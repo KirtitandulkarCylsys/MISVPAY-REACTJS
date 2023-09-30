@@ -2,13 +2,11 @@ import React, { useState } from "react";
 import "./Table-CSS/SalesTable.css";
 import SubSalesTable from "./SubTable/SubSalesTable";
 import Loader from "./Loader";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+
 
 const SalesTable = ({transaction_summary_report,formatNumberToIndianFormat}) => {
   const [clickedIndex, setClickedIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
 
   let totalEquity = 0;
   let totalHybrid = 0;

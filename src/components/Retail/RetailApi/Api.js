@@ -20,6 +20,7 @@ const Api = ({headers}) => {
   const [rm, setRm] = useState("");
   const [common_report, setCommonReport]= useState("");
   const [transaction_summary_report, setTransactionSummaryReport] = useState([]);
+
   const [loading, setLoading] = useState(false);
   const navigate =useNavigate();
   const fetchTransactionSummary = async () => {
@@ -37,11 +38,11 @@ const Api = ({headers}) => {
         select_type: select_type,
         scheme_code: 'nill',
         channel: 'RTL',
-        zone: '',
-        region: 'BIHR',
+        zone: 'EAST',
+        region: '',
         ufc: 'nill',
         rm: 'nill',
-        common_report: 'REGIONWISE'
+        common_report: 'INT_ZONEWISE'
       });
       if(startDate>endDate)
       {
@@ -64,7 +65,6 @@ const Api = ({headers}) => {
       setTransactionSummaryReport(data);
       setLoading(false)
       setHide(true)
-    console.log(transaction_summary_report);
       }
     } catch (error) {
       console.error("error fetching transaction summary data", error);

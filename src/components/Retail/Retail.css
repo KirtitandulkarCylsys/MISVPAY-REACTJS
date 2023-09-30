@@ -1,29 +1,40 @@
-.headline{
+.headline {
   font-size: 1.25rem;
   font-weight: bold;
 }
 
-.form-lables{
+.form-lables {
   font-size: 15px;
   font-weight: bold;
 }
 
-.mrgr{
+.mrgr {
   margin-right: 5px;
 }
 
-.mrgt{
+.mrgt {
   margin-top: 30px;
 }
 
-.mrgtt{
+.mrgtt {
   margin-top: 31px;
 }
 
-.exporttab{
+.exporttab {
   border-radius: 8px;
-  border: 2px solid rgba(53, 45, 148, 0.30);
+  border: 2px solid rgba(53, 45, 148, 0.3);
   padding: 7px;
   width: 160px;
-  height: 41px
+  height: 41px;
+}
+
+@media only screen and (max-width: 320px) {
+  .search {
+    text-align: center;
+  }
+}
+@media only screen and (max-width: 320px) {
+  .tabs {
+    text-align: center;
+  }
 }
