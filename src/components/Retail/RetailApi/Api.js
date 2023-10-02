@@ -28,21 +28,20 @@ const Api = ({headers}) => {
     try {
       const formattedStartDate = startDate.split("-").reverse().join("/");
       const formattedEndDate = endDate.split("-").reverse().join("/");
-
       const queryParams = new URLSearchParams({
         employee_id: '1234',
-        emprole: 'ADMIN',
+        emprole: 'RH',
         quarter: '202324Q2',
         start_date: formattedStartDate,
         end_date: formattedEndDate,
         select_type: select_type,
         scheme_code: 'nill',
         channel: 'RTL',
-        zone: 'EAST',
+        zone: '',
         region: '',
-        ufc: 'nill',
+        ufc: '',
         rm: 'nill',
-        common_report: 'INT_ZONEWISE'
+        common_report: 'REGIONWISE'
       });
       if(startDate>endDate)
       {
@@ -92,7 +91,7 @@ const Api = ({headers}) => {
   };
 
   return{
-    hide,startDate, endDate, setStartDate, setEndDate,select_type, setSelectType, transaction_summary_report,loading,togglehide,setHide,setLoading,formatNumberToIndianFormat
+   employee_id,emprole,quarter,channel, zone, region, common_report,hide,startDate, endDate, setStartDate, setEndDate,select_type, setSelectType, transaction_summary_report,loading,togglehide,setHide,setLoading,formatNumberToIndianFormat
   }
   
 }

@@ -1,30 +1,9 @@
 import React, { useMemo } from "react";
-import RmApi from "../Api/RmApi";
 
-const TableRowWithNetSales = ({
-  pzone,
-  startDate,
-  endDate,
-  select_type,
-  region_name,
-  ufc_code,
-  formatNumberToIndianFormat,
+
+const TableRowWithNetSales = ({formatNumberToIndianFormat, transaction_summary_report_rm
 }) => {
-  const queryParams = useMemo(() => {
-    const formattedStartDate = startDate.split("-").reverse().join("/");
-    const formattedEndDate = endDate.split("-").reverse().join("/");
-    return new URLSearchParams({
-      start_date: formattedStartDate,
-      end_date: formattedEndDate,
-      asset_class: 1,
-      select_type: select_type,
-      employee_code: 2941,
-      p_zone: pzone,
-      region_name: region_name,
-      ufc_code: ufc_code,
-    });
-  }, [startDate, endDate, region_name, select_type, pzone, ufc_code]);
-  const transaction_summary_report_rm = RmApi(queryParams);
+
   let totalEquity = 0;
   let totalHybrid = 0;
   let totalArbitrage = 0;

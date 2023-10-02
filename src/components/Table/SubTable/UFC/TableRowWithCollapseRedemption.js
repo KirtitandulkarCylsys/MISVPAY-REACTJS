@@ -1,34 +1,15 @@
 import React, { useMemo, useState } from "react";
-import UfcApi from "../Api/UfcApi";
+
 import TableRowWithRedemption from "../RMWISE/TableRowWithRedemption";
 import Loader from "../../Loader";
 
 const TableRowWithCollapseRedemption = ({
-  pzone,
-  startDate,
-  endDate,
-  select_type,
-  region_name,
-  formatNumberToIndianFormat,
+
+  formatNumberToIndianFormat,transaction_summary_report_ufc
 }) => {
   const [clickedIndex, setClickedIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
 
-  const queryParams = useMemo(() => {
-    const formattedStartDate = startDate.split("-").reverse().join("/");
-    const formattedEndDate = endDate.split("-").reverse().join("/");
-
-    return new URLSearchParams({
-      start_date: formattedStartDate,
-      end_date: formattedEndDate,
-      asset_class: 1,
-      select_type: select_type,
-      employee_code: 2941,
-      p_zone: pzone,
-      region_name: region_name,
-    });
-  }, [startDate, endDate, region_name, select_type, pzone]);
-  const transaction_summary_report_ufc = UfcApi(queryParams);
   const handleButtonClick = (index) => {
     setIsLoading(true);
     setTimeout(() => {
@@ -141,11 +122,6 @@ const TableRowWithCollapseRedemption = ({
                       <td colSpan="9" className="p-0">
                         {clickedIndex === index && (
                           <TableRowWithRedemption
-                            startDate={startDate}
-                            endDate={endDate}
-                            select_type={select_type}
-                            pzone={pzone}
-                            region_name={region_name}
                             ufc_code={ufc.UFC_CODE}
                             formatNumberToIndianFormat={
                               formatNumberToIndianFormat

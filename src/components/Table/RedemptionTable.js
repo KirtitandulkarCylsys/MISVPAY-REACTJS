@@ -5,21 +5,10 @@ import Loader from "./Loader";
 
 const RedemptionTable = ({
   transaction_summary_report,
-  startDate,
-  endDate,
-  select_type,
-  assetClass,
   formatNumberToIndianFormat,
 }) => {
   const [clickedIndex, setClickedIndex] = useState(-1);
-  const [sortOrder, setSortOrder] = useState({ column: null, order: "asc" });
   const [isLoading, setIsLoading] = useState(false);
-
-  const handleHeaderClick = (column) => {
-    const order =
-      sortOrder.column === column && sortOrder.order === "asc" ? "desc" : "asc";
-    setSortOrder({ column, order });
-  };
 
   let totalEquity = 0;
   let totalHybrid = 0;
@@ -29,37 +18,6 @@ const RedemptionTable = ({
   let totalCash = 0;
   let grandTotal = 0;
 
-  const sortedData = [...transaction_summary_report].sort((a, b) => {
-    const columnA = a[sortOrder.column] || "";
-    const columnB = b[sortOrder.column] || "";
-    if (sortOrder.order === "asc") {
-      if (sortOrder.column === "ZONE") {
-        return columnA.localeCompare(columnB);
-      } else if (
-        sortOrder.column === "REQUITY" ||
-        sortOrder.column === "RHYBRID" ||
-        sortOrder.column === "RARBITRAGE" ||
-        sortOrder.column === "RPASSIVE" ||
-        sortOrder.column === "RFIXED_INCOME" ||
-        sortOrder.column === "RCASH"
-      ) {
-        return parseFloat(columnA) - parseFloat(columnB);
-      }
-    } else if (sortOrder.order === "desc") {
-      if (sortOrder.column === "ZONE") {
-        return columnB.localeCompare(columnA);
-      } else if (
-        sortOrder.column === "REQUITY" ||
-        sortOrder.column === "RHYBRID" ||
-        sortOrder.column === "RARBITRAGE" ||
-        sortOrder.column === "RPASSIVE" ||
-        sortOrder.column === "RFIXED_INCOME" ||
-        sortOrder.column === "RCASH"
-      ) {
-        return parseFloat(columnB) - parseFloat(columnA);
-      }
-    }
-  });
 
   const handleButtonClick = (index) => {
     setIsLoading(true);
@@ -72,6 +30,41 @@ const RedemptionTable = ({
       setClickedIndex(index);
     }
   };
+
+  const headerColumns = ["REGION", "ZONE", "UFC CODE", "RMCODE", "EMP NAME"];
+
+  const isRegionPresentInData = transaction_summary_report.some(
+    (summary) => summary.REGION
+  );
+
+  const isZonePresentInData = transaction_summary_report.some(
+    (summary) => summary.ZONE
+  );
+
+  const isUFCPresentInData = transaction_summary_report.some(
+    (summary) => summary.UFC_CODE
+  );
+
+  const displayRmCodeColumn = transaction_summary_report.some(
+    (summary) => summary.RMCODE
+  );
+  const displayEmpNameColumn = transaction_summary_report.some(
+    (summary) => summary.EMP_NAME
+  );
+  let columnToDisplay = "REGION"; // Default column to display
+
+  if (isZonePresentInData) {
+    columnToDisplay = "ZONE";
+  } else if (isUFCPresentInData) {
+    columnToDisplay = "UFC_CODE";
+  } else if (displayRmCodeColumn && displayEmpNameColumn) {
+    columnToDisplay = "RMCODE_EMP_NAME"; // Use a single column name for both RMCODE and EMP_NAME
+  }
+
+  if (!Array.isArray(transaction_summary_report)) {
+    // Handle the case where transaction_summary_report is not an array
+    return <p>No data available.</p>;
+  }
 
   return (
     <div>
@@ -88,48 +81,50 @@ const RedemptionTable = ({
         <table className="mt-3 table small border" id="table2">
           <thead>
             <tr className="bgcolorBlue text-white">
-              <th scope="col" onClick={() => handleHeaderClick("ZONE")}>
-                ZONE
+              <th key={columnToDisplay} scope="col">
+                {columnToDisplay === "RMCODE_EMP_NAME"
+                  ? "RMCODE"
+                  : columnToDisplay}
               </th>
+              {displayEmpNameColumn && (
+                <>
+                  <th scope="col">EMP_NAME</th>
+                </>
+              )}
               <th
                 scope="col"
                 className="text-end"
-                onClick={() => handleHeaderClick("REQUITY")}
               >
                 Equity
               </th>
               <th
                 scope="col"
                 className="text-end"
-                onClick={() => handleHeaderClick("RHYBRID")}
               >
                 Hybrid
               </th>
               <th
                 scope="col"
                 className="text-end"
-                onClick={() => handleHeaderClick("RARBITRAGE")}
+
               >
                 Arbitrage
               </th>
               <th
                 scope="col"
                 className="text-end"
-                onClick={() => handleHeaderClick("RPASSIVE")}
               >
                 Passive(ex-Debt)
               </th>
               <th
                 scope="col"
                 className="text-end"
-                onClick={() => handleHeaderClick("RFIXED_INCOME")}
               >
                 Fixed Income
               </th>
               <th
                 scope="col"
                 className="text-end"
-                onClick={() => handleHeaderClick("RCASH")}
               >
                 {" "}
                 Cash{" "}
@@ -140,8 +135,10 @@ const RedemptionTable = ({
             </tr>
           </thead>
           <tbody>
-            {sortedData.map((summary, index) => {
-              // Update the column-wise totals
+            {transaction_summary_report.map((summary, index) => {
+              const hasZone = summary.hasOwnProperty("ZONE");
+              const hasRegion = summary.hasOwnProperty("REGION");
+              const hasUfcCode = summary.hasOwnProperty("UFC_CODE");
               totalEquity += parseFloat(summary.REQUITY);
               totalHybrid += parseFloat(summary.RHYBRID);
               totalArbitrage += parseFloat(summary.RARBITRAGE);
@@ -159,10 +156,17 @@ const RedemptionTable = ({
                         onClick={() => handleButtonClick(index)}
                         disabled={isLoading}
                       >
-                        <b className="sharp-font">{summary.ZONE}</b>
+                        <b className="sharp-font"> {hasZone ? summary.ZONE : ""}
+                          {hasRegion ? summary.REGION : ""}
+                          {hasUfcCode ? summary.UFC_CODE : ""}
+                          {displayRmCodeColumn ? summary.RMCODE : ""}</b>
                       </button>
                       {isLoading && <Loader />}
                     </td>
+                    {displayEmpNameColumn && (
+
+                      <td className="">{summary.EMP_NAME}</td>
+                    )}
                     <td className="text-end">
                       {formatNumberToIndianFormat(
                         parseFloat(summary.REQUITY).toFixed(2)
@@ -203,11 +207,7 @@ const RedemptionTable = ({
                     <tr key={`subtable-${index}`}>
                       <td colSpan="8" className="p-0">
                         <SubRedemptionTable
-                          pzone={summary.ZONE}
-                          startDate={startDate}
-                          endDate={endDate}
-                          assetClass={assetClass}
-                          select_type={select_type}
+
                           formatNumberToIndianFormat={
                             formatNumberToIndianFormat
                           }
@@ -220,11 +220,29 @@ const RedemptionTable = ({
             })}
             <tr className="bgcolorBlue text-white">
               <td>TOTAL</td>
+              {displayRmCodeColumn && (
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              )}
+
               <td className="text-end">
-                {formatNumberToIndianFormat(parseFloat(totalEquity.toFixed(2)))}
+                {formatNumberToIndianFormat(
+                  parseFloat(totalEquity.toFixed(2))
+                )}
               </td>
               <td className="text-end">
-                {formatNumberToIndianFormat(parseFloat(totalHybrid.toFixed(2)))}
+                {formatNumberToIndianFormat(
+                  parseFloat(totalHybrid.toFixed(2))
+                )}
               </td>
               <td className="text-end">
                 {formatNumberToIndianFormat(
@@ -242,10 +260,14 @@ const RedemptionTable = ({
                 )}
               </td>
               <td className="text-end">
-                {formatNumberToIndianFormat(parseFloat(totalCash.toFixed(2)))}
+                {formatNumberToIndianFormat(
+                  parseFloat(totalCash.toFixed(2))
+                )}
               </td>
               <td className="text-end">
-                {formatNumberToIndianFormat(parseFloat(grandTotal.toFixed(2)))}
+                {formatNumberToIndianFormat(
+                  parseFloat(grandTotal.toFixed(2))
+                )}
               </td>
             </tr>
           </tbody>

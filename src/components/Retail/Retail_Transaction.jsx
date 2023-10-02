@@ -19,19 +19,9 @@ import ExportToPdf from "./ExportToPdf";
 import Filter from "./Filter";
 import DropDown from "./DropDown";
 import Multiselect from "multiselect-react-dropdown";
+
 const Retail_Transaction = ({ headers }) => {
   const { scheme_details } = Scheme();
-  // const [selectedSchemes, setSelectedSchemes] = useState([]);
-  // const options = scheme_details.map((item) => ({
-  //   name: item.SCHEME,
-  //   id: item.ID,
-  // }));
-  // const functionToHandleSelect = (selectedList, selectedItem) => {
-  //   setSelectedSchemes(selectedList);
-  // };
-  // const functionToHandleRemove = (selectedList, removedItem) => {
-  //   setSelectedSchemes(selectedList);
-  // };
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const {
@@ -45,7 +35,7 @@ const Retail_Transaction = ({ headers }) => {
     togglehide,
     select_type,
     setSelectType,
-    formatNumberToIndianFormat,
+    formatNumberToIndianFormat, employee_id, emprole, quarter, channel, zone, region, common_report,
   } = Api({ headers });
 
   const toggleSidebar = () => {
@@ -231,40 +221,21 @@ const Retail_Transaction = ({ headers }) => {
                         <div className="Table">
                           {loading ? (
                             <div className="text-center mt-4">
-                              <i className="fas fa-spinner fa-spin fa-2x"></i>{" "}
-                              <LoaderSearch />
+                              <i className="fas fa-spinner fa-spin fa-2x"></i> <LoaderSearch />
                             </div>
-                          ) : (
-                            hide && (
-                              <div>
-                                <SalesTable
-                                  transaction_summary_report={
-                                    transaction_summary_report
-                                  }
-                                  formatNumberToIndianFormat={
-                                    formatNumberToIndianFormat
-                                  }
-                                />
-                                <RedemptionTable
-                                  transaction_summary_report={
-                                    transaction_summary_report
-                                  }
-                                  formatNumberToIndianFormat={
-                                    formatNumberToIndianFormat
-                                  }
-                                />
-                                <NetSalesTable
-                                  transaction_summary_report={
-                                    transaction_summary_report
-                                  }
-                                  formatNumberToIndianFormat={
-                                    formatNumberToIndianFormat
-                                  }
-                                />
-                              </div>
-                            )
-                          )}
+                          ) : hide ? (
+                            <>
+                              <SalesTable transaction_summary_report={transaction_summary_report}
+                                formatNumberToIndianFormat={formatNumberToIndianFormat} />
+                              <RedemptionTable transaction_summary_report={transaction_summary_report}
+                                formatNumberToIndianFormat={formatNumberToIndianFormat} />
+                              <NetSalesTable transaction_summary_report={transaction_summary_report}
+                                formatNumberToIndianFormat={formatNumberToIndianFormat} />
+                            </>
+                          ) : (<>
+                          </>)}
                         </div>
+
                       </>
                     </div>
                   </div>
