@@ -160,7 +160,7 @@ const SalesTable = ({ transaction_summary_report, formatNumberToIndianFormat }) 
                               >
                                 <b className="sharp-font">
                                   {hasZone ? summary.ZONE : ""}
-                                  {hasRegion ? summary.REGION : ""}
+                                  {hasRegion  ? summary.REGION : ""}
                                   {hasUfcCode ? summary.UFC_CODE : ""}
                                   {displayRmCodeColumn ? summary.RMCODE : ""}
                                 </b>

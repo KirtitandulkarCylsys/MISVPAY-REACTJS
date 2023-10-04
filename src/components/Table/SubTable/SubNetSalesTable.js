@@ -2,11 +2,12 @@ import React, { useState, useMemo } from "react";
 import "./SubTable-CSS/SubRedemptionTable.css";
 import TableRowWithCollapseNetSales from "./UFC/TableRowWithCollapseNetSales";
 import Loader from "../Loader";
+import { RegionApi } from "../../Retail/RetailApi/RegionApi";
 
-const SubNetSalesTable = ({transaction_summary_report,formatNumberToIndianFormat}) => {
+const SubNetSalesTable = ({formatNumberToIndianFormat}) => {
   const [clickedIndex, setClickedIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
-
+  const {regions}= RegionApi();
   const handleButtonClick = (index) => {
     setIsLoading(true);
     setTimeout(() => {
@@ -50,7 +51,7 @@ const SubNetSalesTable = ({transaction_summary_report,formatNumberToIndianFormat
       >
         <thead>
           <tr className="colorwhite BgcolorOrange">
-            <th scope="col">REGION</th>
+            <th scope="col">REGION  CODE</th>
             <th scope="col" className="text-end">
               Equity
             </th>
@@ -75,7 +76,7 @@ const SubNetSalesTable = ({transaction_summary_report,formatNumberToIndianFormat
           </tr>
         </thead>
         <tbody style={{ backgroundColor: "#DDD" }}>
-          {transaction_summary_report.map((summary, index) => {
+          {regions.map((summary, index) => {
             totalEquity += parseFloat(summary.NEQUITY);
             totalHybrid += parseFloat(summary.NHYBRID);
             totalArbitrage += parseFloat(summary.NARBITRAGE);
@@ -92,7 +93,7 @@ const SubNetSalesTable = ({transaction_summary_report,formatNumberToIndianFormat
                       onClick={() => handleButtonClick(index)}
                       disabled={isLoading}
                     >
-                      <b>{summary.REGION_NAME}</b>
+                      <b>{summary.REGION}</b>
                     </button>
                     {isLoading && (
                       <div className="text-center mt-4">

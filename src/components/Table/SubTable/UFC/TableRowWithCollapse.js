@@ -2,10 +2,12 @@ import React, { useState } from "react";
 
 import TableRowWithSales from "../RMWISE/TableRowWithSales";
 import Loader from "../../Loader";
+import { UfcApi } from "../../../Retail/RetailApi/RegionApi";
 
-const TableRowWithCollapse = ({transaction_summary_report,formatNumberToIndianFormat}) => {
+const TableRowWithCollapse = ({formatNumberToIndianFormat}) => {
   const [clickedIndex, setClickedIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
+  const {ufc}=UfcApi();
   const handleButtonClick = (index) => {
     setIsLoading(true);
     setTimeout(() => {
@@ -58,7 +60,7 @@ const TableRowWithCollapse = ({transaction_summary_report,formatNumberToIndianFo
             </tr>
           </thead>
           <tbody style={{ backgroundColor: "#8080805c" }}>
-            {transaction_summary_report.map((ufc, index) => {
+            {ufc.map((ufc, index) => {
               totalEquity += parseFloat(ufc.SEQUITY);
               totalHybrid += parseFloat(ufc.SHYBRID);
               totalArbitrage += parseFloat(ufc.SARBITRAGE);
@@ -120,7 +122,6 @@ const TableRowWithCollapse = ({transaction_summary_report,formatNumberToIndianFo
                       <td colSpan="9" className="p-0">
                         {clickedIndex === index && (
                           <TableRowWithSales
-transaction_summary_report={transaction_summary_report}
                             formatNumberToIndianFormat={
                               formatNumberToIndianFormat
                             }

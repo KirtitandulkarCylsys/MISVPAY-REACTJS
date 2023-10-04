@@ -2,14 +2,12 @@ import React, { useMemo, useState } from "react";
 
 import TableRowWithRedemption from "../RMWISE/TableRowWithRedemption";
 import Loader from "../../Loader";
+import { UfcApi } from "../../../Retail/RetailApi/RegionApi";
 
-const TableRowWithCollapseRedemption = ({
-
-  formatNumberToIndianFormat,transaction_summary_report_ufc
-}) => {
+const TableRowWithCollapseRedemption = ({formatNumberToIndianFormat}) => {
   const [clickedIndex, setClickedIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
-
+  const {ufc}=UfcApi();
   const handleButtonClick = (index) => {
     setIsLoading(true);
     setTimeout(() => {
@@ -61,7 +59,7 @@ const TableRowWithCollapseRedemption = ({
             </tr>
           </thead>
           <tbody style={{ backgroundColor: "#8080805c" }}>
-            {transaction_summary_report_ufc.map((ufc, index) => {
+            {ufc.map((ufc, index) => {
               totalEquity += parseFloat(ufc.REQUITY);
               totalHybrid += parseFloat(ufc.RHYBRID);
               totalArbitrage += parseFloat(ufc.RARBITRAGE);

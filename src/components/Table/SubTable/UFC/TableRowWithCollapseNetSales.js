@@ -1,13 +1,10 @@
 import React, { useMemo, useState } from "react";
 import TableRowWithNetSales from "../RMWISE/TableRowWithNetSales";
 import Loader from "../../Loader";
+import { UfcApi } from "../../../Retail/RetailApi/RegionApi";
 
-const TableRowWithCollapseNetSales = ({
-
-  formatNumberToIndianFormat,transaction_summary_report_ufc
-}) => {
-
-
+const TableRowWithCollapseNetSales = ({formatNumberToIndianFormat}) => {
+  const {ufc}=UfcApi();
   const [clickedIndex, setClickedIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
   const handleButtonClick = (index) => {
@@ -62,7 +59,7 @@ const TableRowWithCollapseNetSales = ({
             </tr>
           </thead>
           <tbody style={{ backgroundColor: "#8080805c" }}>
-            {transaction_summary_report_ufc.map((ufc, index) => {
+            {ufc.map((ufc, index) => {
               totalEquity += parseFloat(ufc.NEQUITY);
               totalHybrid += parseFloat(ufc.NHYBRID);
               totalArbitrage += parseFloat(ufc.NARBITRAGE);
@@ -123,8 +120,6 @@ const TableRowWithCollapseNetSales = ({
                       <td colSpan="9" className="p-0">
                         {clickedIndex === index && (
                           <TableRowWithNetSales
-
-                            ufc_code={ufc.UFC_CODE}
                             formatNumberToIndianFormat={
                               formatNumberToIndianFormat
                             }

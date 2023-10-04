@@ -2,11 +2,12 @@ import React, { useState, useMemo } from "react";
 import "./SubTable-CSS/SubRedemptionTable.css";
 import Loader from "../Loader";
 import TableRowWithCollapseRedemption from "./UFC/TableRowWithCollapseRedemption";
+import { RegionApi } from "../../Retail/RetailApi/RegionApi";
 
-const SubRedemptionTable = ({transaction_summary_report,formatNumberToIndianFormat}) => {
+const SubRedemptionTable = ({formatNumberToIndianFormat}) => {
   const [clickedIndex, setClickedIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
-
+  const {regions} = RegionApi();
   const handleButtonClick = (index) => {
     setIsLoading(true);
     setTimeout(() => {
@@ -50,7 +51,7 @@ const SubRedemptionTable = ({transaction_summary_report,formatNumberToIndianForm
       >
         <thead>
           <tr className="colorwhite BgcolorOrange">
-            <th scope="col">REGION</th>
+            <th scope="col">REGION CODE</th>
             <th scope="col" className="text-end">
               Equity
             </th>
@@ -75,7 +76,7 @@ const SubRedemptionTable = ({transaction_summary_report,formatNumberToIndianForm
           </tr>
         </thead>
         <tbody style={{ backgroundColor: "#DDD" }}>
-          {transaction_summary_report.map((summary, index) => {
+          {regions.map((summary, index) => {
             totalEquity += parseFloat(summary.REQUITY);
             totalHybrid += parseFloat(summary.RHYBRID);
             totalArbitrage += parseFloat(summary.RARBITRAGE);
@@ -93,7 +94,7 @@ const SubRedemptionTable = ({transaction_summary_report,formatNumberToIndianForm
                       onClick={() => handleButtonClick(index)}
                       disabled={isLoading}
                     >
-                      <b className="sharp-font">{summary.REGION_NAME}</b>
+                      <b className="sharp-font">{summary.REGION}</b>
                     </button>
                     {isLoading && (
                       <div className="text-center mt-4">

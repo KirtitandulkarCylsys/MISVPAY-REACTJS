@@ -2,11 +2,12 @@ import React, { useState, useMemo } from "react";
 import "./SubTable-CSS/SubSalesTable.css";
 import TableRowWithCollapse from "./UFC/TableRowWithCollapse";
 import Loader from "../Loader";
+import { RegionApi } from "../../Retail/RetailApi/RegionApi";
 
-const SubSalesTable = ({transaction_summary_report,formatNumberToIndianFormat}) => {
+const SubSalesTable = ({formatNumberToIndianFormat}) => {
   const [clickedIndex, setClickedIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
-
+  const {regions} = RegionApi();
   const handleButtonClick = (index) => {
     setIsLoading(true);
     setTimeout(() => {
@@ -50,7 +51,7 @@ const SubSalesTable = ({transaction_summary_report,formatNumberToIndianFormat}) 
       >
         <thead>
           <tr className="colorwhite BgcolorOrange">
-            <th scope="col">REGION</th>
+            <th scope="col">REGION CODE</th>
             <th scope="col" className="text-end">
               Equity
             </th>
@@ -75,7 +76,7 @@ const SubSalesTable = ({transaction_summary_report,formatNumberToIndianFormat}) 
           </tr>
         </thead>
         <tbody style={{ backgroundColor: "#DADADA" }}>
-          {transaction_summary_report.map((summary, index) => {
+          {regions.map((summary, index) => {
             totalEquity += parseFloat(summary.SEQUITY);
             totalHybrid += parseFloat(summary.SHYBRID);
             totalArbitrage += parseFloat(summary.SARBITRAGE);
@@ -92,7 +93,7 @@ const SubSalesTable = ({transaction_summary_report,formatNumberToIndianFormat}) 
                       onClick={() => handleButtonClick(index)}
                       disabled={isLoading}
                     >
-                      <b className="sharp-font">{summary.REGION_NAME}</b>
+                      <b className="sharp-font">{summary.REGION}</b>
                     </button>
                     {isLoading && (
                       <div className="text-center mt-4">
@@ -130,7 +131,6 @@ const SubSalesTable = ({transaction_summary_report,formatNumberToIndianFormat}) 
                     <td colSpan="8" className="p-0">
                       {clickedIndex === index && (
                         <TableRowWithCollapse
-                          transaction_summary_report={transaction_summary_report}
                           formatNumberToIndianFormat={
                             formatNumberToIndianFormat
                           }

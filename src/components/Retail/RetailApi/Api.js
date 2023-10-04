@@ -30,7 +30,7 @@ const Api = ({headers}) => {
       const formattedEndDate = endDate.split("-").reverse().join("/");
       const queryParams = new URLSearchParams({
         employee_id: '1234',
-        emprole: 'RH',
+        emprole: 'ADMIN',
         quarter: '202324Q2',
         start_date: formattedStartDate,
         end_date: formattedEndDate,
@@ -41,7 +41,7 @@ const Api = ({headers}) => {
         region: '',
         ufc: '',
         rm: 'nill',
-        common_report: 'REGIONWISE'
+        common_report: ''
       });
       if(startDate>endDate)
       {

@@ -1,6 +1,9 @@
 import React, { useMemo } from "react";
+import { RMApi } from "../../../Retail/RetailApi/RegionApi";
 
-const TableRowWithSales = ({transaction_summary_report,formatNumberToIndianFormat}) => {
+const TableRowWithSales = ({formatNumberToIndianFormat}) => {
+  const {rm}= RMApi();
+
   let totalEquity = 0;
   let totalHybrid = 0;
   let totalArbitrage = 0;
@@ -18,10 +21,8 @@ const TableRowWithSales = ({transaction_summary_report,formatNumberToIndianForma
           >
             <tr className="">
               <th scope="col">UFC Code</th>
-              <th scope="col">UFC NAME</th>
               <th scope="col">RM CODE</th>
-              <th scope="col">RM NAME</th>
-              <th scope="col">FUNCROLE</th>
+              <th scope="col">EMPLOYEE NAME</th>
               <th scope="col" className="text-end">
                 Equity
               </th>
@@ -46,7 +47,7 @@ const TableRowWithSales = ({transaction_summary_report,formatNumberToIndianForma
             </tr>
           </thead>
           <tbody>
-            {transaction_summary_report.map((rm) => {
+            {rm.map((rm) => {
               totalEquity += parseFloat(rm.SEQUITY);
               totalHybrid += parseFloat(rm.SHYBRID);
               totalArbitrage += parseFloat(rm.SARBITRAGE);
@@ -63,16 +64,10 @@ const TableRowWithSales = ({transaction_summary_report,formatNumberToIndianForma
                   </td>
                   <td>
                     <button className="textlink">
-                      <b className="sharp-font">{rm.UFC_NAME}</b>
-                    </button>
-                  </td>
-                  <td>
-                    <button className="textlink">
                       <b className="sharp-font">{rm.RMCODE}</b>
                     </button>
                   </td>
-                  <td>{rm.RMNAME}</td>
-                  <td>{rm.FUNCROLE}</td>
+                  <td>{rm.EMP_NAME}</td>
                   <td className="text-end">
                     {formatNumberToIndianFormat(parseFloat(rm.SEQUITY))}
                   </td>
@@ -104,8 +99,6 @@ const TableRowWithSales = ({transaction_summary_report,formatNumberToIndianForma
               }}
             >
               <td>TOTAL</td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td className="text-end">

@@ -1,11 +1,8 @@
 import React, { useMemo } from "react";
+import { RMApi } from "../../../Retail/RetailApi/RegionApi";
 
-const TableRowWithRedemption = ({
-
-  formatNumberToIndianFormat,transaction_summary_report_rm
-}) => {
-
-
+const TableRowWithRedemption = ({formatNumberToIndianFormat}) => {
+  const {rm}= RMApi();
   let totalEquity = 0;
   let totalHybrid = 0;
   let totalArbitrage = 0;
@@ -23,10 +20,8 @@ const TableRowWithRedemption = ({
           >
             <tr className="">
               <th scope="col">UFC Code</th>
-              <th scope="col">UFC NAME</th>
               <th scope="col">RM CODE</th>
-              <th scope="col">RM NAME</th>
-              <th scope="col">FUNCROLE</th>
+              <th scope="col">EMPLOYEE NAME</th>
               <th scope="col" className="text-end">
                 Equity
               </th>
@@ -51,7 +46,7 @@ const TableRowWithRedemption = ({
             </tr>
           </thead>
           <tbody>
-            {transaction_summary_report_rm.map((rm) => {
+            {rm.map((rm) => {
               totalEquity += parseFloat(rm.REQUITY);
               totalHybrid += parseFloat(rm.RHYBRID);
               totalArbitrage += parseFloat(rm.RARBITRAGE);
@@ -68,16 +63,10 @@ const TableRowWithRedemption = ({
                   </td>
                   <td>
                     <button className="textlink">
-                      <b className="sharp-font">{rm.UFC_NAME}</b>
-                    </button>
-                  </td>
-                  <td>
-                    <button className="textlink">
                       <b className="sharp-font">{rm.RMCODE}</b>
                     </button>
                   </td>
-                  <td>{rm.RMNAME}</td>
-                  <td className="text-end">{rm.FUNCROLE}</td>
+                  <td>{rm.EMP_NAME}</td>
                   <td className="text-end">
                     {formatNumberToIndianFormat(parseFloat(rm.REQUITY))}
                   </td>
@@ -109,8 +98,6 @@ const TableRowWithRedemption = ({
               }}
             >
               <td>TOTAL</td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td className="text-end">
