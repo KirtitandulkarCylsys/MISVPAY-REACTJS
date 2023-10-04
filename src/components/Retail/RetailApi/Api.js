@@ -40,8 +40,8 @@ const Api = ({headers}) => {
         zone: '',
         region: '',
         ufc: '',
-        rm: 'nill',
-        common_report: ''
+        rm: '1498',
+        common_report: 'RMWISE'
       });
       if(startDate>endDate)
       {
@@ -91,7 +91,7 @@ const Api = ({headers}) => {
   };
 
   return{
-   employee_id,emprole,quarter,channel, zone, region, common_report,hide,startDate, endDate, setStartDate, setEndDate,select_type, setSelectType, transaction_summary_report,loading,togglehide,setHide,setLoading,formatNumberToIndianFormat
+   employee_id,emprole,quarter,ufc,rm,channel, zone, region, common_report,hide,startDate, endDate, setStartDate, setEndDate,select_type, setSelectType, transaction_summary_report,loading,togglehide,setHide,setLoading,formatNumberToIndianFormat
   }
   
 }

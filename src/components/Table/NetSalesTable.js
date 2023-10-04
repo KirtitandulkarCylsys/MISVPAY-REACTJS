@@ -7,7 +7,7 @@ const NetSalesTable = ({
   startDate,
   endDate,
   select_type,
-  assetClass,
+  
   formatNumberToIndianFormat,
 }) => {
   const [clickedIndex, setClickedIndex] = useState(-1);
@@ -199,7 +199,6 @@ const NetSalesTable = ({
                           pzone={summary.ZONE}
                           startDate={startDate}
                           endDate={endDate}
-                          assetClass={assetClass}
                           select_type={select_type}
                           formatNumberToIndianFormat={
                             formatNumberToIndianFormat

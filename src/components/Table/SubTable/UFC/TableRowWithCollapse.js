@@ -4,10 +4,34 @@ import TableRowWithSales from "../RMWISE/TableRowWithSales";
 import Loader from "../../Loader";
 import { UfcApi } from "../../../Retail/RetailApi/RegionApi";
 
-const TableRowWithCollapse = ({formatNumberToIndianFormat}) => {
+const TableRowWithCollapse = ({formatNumberToIndianFormat,select_type,startDate,endDate,region,transaction_summary_report}) => {
   const [clickedIndex, setClickedIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
-  const {ufc}=UfcApi();
+  const formattedStartDate = startDate.split("-").reverse().join("/");
+  const formattedEndDate = endDate.split("-").reverse().join("/");
+  const queryParams = new URLSearchParams({
+    employee_id: '1234',
+    emprole: 'ADMIN',
+    quarter: '202324Q2',
+    start_date: formattedStartDate,
+    end_date: formattedEndDate,
+    select_type: select_type,
+    scheme_code: 'nill',
+    channel: 'RTL',
+    zone: "",
+    region: region,
+    ufc: '',
+    rm: 'nill',
+    common_report: 'INT_REGIONWISE'
+  });
+  const {ufc}=UfcApi(queryParams);
+  let dataToUse = [];
+
+  if (ufc && ufc.length > 0) {
+    dataToUse = ufc;
+  } else if (transaction_summary_report && transaction_summary_report.length > 0) {
+    dataToUse = transaction_summary_report;
+  }
   const handleButtonClick = (index) => {
     setIsLoading(true);
     setTimeout(() => {
@@ -60,7 +84,7 @@ const TableRowWithCollapse = ({formatNumberToIndianFormat}) => {
             </tr>
           </thead>
           <tbody style={{ backgroundColor: "#8080805c" }}>
-            {ufc.map((ufc, index) => {
+            {dataToUse.map((ufc, index) => {
               totalEquity += parseFloat(ufc.SEQUITY);
               totalHybrid += parseFloat(ufc.SHYBRID);
               totalArbitrage += parseFloat(ufc.SARBITRAGE);
@@ -125,6 +149,10 @@ const TableRowWithCollapse = ({formatNumberToIndianFormat}) => {
                             formatNumberToIndianFormat={
                               formatNumberToIndianFormat
                             }
+                            startDate={startDate}
+                            endDate={endDate}
+                            select_type = {select_type}
+                            ufc = {ufc.UFC_CODE}
                           />
                         )}
                       </td>

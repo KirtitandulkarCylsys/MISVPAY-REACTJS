@@ -4,10 +4,35 @@ import Loader from "../Loader";
 import TableRowWithCollapseRedemption from "./UFC/TableRowWithCollapseRedemption";
 import { RegionApi } from "../../Retail/RetailApi/RegionApi";
 
-const SubRedemptionTable = ({formatNumberToIndianFormat}) => {
+const SubRedemptionTable = ({formatNumberToIndianFormat,select_type,startDate,endDate,zone,transaction_summary_report}) => {
   const [clickedIndex, setClickedIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
-  const {regions} = RegionApi();
+  const formattedStartDate = startDate.split("-").reverse().join("/");
+  const formattedEndDate = endDate.split("-").reverse().join("/");
+  const queryParams = new URLSearchParams({
+    employee_id: '1234',
+    emprole: 'ADMIN',
+    quarter: '202324Q2',
+    start_date: formattedStartDate,
+    end_date: formattedEndDate,
+    select_type: select_type,
+    scheme_code: 'nill',
+    channel: 'RTL',
+    zone: zone,
+    region: '',
+    ufc: '',
+    rm: 'nill',
+    common_report: 'INT_ZONEWISE'
+  });
+  const {regions} = RegionApi(queryParams);
+
+  let dataToUse = [];
+
+  if (regions && regions.length > 0) {
+    dataToUse = regions;
+  } else if (transaction_summary_report && transaction_summary_report.length > 0) {
+    dataToUse = transaction_summary_report;
+  }
   const handleButtonClick = (index) => {
     setIsLoading(true);
     setTimeout(() => {
@@ -76,7 +101,7 @@ const SubRedemptionTable = ({formatNumberToIndianFormat}) => {
           </tr>
         </thead>
         <tbody style={{ backgroundColor: "#DDD" }}>
-          {regions.map((summary, index) => {
+          {dataToUse.map((summary, index) => {
             totalEquity += parseFloat(summary.REQUITY);
             totalHybrid += parseFloat(summary.RHYBRID);
             totalArbitrage += parseFloat(summary.RARBITRAGE);
@@ -136,6 +161,10 @@ const SubRedemptionTable = ({formatNumberToIndianFormat}) => {
                           formatNumberToIndianFormat={
                             formatNumberToIndianFormat
                           }
+                          startDate={startDate}
+                          endDate = {endDate}
+                          select_type= {select_type}
+                          region= {summary.REGION}
                         />
                       )}
                     </td>

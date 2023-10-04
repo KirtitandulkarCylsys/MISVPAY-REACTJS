@@ -19,9 +19,19 @@ import ExportToPdf from "./ExportToPdf";
 import Filter from "./Filter";
 import DropDown from "./DropDown";
 import Multiselect from "multiselect-react-dropdown";
+import SubSalesTable from "../Table/SubTable/SubSalesTable";
+import SubRedemptionTable from "../Table/SubTable/SubRedemptionTable";
+import SubNetSalesTable from "../Table/SubTable/SubNetSalesTable";
+import TableRowWithCollapse from "../Table/SubTable/UFC/TableRowWithCollapse";
+import TableRowWithCollapseRedemption from "../Table/SubTable/UFC/TableRowWithCollapseRedemption";
+import TableRowWithCollapseNetSales from "../Table/SubTable/UFC/TableRowWithCollapseNetSales";
+import TableRowWithNetSales from "../Table/SubTable/RMWISE/TableRowWithNetSales";
+import TableRowWithRedemption from "../Table/SubTable/RMWISE/TableRowWithRedemption";
+import TableRowWithSales from "../Table/SubTable/RMWISE/TableRowWithSales";
 
 const Retail_Transaction = ({ headers }) => {
   const { scheme_details } = Scheme();
+  const Data = "1498";
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const {
@@ -35,7 +45,14 @@ const Retail_Transaction = ({ headers }) => {
     togglehide,
     select_type,
     setSelectType,
-    formatNumberToIndianFormat, employee_id, emprole, quarter, channel, zone, region, common_report,
+    formatNumberToIndianFormat,
+    employee_id,
+    emprole,
+    quarter,
+    channel,
+    zone,
+    region,
+    common_report,
   } = Api({ headers });
 
   const toggleSidebar = () => {
@@ -221,21 +238,161 @@ const Retail_Transaction = ({ headers }) => {
                         <div className="Table">
                           {loading ? (
                             <div className="text-center mt-4">
-                              <i className="fas fa-spinner fa-spin fa-2x"></i> <LoaderSearch />
+                              <i className="fas fa-spinner fa-spin fa-2x"></i>{" "}
+                              <LoaderSearch />
                             </div>
                           ) : hide ? (
                             <>
-                              <SalesTable transaction_summary_report={transaction_summary_report}
-                                formatNumberToIndianFormat={formatNumberToIndianFormat} />
-                              <RedemptionTable transaction_summary_report={transaction_summary_report}
-                                formatNumberToIndianFormat={formatNumberToIndianFormat} />
-                              <NetSalesTable transaction_summary_report={transaction_summary_report}
-                                formatNumberToIndianFormat={formatNumberToIndianFormat} />
+                              {Data === "EAST" ? (
+                                <>
+                                  <SalesTable
+                                    transaction_summary_report={
+                                      transaction_summary_report
+                                    }
+                                    formatNumberToIndianFormat={
+                                      formatNumberToIndianFormat
+                                    }
+                                    startDate={startDate}
+                                    endDate={endDate}
+                                    select_type={select_type}
+                                  />
+                                  <RedemptionTable
+                                    transaction_summary_report={
+                                      transaction_summary_report
+                                    }
+                                    formatNumberToIndianFormat={
+                                      formatNumberToIndianFormat
+                                    }
+                                    startDate={startDate}
+                                    endDate={endDate}
+                                    select_type={select_type}
+                                  />
+                                  <NetSalesTable
+                                    transaction_summary_report={
+                                      transaction_summary_report
+                                    }
+                                    formatNumberToIndianFormat={
+                                      formatNumberToIndianFormat
+                                    }
+                                    startDate={startDate}
+                                    endDate={endDate}
+                                    select_type={select_type}
+                                  />
+                                </>
+                              ) : Data === "BIHR" ? (
+                                <>
+                                  <SubSalesTable
+                                    startDate={startDate}
+                                    endDate={endDate}
+                                    select_type={select_type}
+                                    formatNumberToIndianFormat={
+                                      formatNumberToIndianFormat
+                                    }
+                                    transaction_summary_report={
+                                      transaction_summary_report
+                                    }
+                                  />
+                                  <SubRedemptionTable
+                                    startDate={startDate}
+                                    endDate={endDate}
+                                    select_type={select_type}
+                                    formatNumberToIndianFormat={
+                                      formatNumberToIndianFormat
+                                    }
+                                    transaction_summary_report={
+                                      transaction_summary_report
+                                    }
+                                  />
+                                  <SubNetSalesTable
+                                    startDate={startDate}
+                                    endDate={endDate}
+                                    select_type={select_type}
+                                    formatNumberToIndianFormat={
+                                      formatNumberToIndianFormat
+                                    }
+                                    transaction_summary_report={
+                                      transaction_summary_report
+                                    }
+                                  />
+                                </>
+                              ) : Data === "203" ? (
+                                <>
+                                  <TableRowWithCollapse
+                                    startDate={startDate}
+                                    endDate={endDate}
+                                    select_type={select_type}
+                                    formatNumberToIndianFormat={
+                                      formatNumberToIndianFormat
+                                    }
+                                    transaction_summary_report={
+                                      transaction_summary_report
+                                    }
+                                  />
+                                  <TableRowWithCollapseRedemption
+                                    startDate={startDate}
+                                    endDate={endDate}
+                                    select_type={select_type}
+                                    formatNumberToIndianFormat={
+                                      formatNumberToIndianFormat
+                                    }
+                                    transaction_summary_report={
+                                      transaction_summary_report
+                                    }
+                                  />
+                                  <TableRowWithCollapseNetSales
+                                    startDate={startDate}
+                                    endDate={endDate}
+                                    select_type={select_type}
+                                    formatNumberToIndianFormat={
+                                      formatNumberToIndianFormat
+                                    }
+                                    transaction_summary_report={
+                                      transaction_summary_report
+                                    }
+                                  />
+                                </>
+                              ) : Data === "1498" ? (
+                                <>
+                                  <TableRowWithSales
+                                    startDate={startDate}
+                                    endDate={endDate}
+                                    select_type={select_type}
+                                    formatNumberToIndianFormat={
+                                      formatNumberToIndianFormat
+                                    }
+                                    transaction_summary_report={
+                                      transaction_summary_report
+                                    }
+                                  />
+                                  <TableRowWithNetSales
+                                    startDate={startDate}
+                                    endDate={endDate}
+                                    select_type={select_type}
+                                    formatNumberToIndianFormat={
+                                      formatNumberToIndianFormat
+                                    }
+                                    transaction_summary_report={
+                                      transaction_summary_report
+                                    }
+                                  />
+                                  <TableRowWithRedemption
+                                    startDate={startDate}
+                                    endDate={endDate}
+                                    select_type={select_type}
+                                    formatNumberToIndianFormat={
+                                      formatNumberToIndianFormat
+                                    }
+                                    transaction_summary_report={
+                                      transaction_summary_report
+                                    }
+                                  />
+                                </>
+                              ) : null}
                             </>
-                          ) : (<>
-                          </>)}
+                          ) : (
+                            <></>
+                          )}
                         </div>
-
                       </>
                     </div>
                   </div>

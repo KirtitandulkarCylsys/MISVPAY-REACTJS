@@ -3,7 +3,13 @@ import "./Table-CSS/SalesTable.css";
 import SubSalesTable from "./SubTable/SubSalesTable";
 import Loader from "./Loader";
 
-const SalesTable = ({ transaction_summary_report, formatNumberToIndianFormat }) => {
+const SalesTable = ({
+  transaction_summary_report,
+  formatNumberToIndianFormat,
+  startDate,
+  endDate,
+  select_type,
+}) => {
   const [clickedIndex, setClickedIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -27,44 +33,43 @@ const SalesTable = ({ transaction_summary_report, formatNumberToIndianFormat }) 
     }
   };
 
-  const headerColumns = ["REGION", "ZONE", "UFC CODE", "RMCODE", "EMP NAME"];
+  // const headerColumns = ["REGION", "ZONE", "UFC CODE", "RMCODE", "EMP NAME"];
 
-  const isRegionPresentInData = transaction_summary_report.some(
-    (summary) => summary.REGION
-  );
+  // const isRegionPresentInData = transaction_summary_report.some(
+  //   (summary) => summary.REGION
+  // );
 
-  const isZonePresentInData = transaction_summary_report.some(
-    (summary) => summary.ZONE
-  );
+  // const isZonePresentInData = transaction_summary_report.some(
+  //   (summary) => summary.ZONE
+  // );
 
-  const isUFCPresentInData = transaction_summary_report.some(
-    (summary) => summary.UFC_CODE
-  );
+  // const isUFCPresentInData = transaction_summary_report.some(
+  //   (summary) => summary.UFC_CODE
+  // );
 
-  const displayRmCodeColumn = transaction_summary_report.some(
-    (summary) => summary.RMCODE
-  );
-  const displayEmpNameColumn = transaction_summary_report.some(
-    (summary) => summary.EMP_NAME
-  );
-  let columnToDisplay = "REGION"; // Default column to display
+  // const displayRmCodeColumn = transaction_summary_report.some(
+  //   (summary) => summary.RMCODE
+  // );
+  // const displayEmpNameColumn = transaction_summary_report.some(
+  //   (summary) => summary.EMP_NAME
+  // );
+  // let columnToDisplay = "REGION"; // Default column to display
 
-  if (isZonePresentInData) {
-    columnToDisplay = "ZONE";
-  } else if (isUFCPresentInData) {
-    columnToDisplay = "UFC_CODE";
-  } else if (displayRmCodeColumn && displayEmpNameColumn) {
-    columnToDisplay = "RMCODE_EMP_NAME"; // Use a single column name for both RMCODE and EMP_NAME
-  }
+  // if (isZonePresentInData) {
+  //   columnToDisplay = "ZONE";
+  // } else if (isUFCPresentInData) {
+  //   columnToDisplay = "UFC_CODE";
+  // } else if (displayRmCodeColumn && displayEmpNameColumn) {
+  //   columnToDisplay = "RMCODE_EMP_NAME"; // Use a single column name for both RMCODE and EMP_NAME
+  // }
 
-  if (!Array.isArray(transaction_summary_report)) {
-    // Handle the case where transaction_summary_report is not an array
-    return <p>No data available.</p>;
-  }
+  // if (!Array.isArray(transaction_summary_report)) {
+  //   // Handle the case where transaction_summary_report is not an array
+  //   return <p>No data available.</p>;
+  // }
 
   return (
     <>
-
       <div className="">
         <div>
           <div>
@@ -103,16 +108,12 @@ const SalesTable = ({ transaction_summary_report, formatNumberToIndianFormat }) 
                 <table className="table small border" id="table1">
                   <thead>
                     <tr className="bgcolorBlue text-white">
-                      <th key={columnToDisplay} scope="col">
-                        {columnToDisplay === "RMCODE_EMP_NAME"
-                          ? "RMCODE"
-                          : columnToDisplay}
-                      </th>
-                      {displayEmpNameColumn && (
+                      <th scope="col">ZONE</th>
+                      {/* {displayEmpNameColumn && (
                         <>
                           <th scope="col">EMP_NAME</th>
                         </>
-                      )}
+                      )} */}
                       <th scope="col" className="text-end">
                         Equity
                       </th>
@@ -138,9 +139,9 @@ const SalesTable = ({ transaction_summary_report, formatNumberToIndianFormat }) 
                   </thead>
                   <tbody>
                     {transaction_summary_report.map((summary, index) => {
-                      const hasZone = summary.hasOwnProperty("ZONE");
-                      const hasRegion = summary.hasOwnProperty("REGION");
-                      const hasUfcCode = summary.hasOwnProperty("UFC_CODE");
+                      // const hasZone = summary.hasOwnProperty("ZONE");
+                      // const hasRegion = summary.hasOwnProperty("REGION");
+                      // const hasUfcCode = summary.hasOwnProperty("UFC_CODE");
                       totalEquity += parseFloat(summary.SEQUITY);
                       totalHybrid += parseFloat(summary.SHYBRID);
                       totalArbitrage += parseFloat(summary.SARBITRAGE);
@@ -159,10 +160,11 @@ const SalesTable = ({ transaction_summary_report, formatNumberToIndianFormat }) 
                                 disabled={isLoading}
                               >
                                 <b className="sharp-font">
-                                  {hasZone ? summary.ZONE : ""}
-                                  {hasRegion  ? summary.REGION : ""}
+                                  {summary.ZONE}
+                                  {/* {hasZone ? summary.ZONE : ""}
+                                  {hasRegion ? summary.REGION : ""}
                                   {hasUfcCode ? summary.UFC_CODE : ""}
-                                  {displayRmCodeColumn ? summary.RMCODE : ""}
+                                  {displayRmCodeColumn ? summary.RMCODE : ""} */}
                                 </b>
                               </button>
                               {isLoading && (
@@ -172,10 +174,9 @@ const SalesTable = ({ transaction_summary_report, formatNumberToIndianFormat }) 
                                 </div>
                               )}
                             </td>
-                            {displayEmpNameColumn && (
-
+                            {/* {displayEmpNameColumn && (
                               <td className="">{summary.EMP_NAME}</td>
-                            )}
+                            )} */}
                             <td className="text-end">
                               {formatNumberToIndianFormat(
                                 parseFloat(summary.SEQUITY)
@@ -216,10 +217,16 @@ const SalesTable = ({ transaction_summary_report, formatNumberToIndianFormat }) 
                             <tr key={`subtable-${index}`}>
                               <td colSpan="8" className="p-0">
                                 <SubSalesTable
-                                  transaction_summary_report={transaction_summary_report}
+                                  transaction_summary_report={
+                                    transaction_summary_report
+                                  }
                                   formatNumberToIndianFormat={
                                     formatNumberToIndianFormat
                                   }
+                                  startDate={startDate}
+                                  endDate={endDate}
+                                  select_type={select_type}
+                                  zone= {summary.ZONE}
                                 />
                               </td>
                             </tr>
@@ -229,7 +236,7 @@ const SalesTable = ({ transaction_summary_report, formatNumberToIndianFormat }) 
                     })}
                     <tr className="bgcolorBlue text-white">
                       <td>TOTAL</td>
-                      {displayRmCodeColumn && (
+                      {/* {displayRmCodeColumn && (
                         <tr>
                           <td></td>
                           <td></td>
@@ -241,7 +248,7 @@ const SalesTable = ({ transaction_summary_report, formatNumberToIndianFormat }) 
                           <td></td>
                           <td></td>
                         </tr>
-                      )}
+                      )} */}
 
                       <td className="text-end">
                         {formatNumberToIndianFormat(

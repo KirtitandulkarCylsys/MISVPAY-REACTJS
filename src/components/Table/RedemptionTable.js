@@ -6,6 +6,9 @@ import Loader from "./Loader";
 const RedemptionTable = ({
   transaction_summary_report,
   formatNumberToIndianFormat,
+  startDate,
+  endDate,
+  select_type,
 }) => {
   const [clickedIndex, setClickedIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
@@ -17,7 +20,6 @@ const RedemptionTable = ({
   let totalFixedIncome = 0;
   let totalCash = 0;
   let grandTotal = 0;
-
 
   const handleButtonClick = (index) => {
     setIsLoading(true);
@@ -91,41 +93,22 @@ const RedemptionTable = ({
                   <th scope="col">EMP_NAME</th>
                 </>
               )}
-              <th
-                scope="col"
-                className="text-end"
-              >
+              <th scope="col" className="text-end">
                 Equity
               </th>
-              <th
-                scope="col"
-                className="text-end"
-              >
+              <th scope="col" className="text-end">
                 Hybrid
               </th>
-              <th
-                scope="col"
-                className="text-end"
-
-              >
+              <th scope="col" className="text-end">
                 Arbitrage
               </th>
-              <th
-                scope="col"
-                className="text-end"
-              >
+              <th scope="col" className="text-end">
                 Passive(ex-Debt)
               </th>
-              <th
-                scope="col"
-                className="text-end"
-              >
+              <th scope="col" className="text-end">
                 Fixed Income
               </th>
-              <th
-                scope="col"
-                className="text-end"
-              >
+              <th scope="col" className="text-end">
                 {" "}
                 Cash{" "}
               </th>
@@ -156,15 +139,17 @@ const RedemptionTable = ({
                         onClick={() => handleButtonClick(index)}
                         disabled={isLoading}
                       >
-                        <b className="sharp-font"> {hasZone ? summary.ZONE : ""}
+                        <b className="sharp-font">
+                          {" "}
+                          {hasZone ? summary.ZONE : ""}
                           {hasRegion ? summary.REGION : ""}
                           {hasUfcCode ? summary.UFC_CODE : ""}
-                          {displayRmCodeColumn ? summary.RMCODE : ""}</b>
+                          {displayRmCodeColumn ? summary.RMCODE : ""}
+                        </b>
                       </button>
                       {isLoading && <Loader />}
                     </td>
                     {displayEmpNameColumn && (
-
                       <td className="">{summary.EMP_NAME}</td>
                     )}
                     <td className="text-end">
@@ -207,10 +192,13 @@ const RedemptionTable = ({
                     <tr key={`subtable-${index}`}>
                       <td colSpan="8" className="p-0">
                         <SubRedemptionTable
-
                           formatNumberToIndianFormat={
                             formatNumberToIndianFormat
                           }
+                          startDate={startDate}
+                          endDate={endDate}
+                          select_type={select_type}
+                          zone={summary.ZONE}
                         />
                       </td>
                     </tr>
@@ -235,14 +223,10 @@ const RedemptionTable = ({
               )}
 
               <td className="text-end">
-                {formatNumberToIndianFormat(
-                  parseFloat(totalEquity.toFixed(2))
-                )}
+                {formatNumberToIndianFormat(parseFloat(totalEquity.toFixed(2)))}
               </td>
               <td className="text-end">
-                {formatNumberToIndianFormat(
-                  parseFloat(totalHybrid.toFixed(2))
-                )}
+                {formatNumberToIndianFormat(parseFloat(totalHybrid.toFixed(2)))}
               </td>
               <td className="text-end">
                 {formatNumberToIndianFormat(
@@ -260,14 +244,10 @@ const RedemptionTable = ({
                 )}
               </td>
               <td className="text-end">
-                {formatNumberToIndianFormat(
-                  parseFloat(totalCash.toFixed(2))
-                )}
+                {formatNumberToIndianFormat(parseFloat(totalCash.toFixed(2)))}
               </td>
               <td className="text-end">
-                {formatNumberToIndianFormat(
-                  parseFloat(grandTotal.toFixed(2))
-                )}
+                {formatNumberToIndianFormat(parseFloat(grandTotal.toFixed(2)))}
               </td>
             </tr>
           </tbody>
