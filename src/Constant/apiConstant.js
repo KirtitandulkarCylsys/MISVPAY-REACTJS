@@ -34,11 +34,11 @@ export const API_AUM_period = {
 };
 
 export const API_AUM_Region = {
-    DATA: (queryParams) => `${API}/aum_regions?${queryParams}`,
+    DATA: (queryParams) => `${API}/aum?${queryParams}`,
 };
 
 export const API_AUM_UFC = {
-    DATA: (queryParams) => `${API}/aum_ufc?${queryParams}`,
+    DATA: (queryParams) => `${API}/aum?${queryParams}`,
 };
 
 export const API_ALL_REGION_RETAIL = {
