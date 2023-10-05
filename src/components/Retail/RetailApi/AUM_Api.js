@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { API_AUM_DROPDOWN, API_AUM_Region, API_AUM_UFC } from '../../../Constant/apiConstant';
 import {API_AUM_period} from '../../../Constant/apiConstant';
 import { API_SCHEME_DETAILS } from '../../../Constant/apiConstant';
+import axiosInstance from '../../../Constant/apiConstant';
 
 
 export const AumDropdownApi = () => {
@@ -11,8 +12,9 @@ export const AumDropdownApi = () => {
     const fetchData = async () => {
       setLoading(true)
       try {
-        const response = await fetch(API_AUM_DROPDOWN.DATA);
-        const data = await response.json();
+        const response = await axiosInstance.get(API_AUM_DROPDOWN.DATA);
+        // const data = await response.json();
+        const data = response.data;
         setAumDropdown(data);
         setLoading(false)
       } catch (error) {
@@ -33,8 +35,9 @@ export const useAUMApi = (queryParams) => {
     const fetchData = async () => {
       setLoading(true)
       try {
-        const response = await fetch(API_AUM_Region.DATA(queryParams));
-        const data = await response.json();
+        const response = await axiosInstance.get(API_AUM_Region.DATA(queryParams));
+        // const data = await response.json();
+        const data = response.data;
         setAumDetails(data);
         setLoading(false)
       } catch (error) {
@@ -59,8 +62,9 @@ export const usePeriodApi = () => {
     const fetchData = async () => {
       setLoading(true)
       try {
-        const response = await fetch(API_AUM_period.DATA(queryParams));
-        const data = await response.json();
+        const response = await axiosInstance.get(API_AUM_period.DATA(queryParams));
+        // const data = await response.json();
+        const data = response.data;
         setAumPeriod(data)
         setLoading(false)
       } catch (error) {
@@ -80,8 +84,9 @@ export const useUfc = (queryParams) => {
     const fetchData = async () => {
       setLoading(true)
       try {
-        const response = await fetch(API_AUM_UFC.DATA(queryParams));
-        const data = await response.json();
+        const response = await axiosInstance.get(API_AUM_UFC.DATA(queryParams));
+        // const data = await response.json();
+        const data = response.data;
         setAumUfc(data);
         setLoading(false)
       } catch (error) {
@@ -100,8 +105,9 @@ export const Scheme =()=>{
     const fetchData = async () => {
      
       try {
-        const response = await fetch(API_SCHEME_DETAILS.DATA);
-        const data = await response.json();
+        const response = await axiosInstance.get(API_SCHEME_DETAILS.DATA);
+        // const data = await response.json();
+        const data = response.data;
         setSchemeDetails(data);
         console.log(scheme_details,"aaaa")
       } catch (error) {
