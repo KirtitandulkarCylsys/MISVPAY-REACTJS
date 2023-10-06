@@ -31,7 +31,7 @@ import TableRowWithSales from "../Table/SubTable/RMWISE/TableRowWithSales";
 
 const Retail_Transaction = ({ headers }) => {
   const { scheme_details } = Scheme();
-  const Data = "1498";
+  const Data = "BIHR";
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const {
@@ -187,29 +187,40 @@ const Retail_Transaction = ({ headers }) => {
 
                       <div className="row d-flex justify-content-around">
                         {/* <div class="col-md-1"></div> */}
-                        <div className="form-group col-md-2  mt-4">
-                          <label className="form-lables">
-                            <b> Scheme</b>
-                          </label>
-                          <Multiselect
+                        <div className="col-md-6">
+                          <div className="form-group col-md-2  mt-4">
+                            <label className="form-lables">
+                              <b> Scheme</b>
+                            </label>
+                            <Multiselect
                             // options={options}
                             // selectedValues={selectedSchemes}
                             // onSelect={functionToHandleSelect}
                             // onRemove={functionToHandleRemove}
-                            displayValue="name"
-                          />
+                            // displayValue="name"
+                            />
+                          </div>
                         </div>
-
-                        {/* coloumn and filter */}
-                        <div className=" col-md-2">
+                        {/* coloumn and filter
+                        <div className=" col-md-2 media">
                           <Filter />
                         </div>
                         <div className="col-md-2">
                           <DropDown />
-                        </div>
-
+                        </div> */}
+                        {/* search button */}
+                        <div className="col-md-6">
+                          <div className="col-md-6 mt-5 search ">
+                            <button
+                              className="btn  BgcolorOrange "
+                              onClick={togglehide}
+                            >
+                              <b className="colorwhite"> Search</b>
+                            </button>
+                          </div>
+                        
                         {/* export, pdf, model */}
-                        <div className="col-md-2 mt-5 tabs ">
+                        <div className="col-md-6 mt-5 tabs ">
                           <p className="exporttab">
                             <ExcelToExport />
                             |<ExportToPdf />|
@@ -223,14 +234,6 @@ const Retail_Transaction = ({ headers }) => {
                             />
                           </p>
                         </div>
-                        {/* search button */}
-                        <div className="col-md-1 mt-5 search ">
-                          <button
-                            className="btn  BgcolorOrange "
-                            onClick={togglehide}
-                          >
-                            <b className="colorwhite"> Search</b>
-                          </button>
                         </div>
                       </div>
                       <ScheduleModal />

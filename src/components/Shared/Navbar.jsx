@@ -49,7 +49,7 @@ const Navbar = ({ onToggle }) => {
               </div>
               <div className="col-md-2 pt-1">
                 <h5 className="nav-h4">Welcome, Admin</h5>
-                <p>
+                <p className="Quarter1">
                   Quarter <span>:</span>
                   <strong>
                     <span>2023-24 Q1</span>

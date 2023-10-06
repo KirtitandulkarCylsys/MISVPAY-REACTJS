@@ -40,8 +40,8 @@ const Api = ({ headers }) => {
         channel: "RTL",
         zone: "",
         region: "BIHR",
-        ufc: "nill",
-        rm: "nill",
+        ufc: "",
+        rm: "",
         common_report: "REGIONWISE",
       });
       if (startDate > endDate) {
@@ -51,10 +51,7 @@ const Api = ({ headers }) => {
         setLoading(true);
 
         const response = await axiosInstance.get(
-          API_SUMMARY_TRANSACTION.DATA(queryParams),
-          {
-            method: "GET",
-          }
+          API_SUMMARY_TRANSACTION.DATA(queryParams)
         );
         // const data = await response.json();
         const data = response.data;

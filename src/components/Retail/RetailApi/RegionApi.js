@@ -56,3 +56,68 @@ export const RMApi = (queryParams) => {
 }
 
 
+export const AllRegionwise = (queryParams) => {
+	const [regionwise, setRegionWise] = useState([]);
+	const [loading, setLoading] = useState(false);
+	useEffect(() => {
+		const fetchAllRegionData = async () => {
+			setLoading(true)
+			try {
+				const response = await fetch(API_SUMMARY_TRANSACTION.DATA(queryParams));
+				const data = await response.json();
+				setRegionWise(data)
+				setLoading(false)
+			} catch (error) {
+				console.error("Error fetching  details", error);
+			}
+
+		};
+		fetchAllRegionData();
+	}, [])
+	return { regionwise,loading }
+}
+
+export const AllUfcwise = (queryParams) => {
+	const [ufcwise, setUfcWise] = useState([]);
+	const [loading, setLoading] = useState(false);
+	useEffect(() => {
+		const fetchAllRegionData = async () => {
+			setLoading(true)
+			try {
+				const response = await fetch(API_SUMMARY_TRANSACTION.DATA(queryParams));
+				const data = await response.json();
+				setUfcWise(data)
+				setLoading(false)
+			} catch (error) {
+				console.error("Error fetching  details", error);
+			}
+
+		};
+		fetchAllRegionData();
+	}, [])
+	return { ufcwise,loading }
+}
+
+export const AllRmwise = (queryParams) => {
+	const [rmwise, setRmWise] = useState([]);
+	const [loading, setLoading] = useState(false);
+	useEffect(() => {
+		const fetchAllRegionData = async () => {
+			setLoading(true)
+			try {
+				const response = await fetch(API_SUMMARY_TRANSACTION.DATA(queryParams));
+				const data = await response.json();
+				setRmWise(data)
+				setLoading(false)
+			} catch (error) {
+				console.error("Error fetching  details", error);
+			}
+
+		};
+		fetchAllRegionData();
+	}, [])
+	return { rmwise,loading }
+}
+
+
+
