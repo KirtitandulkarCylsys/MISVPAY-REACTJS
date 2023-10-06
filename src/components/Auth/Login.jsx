@@ -5,11 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { setEmpIdCookie, setAuthTokenCookie } from "./Cookie";
 import { API_LOGIN } from "../../Constant/apiConstant";
 import Api from "../../Constant/apiConstant";
+import { fetchRoleWiseData } from "../../Constant/apiService";
+
 
 const Login = () => {
   const [p_emp_id, setEmpID] = useState(" ");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [roleWiseData, setRoleWiseData] = useState(null);
   const navigate = useNavigate();
   const handleLogin = (e) => {
     e.preventDefault();
@@ -44,7 +47,17 @@ const Login = () => {
           
           setEmpID("");
           setPassword("");
+
+          fetchRoleWiseData(empId, token)
+          .then((roleWiseData) => {
+            setRoleWiseData(roleWiseData);
+            // updateRoleWiseData = roleWiseData
+
           navigate("/Home");
+        })
+        .catch((error) => {
+          console.error("Error fetching role-wise data:", error);
+        });
         } else {
           console.error("Invalid API response format");
         }
