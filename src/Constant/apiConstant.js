@@ -84,4 +84,8 @@ export const API_ALL_RM_RETAIL = {
     DATA: (queryParams) => `${API}/all_rm_retail?${queryParams}`,
 };
 
+export const API_ROLEWISE = {
+  DATA: `${API}/rolewiselogin`,
+}
+
 export default axiosInstance;
