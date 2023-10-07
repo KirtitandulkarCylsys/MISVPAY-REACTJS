@@ -4,45 +4,60 @@ import leftimage from "../Assets/images/utiloginfinal.png";
 import { useNavigate } from "react-router-dom";
 import { setEmpIdCookie, setAuthTokenCookie } from "./Cookie";
 import { API_LOGIN } from "../../Constant/apiConstant";
-import Api from "../Retail/RetailApi/Api";
+import Api from "../../Constant/apiConstant";
+import { fetchRoleWiseData } from "../../Constant/apiService";
+
 
 const Login = () => {
   const [p_emp_id, setEmpID] = useState(" ");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [roleWiseData, setRoleWiseData] = useState(null);
   const navigate = useNavigate();
   const handleLogin = (e) => {
     e.preventDefault();
-    fetch(API_LOGIN.DATA, {
-      method: "POST",
-      body: JSON.stringify({ p_emp_id, password }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+    Api.post(API_LOGIN.DATA, { p_emp_id, password })
       .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
+        if (response.status >= 200 && response.status < 300) {
+          const contentType = response.headers.get("content-type");
+          console.log("Content-Type:", contentType);
+
+          if (contentType && contentType.includes("application/json")) {
+            return response.data;
+          } else {
+            console.error("Response is not in JSON format");
+            throw new Error("Response is not in JSON format");
+          }
+        } else {
+          console.error(`Network response was not ok (${response.status})`);
+          throw new Error(`Network response was not ok (${response.status})`);
         }
-        return response.json();
       })
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
           const empId = data[0].p_emp_id;
           const token = data[0].p_auth_token;
 
+          localStorage.setItem("emp_id", empId);
+          localStorage.setItem("token", token);
+
           setEmpIdCookie(empId);
           setAuthTokenCookie(token);
 
-          const headers = {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-            emp_id: empId,
-          };
+          
           setEmpID("");
           setPassword("");
+
+          fetchRoleWiseData(empId, token)
+          .then((roleWiseData) => {
+            setRoleWiseData(roleWiseData);
+            // updateRoleWiseData = roleWiseData
+
           navigate("/Home");
-          return <Api headers={headers} />;
+        })
+        .catch((error) => {
+          console.error("Error fetching role-wise data:", error);
+        });
         } else {
           console.error("Invalid API response format");
         }
@@ -68,51 +83,51 @@ const Login = () => {
               <div className="main-form">
                 <form>
                   <div className="mb-3">
-                      <label className="form-label" id="label-text">
-                         Employee ID <span className="required-span">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        className="form-control "
-                        placeholder="Please Enter your valid Employee ID"
-                        value={p_emp_id}
-                        onChange={(e) => {
+                    <label className="form-label" id="label-text">
+                      Employee ID <span className="required-span">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control "
+                      placeholder="Please Enter your valid Employee ID"
+                      value={p_emp_id}
+                      onChange={(e) => {
                         setEmpID(e.target.value);
-                        }}
-                      />
+                      }}
+                    />
                   </div>
                   <div className="mb-3">
-                        <label className="form-label" id="label-text">
-                           Password <span className="required-span">*</span>
-                       </label>
-                        <input
-                        type={showPassword ? "text" : "password"} // Toggle the input type based on showPassword state
-                        className="form-control"
-                        id="exampleInputPassword1"
-                        placeholder="Please Enter your Password"
-                        value={password}
-                        onChange={(e) => {
-                            setPassword(e.target.value);
-                        }}
-                        />
+                    <label className="form-label" id="label-text">
+                      Password <span className="required-span">*</span>
+                    </label>
+                    <input
+                      type={showPassword ? "text" : "password"} // Toggle the input type based on showPassword state
+                      className="form-control"
+                      id="exampleInputPassword1"
+                      placeholder="Please Enter your Password"
+                      value={password}
+                      onChange={(e) => {
+                        setPassword(e.target.value);
+                      }}
+                    />
                   </div>
                   <div className="mb-3 form-check">
-                        <input
-                        type="checkbox"
-                        className="form-check-input"
-                        checked={showPassword}
-                        onChange={() => setShowPassword(!showPassword)}
-                        />
-                        <label className="form-check-label">Show Password</label>
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      checked={showPassword}
+                      onChange={() => setShowPassword(!showPassword)}
+                    />
+                    <label className="form-check-label">Show Password</label>
                   </div>
                   <div className="text-center">
-                        <button
-                        className="btn w-100"
-                        id="button-login"
-                        onClick={handleLogin}
-                        >
-                        Login
-                        </button>
+                    <button
+                      className="btn w-100"
+                      id="button-login"
+                      onClick={handleLogin}
+                    >
+                      Login
+                    </button>
                   </div>
                 </form>
               </div>
