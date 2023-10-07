@@ -11,6 +11,9 @@ import AumRegionReport from './components/Retail/AUM/AumRegionReport';
 import AumUfcReport from './components/Retail/AUM/AumUfcReport';
 import RegionWiseSales from './components/Table/All-Wise-Table/RegionWiseSales';
 import TransactionReport from './components/Retail/Report_Transaction';
+import AllIndiaRegionwWise from './components/Retail/AUM/AllIndiaWise/AllIndiaRegionwWise';
+import AllIndiaUfcWise from './components/Retail/AUM/AllIndiaWise/AllIndiaUfcWise';
+import AllIndiaRmWIse from './components/Retail/AUM/AllIndiaWise/AllIndiaRmWIse';
 function App() {
   return (
     <div className="App">
@@ -27,6 +30,9 @@ function App() {
         <Route path='/AumRegionReport/:zone/:report_period' element={<AumRegionReport/>}/>
         <Route path="/AumUfcReport/:zone/:report_period/:region_code" element={<AumUfcReport />} />
         <Route path='TransactionReport' element={<TransactionReport/>}/>
+        <Route path='/AllIndiaAumRegionWise/:report_period' element={<AllIndiaRegionwWise/>}/>
+        <Route path='/AllIndiaAumUfcWise/:report_period' element={<AllIndiaUfcWise/>}/>
+        <Route path='/AllIndiaAumRMWise/:report_period' element={<AllIndiaRmWIse/>}/>
       </Routes>
     </BrowserRouter>         
     </div>

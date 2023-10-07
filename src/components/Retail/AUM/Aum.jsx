@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate ,Link} from "react-router-dom";
 import "./Aum.css";
 import { usePeriodApi } from "../RetailApi/AUM_Api";
 import LoaderSearch from "../../Table/SubTable/LoaderSearch";
@@ -59,23 +59,56 @@ const Aum = ({ report_period }) => {
             <LoaderSearch />
           </div>
         ) : (
-          <div className="" style={{ paddingLeft: "" }}>
+          <div className=" col-md-12 d-flex" style={{ paddingLeft: "" }}>
             <div
               className=""
               style={{ paddingLeft: "", paddingBottom: "10px" }}
             >
-              <div className="col-md-3 d-flex">
+              <div className="col-md-6 ">
                 <h4>
-                  <b>SALES</b>
+                  <b>SALES  (In Lakhs)</b>
                 </h4>
                 <h5>
-                  <b className="gray-color">(In Lakhs)</b>
+                  
                 </h5>
               </div>
             </div>
+
+            <div className="col-md-2 list-group mt-5">
+          <p className="theader">
+            <Link
+              className="btn textlink"
+              to={`/AllIndiaAumRegionWise/${report_period}`}
+            >
+              <b>All India Region Wise</b>
+            </Link>
+          </p>
+        </div>
+            
+        <div className="col-md-2 mt-5">
+          <p className="theader">
+            <Link className=" btn textlink"   to={`/AllIndiaAumUfcWise/${report_period}`}>
+              <b>All India UFC Wise </b>
+            </Link>
+          </p>
+        </div>
+
+        <div className="col-md-2 mt-5">
+          <p className="theader">
+            <Link className=" btn textlink"
+             to={`/AllIndiaAumRMWise/${report_period}`} >
+              <b>All India RM Wise </b>
+            </Link>
+          </p>
+        </div>
+
           </div>
         )}
+       
+        
 
+       
+       
         {!loading && (
           <table className="table table-bordered active" id="table1">
             <thead className="Aum-Head">
@@ -147,7 +180,7 @@ const Aum = ({ report_period }) => {
                       <td colSpan="8" className="p-0">
                         <AumRegionReport
                           report_period={report_period}
-                          zone =  {item.ZONE}
+                          zone={item.ZONE}
                           formatNumberToIndianFormat={
                             formatNumberToIndianFormat
                           }

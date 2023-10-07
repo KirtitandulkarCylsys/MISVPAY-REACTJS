@@ -120,7 +120,7 @@ const AumUfcReport = ({
                       <th rowSpan="2">Region Code</th>
                       <th rowSpan="2">UFC Code</th>
                       <th rowSpan="2">UFC</th>
-                      <th rowSpan="2">Employee ID</th>
+                      
                       <th rowSpan="2">Employee Name</th>
                       <th rowSpan="2">Total AUM</th>
                       <th colSpan="6">AUM</th>
@@ -142,7 +142,7 @@ const AumUfcReport = ({
                         <td className="">{item.REGION_CODE}</td>
                         <td className="">{item.UFC_CODE}</td>
                         <td className="">{item.UFC_NAME}</td>
-                        <td className="">{item.EMPLID}</td>
+                       
                         <td className="">{item.EMP_NAME}</td>
                         <td className="">{item.TOTAL_AUM}</td>
                         <td className="">{item.EQUITY_AUM}</td>
@@ -154,7 +154,7 @@ const AumUfcReport = ({
                       </tr>
                     ))}
                     <tr style={{ backgroundColor: "#4C6072", color: "white" }}>
-                      <td colSpan="7">Total</td>
+                      <td colSpan="6">Total</td>
                       <td className="">
                         {formatNumberToIndianFormat(
                           calculateTotalAum().toFixed(2)
