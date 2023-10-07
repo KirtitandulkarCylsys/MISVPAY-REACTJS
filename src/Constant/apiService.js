@@ -8,7 +8,7 @@ export const fetchRoleWiseData = async (empId, token, currentDate, quarterNo) =>
 const formattedDate = date.toLocaleDateString('en-GB', {
   day: '2-digit', month: 'short', year: 'numeric'
 }).replace(/ /g, '-');
-// console.log(formattedDate);
+
 
   try {
     const response = await axiosInstance.get(API_ROLEWISE.DATA, {

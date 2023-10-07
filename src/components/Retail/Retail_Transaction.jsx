@@ -31,7 +31,7 @@ import TableRowWithSales from "../Table/SubTable/RMWISE/TableRowWithSales";
 
 const Retail_Transaction = ({ headers }) => {
   const { scheme_details } = Scheme();
-  const Data = "BIHR";
+  const Data = "EAST";
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const {

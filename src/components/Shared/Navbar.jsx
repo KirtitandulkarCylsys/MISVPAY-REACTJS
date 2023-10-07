@@ -10,12 +10,10 @@ import logout from "../Assets/images/logout icon.png";
 import { useNavigate } from "react-router-dom";
 import { removeEmpIdCookie, removeAuthTokenCookie } from "../Auth/Cookie";
 // import { fetchRoleWiseData } from "../../Constant/apiService";
-import { useDataContext } from "../../Context/DateContext";
 
 
 const Navbar = ({ onToggle }) => {
   const navigate = useNavigate();
-  const { roleWiseData } = useDataContext();
 
   const handleLogout = () => {
     removeEmpIdCookie();
@@ -52,11 +50,11 @@ const Navbar = ({ onToggle }) => {
                 </button>
               </div>
               <div className="col-md-2 pt-1">
-                <h5 className="nav-h4">Welcome,{roleWiseData?("EMP_NAME"):null}</h5>
+                <h5 className="nav-h4">Welcome,</h5>
                 <p>
                   Quarter <span>:</span>
                   <strong>
-                    <span>{roleWiseData?.YEAR}</span>
+                    <span></span>
                   </strong>
                 </p>
               </div>
@@ -65,11 +63,11 @@ const Navbar = ({ onToggle }) => {
                   <div>
                     <p className="nav-para">
                       Channel <span>:</span>
-                      <strong>{roleWiseData?.CHANNEL_CODE}</strong>
+                      <strong></strong>
                     </p>
                   </div>
                   <div className="nav-div">
-                    <img src={Navi} alt="navi" /> <strong>{roleWiseData?.ZONE}</strong>
+                    <img src={Navi} alt="navi" /> <strong></strong>
                   </div>
                 </div>
               </div>
@@ -96,7 +94,7 @@ const Navbar = ({ onToggle }) => {
                       className="mt-4"
                     />
                     <div className="m-2 w-100">
-                      <h5 className="nav-heading">Role : {roleWiseData?.FUNC_ROLE}</h5>
+                      <h5 className="nav-heading">Role : </h5>
                       <p>{formattedDateTime}</p>
                     </div>
                   </li>

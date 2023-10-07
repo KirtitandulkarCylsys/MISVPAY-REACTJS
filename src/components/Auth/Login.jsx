@@ -12,7 +12,7 @@ const Login = () => {
   const [p_emp_id, setEmpID] = useState(" ");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [roleWiseData, setRoleWiseData] = useState(null);
+  const [roleWiseData, setRoleWiseData] = useState([]);
   const navigate = useNavigate();
   const handleLogin = (e) => {
     e.preventDefault();

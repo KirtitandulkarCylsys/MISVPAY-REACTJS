@@ -2,13 +2,12 @@ import { useState } from "react";
 import { API_SUMMARY_TRANSACTION } from "../../../Constant/apiConstant";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Navigate, useNavigate } from "react-router-dom";
 import axiosInstance from "../../../Constant/apiConstant";
-
+import { useContext } from "react";
+import RollWiseContext from "../../../Context/RollWiseContext";
 const Api = ({ headers }) => {
   const [hide, setHide] = useState(false);
   const [employee_id, setEmployeeId] = useState("");
-  const [emprole, setEmpRole] = useState("");
   const [quarter, setQuarter] = useState("");
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
@@ -20,18 +19,18 @@ const Api = ({ headers }) => {
   const [ufc, setUfc] = useState("");
   const [rm, setRm] = useState("");
   const [common_report, setCommonReport] = useState("");
-  const [transaction_summary_report, setTransactionSummaryReport] = useState(
-    []
-  );
+  const [transaction_summary_report, setTransactionSummaryReport] = useState([]);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  debugger
+  const rollwiseData= useContext(RollWiseContext);
+  const emprole = rollwiseData.FUNC_ROLE;
   const fetchTransactionSummary = async () => {
     try {
       const formattedStartDate = startDate.split("-").reverse().join("/");
       const formattedEndDate = endDate.split("-").reverse().join("/");
       const queryParams = new URLSearchParams({
         employee_id: "1234",
-        emprole: "ADMIN",
+        emprole: emprole,
         quarter: "202324Q2",
         start_date: formattedStartDate,
         end_date: formattedEndDate,
@@ -39,10 +38,10 @@ const Api = ({ headers }) => {
         scheme_code: "nill",
         channel: "RTL",
         zone: "",
-        region: "BIHR",
+        region: "",
         ufc: "",
         rm: "",
-        common_report: "REGIONWISE",
+        common_report: "",
       });
       if (startDate > endDate) {
         toast.error("End Date must be Greater Than Start Date");
