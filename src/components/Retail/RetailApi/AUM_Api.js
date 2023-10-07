@@ -28,13 +28,14 @@ export const AumDropdownApi = () => {
   return {aum_dropdown, loading}
 }
 
-export const  usePeriodApi = (queryParams) => {
+export const usePeriodApi = () => {
   const [aum_period, setAumperiod] = useState([]);
   const [loading, setLoading] = useState(false);
-const [report_period, setReportPeriod] = useState('');
+  const [report_period, setReportPeriod] = useState('');
+
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true)
+      setLoading(true);
       const queryParams = new URLSearchParams({
         empid: "1234",
         emprole: "ADMIN",
@@ -43,24 +44,32 @@ const [report_period, setReportPeriod] = useState('');
         zone: "",
         region_code: "",
         ufc_code: "",
-        rm_code: "nill",
+        rm_code: "",
         chn_code: "",
         common_report: ''
       });
+
       try {
-        const response = await fetch(API_AUM_period.DATA(queryParams));
-        const data = await response.json();
-        setAumperiod(data);
-        setLoading(false)
+        const response = await axiosInstance.get(API_AUM_period.DATA(queryParams));
+        if (response.status === 200) {
+          const data = await response.data;
+          setAumperiod(data);
+        } else {
+          console.error("Request failed with status code", response.status);
+          // You can handle different HTTP status codes as needed
+        }
       } catch (error) {
         console.error("Error fetching AUM details", error);
+        // Handle the error here, e.g., set an error state
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchData();
   }, []);
 
-  return {aum_period, report_period, setReportPeriod, loading};
+  return { aum_period, report_period, setReportPeriod, loading };
 };
 
 export const useAUMApi = (queryParams) => {
@@ -71,10 +80,12 @@ export const useAUMApi = (queryParams) => {
     const fetchData = async () => {
       setLoading(true)
       try {
-        const response = await axiosInstance.get(API_AUM_Region.DATA(queryParams));
+        const response = await axiosInstance.get(API_AUM_Region.DATA(queryParams), {
+          method: "GET",
+        });
         // const data = await response.json();
         const data = response.data;
-        setAumDetails(data);
+        setAumRegions(data);
         setLoading(false)
       } catch (error) {
         console.error("Error fetching AUM details", error);
@@ -87,31 +98,33 @@ export const useAUMApi = (queryParams) => {
   return {aum_regions,loading};
 };
 
+
+ // Replace with your axios instance
+ // Replace with your API_AUM_period import
+
 export const UfcApi = (queryParams) => {
-  const [aum_ufc, setAumUfc] = useState([]);
+  const [aumUfc, setAumUfc] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true)
+      setLoading(true);
+
       try {
-        const response = await axiosInstance.get(API_AUM_period.DATA(queryParams));
-        // const data = await response.json();
-        const data = response.data;
-        setAumPeriod(data)
-        const response = await fetch(API_AUM_period.DATA(queryParams));
-        const data = await response.json();
-        setAumUfc(data);
-        setLoading(false)
+        const responseAUM = await axiosInstance.get(API_AUM_period.DATA(queryParams));
+        const dataAUM = responseAUM.data;
+        setAumUfc(dataAUM);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching AUM details", error);
+        setLoading(false);
       }
     };
 
     fetchData();
-  }, []);
+  }, [queryParams]);
 
-  return {aum_ufc,loading};
+  return { aumUfc, loading };
 };
 
 export const useAllRegion = (queryParams) => {
@@ -122,8 +135,10 @@ export const useAllRegion = (queryParams) => {
     const fetchData = async () => {
       setLoading(true)
       try {
-        const response = await fetch(API_ALL_REGION_AUM.DATA(queryParams));
-        const data = await response.json();
+       
+        const responseAUM = await axiosInstance.get(API_ALL_REGION_AUM.DATA(queryParams));
+        const data= responseAUM.data;
+        
         setAumAllAumRegion(data);
         setLoading(false)
       } catch (error) {

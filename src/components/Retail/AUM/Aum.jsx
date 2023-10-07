@@ -21,7 +21,7 @@ const Aum = ({ report_period }) => {
   //   chn_code: "",
   //   common_report: 'REGIONWISE'
   // });
-  const { aum_period, loading } = usePeriodApi();
+  const { aum_period, loading,setReportPeriod } = usePeriodApi();
   const formatNumberToIndianFormat = (number) => {
     if (typeof number !== "number") {
       return number;

@@ -9,7 +9,7 @@ export const useDataContext = () => {
 export const DataProvider = ({ children }) => {
   const [roleWiseData, setRoleWiseData] = useState(null);
 
-  debugger
+ 
   const updateRoleWiseData = (data) => {
     setRoleWiseData(data);
     console.log(roleWiseData);
