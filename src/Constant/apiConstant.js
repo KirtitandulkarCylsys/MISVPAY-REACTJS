@@ -71,6 +71,9 @@ export const API_AUM_Region = {
 export const API_AUM_UFC = {
     DATA: (queryParams) => `${API}/aum?${queryParams}`,
 };
+export const API_AUM_RM = {
+  DATA: (queryParams) => `${API}/aum?${queryParams}`,
+};
 export const API_ALL_REGION_AUM = {
     DATA: (queryParams) => `${API}/aum?${queryParams}`,
 };

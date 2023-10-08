@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { API_ALL_RM_AUM, API_ALL_UFC_AUM, API_AUM_DROPDOWN, API_AUM_Region, API_AUM_UFC } from '../../../Constant/apiConstant';
+import { API_ALL_RM_AUM, API_ALL_UFC_AUM, API_AUM_DROPDOWN, API_AUM_RM, API_AUM_Region, API_AUM_UFC } from '../../../Constant/apiConstant';
 import {API_AUM_period} from '../../../Constant/apiConstant';
 import { API_SCHEME_DETAILS } from '../../../Constant/apiConstant';
 import axiosInstance from '../../../Constant/apiConstant';
@@ -46,7 +46,7 @@ export const usePeriodApi = () => {
         ufc_code: "",
         rm_code: "",
         chn_code: "",
-        common_report: ''
+        common_report: ""
       });
 
       try {
@@ -80,9 +80,7 @@ export const useAUMApi = (queryParams) => {
     const fetchData = async () => {
       setLoading(true)
       try {
-        const response = await axiosInstance.get(API_AUM_Region.DATA(queryParams), {
-          method: "GET",
-        });
+        const response = await axiosInstance.get(API_AUM_Region.DATA(queryParams));
         // const data = await response.json();
         const data = response.data;
         setAumRegions(data);
@@ -111,9 +109,9 @@ export const UfcApi = (queryParams) => {
       setLoading(true);
 
       try {
-        const responseAUM = await axiosInstance.get(API_AUM_period.DATA(queryParams));
-        const dataAUM = responseAUM.data;
-        setAumUfc(dataAUM);
+        const response = await axiosInstance.get(API_AUM_UFC.DATA(queryParams));
+        const data = response.data;
+        setAumUfc(data);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching AUM details", error);
@@ -122,10 +120,42 @@ export const UfcApi = (queryParams) => {
     };
 
     fetchData();
-  }, [queryParams]);
+  }, []);
 
   return { aumUfc, loading };
 };
+
+export const RMApi = (queryParams) => {
+  const [aumRM, setAumRM] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+
+      try {
+        const response = await axiosInstance.get(API_AUM_RM.DATA(queryParams));
+        const data = response.data;
+        setAumRM(data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching AUM details", error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  return { aumRM, loading };
+};
+
+
+
+
+
+
+
 
 export const useAllRegion = (queryParams) => {
   const [aum_AllAumRegion, setAumAllAumRegion] = useState([]);
@@ -160,8 +190,11 @@ export const useAllUfc = (queryParams) => {
     const fetchData = async () => {
       setLoading(true)
       try {
-        const response = await fetch(API_ALL_UFC_AUM.DATA(queryParams));
-        const data = await response.json();
+        
+
+
+        const responseAUM = await axiosInstance.get(API_ALL_UFC_AUM.DATA(queryParams));
+        const data = responseAUM.data;
         setAumAllAumUfc(data);
         setLoading(false)
       } catch (error) {
@@ -183,8 +216,9 @@ export const useAllRM = (queryParams) => {
     const fetchData = async () => {
       setLoading(true)
       try {
-        const response = await fetch(API_ALL_RM_AUM.DATA(queryParams));
-        const data = await response.json();
+       
+        const response = await axiosInstance.get(API_ALL_RM_AUM.DATA(queryParams));
+        const data = response.data;
         setAumAllAumRM(data);
         setLoading(false)
       } catch (error) {

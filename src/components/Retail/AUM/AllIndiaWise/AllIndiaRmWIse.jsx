@@ -4,6 +4,8 @@ import Navbar from '../../../Shared/Navbar';
 import SideBar from '../../../Shared/SideBar/SideBar';
 import { useParams } from 'react-router-dom';
 import LoaderSearch from '../../../Table/SubTable/LoaderSearch';
+import { ExcelToExport } from '../../ExcelToExport';
+import ExportToPdf from '../../ExportToPdf';
 
 const AllIndiaRmWIse = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -103,6 +105,15 @@ const AllIndiaRmWIse = () => {
               </div>
             </div>
           )}
+          <div class="col-md-6 col-12 mb-3">
+                          <div className="icon">
+                            {/* <button onClick={handleExport} className="border-0">
+                          <img src={excel} alt="excelicon" />
+                        </button> */}
+                            <ExcelToExport />
+                            | <ExportToPdf />
+                          </div>
+                        </div>
           {!loading && (
             <table
               className="table table-bordered nested-table active"

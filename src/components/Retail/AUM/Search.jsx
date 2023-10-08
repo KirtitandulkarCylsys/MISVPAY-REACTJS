@@ -158,6 +158,7 @@ const Search = () => {
                     <AumUfcReport
                       aum_period={aum_period}
                       report_period={report_period}
+                      
                       formatNumberToIndianFormat={formatNumberToIndianFormat}
                     />
                   ) : null}
