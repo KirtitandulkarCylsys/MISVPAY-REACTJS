@@ -1,70 +1,108 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import "../Assets/css/Auth/Login.css";
 import leftimage from "../Assets/images/utiloginfinal.png";
 import { useNavigate } from "react-router-dom";
 import { setEmpIdCookie, setAuthTokenCookie } from "./Cookie";
 import { API_LOGIN } from "../../Constant/apiConstant";
-import Api from "../../Constant/apiConstant";
-import { fetchRoleWiseData } from "../../Constant/apiService";
-
+// import Api from "../../Constant/apiConstant";
+// import { fetchRoleWiseData } from "../../Constant/apiService";
+import axiosInstance from "../../Constant/apiConstant";
+import {API_ROLEWISE} from "../../Constant/apiConstant";
+import { useRoleWiseData } from "../../Context/RoleWiseDataContext";
 
 const Login = () => {
   const [p_emp_id, setEmpID] = useState(" ");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [roleWiseData, setRoleWiseData] = useState(null);
+  // const [roleWiseData, setRoleWiseData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const handleLogin = (e) => {
+  
+  
+  const { setRoleWiseData } = useRoleWiseData();
+  const handleLogin = async (e) => {
+    
     e.preventDefault();
-    Api.post(API_LOGIN.DATA, { p_emp_id, password })
-      .then((response) => {
-        if (response.status >= 200 && response.status < 300) {
-          const contentType = response.headers.get("content-type");
-          console.log("Content-Type:", contentType);
-
-          if (contentType && contentType.includes("application/json")) {
-            return response.data;
-          } else {
-            console.error("Response is not in JSON format");
-            throw new Error("Response is not in JSON format");
-          }
-        } else {
-          console.error(`Network response was not ok (${response.status})`);
-          throw new Error(`Network response was not ok (${response.status})`);
-        }
-      })
-      .then((data) => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.post(API_LOGIN.DATA, {
+        p_emp_id,
+        password,
+      });
+      
+      if (response.status >= 200 && response.status < 300) {
+        const data = await response.data;
         if (Array.isArray(data) && data.length > 0) {
           const empId = data[0].p_emp_id;
           const token = data[0].p_auth_token;
-
+          
           localStorage.setItem("emp_id", empId);
           localStorage.setItem("token", token);
-
+          
           setEmpIdCookie(empId);
           setAuthTokenCookie(token);
-
+          
+          // Call fetchRoleWiseData here with empId and token
+          const roleWiseData = await fetchRoleWiseData(empId, token);
+          setRoleWiseData(roleWiseData);
+          console.log(roleWiseData);
           
           setEmpID("");
           setPassword("");
 
-          fetchRoleWiseData(empId, token)
-          .then((roleWiseData) => {
-            setRoleWiseData(roleWiseData);
-            // updateRoleWiseData = roleWiseData
-
           navigate("/Home");
-        })
-        .catch((error) => {
-          console.error("Error fetching role-wise data:", error);
-        });
         } else {
-          console.error("Invalid API response format");
+          setError("Invalid API response format");
         }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
+      } else {
+        setError(`Network response was not ok (${response.status})`);
+      }
+    } catch (error) {
+      setError("Error fetching data: " + error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchRoleWiseData = async (empId, token) => {
+    const date = new Date();
+    const formattedDate = date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    }).replace(/ /g, "-");
+    
+    try {
+      const response = await axiosInstance.get(API_ROLEWISE.DATA, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          emp_id: empId,
+          current_date: formattedDate.toString(),
+          quarter_no: 0,
+        },
       });
+      
+      if (response.status >= 200 && response.status < 300) {
+        const contentType = response.headers.get("content-type");
+        console.log("Content-Type:", contentType);
+        
+        if (contentType && contentType.includes("application/json")) {
+          return response.data;
+        } else {
+          console.error("Response is not in JSON format");
+          throw new Error("Response is not in JSON format");
+        }
+      } else {
+        console.error(`Network response was not ok (${response.status})`);
+        throw new Error(`Network response was not ok (${response.status})`);
+      }
+    } catch (error) {
+      console.error("Error fetching role-wise data:", error);
+      throw error;
+    }
   };
 
   return (
@@ -138,6 +176,8 @@ const Login = () => {
                 </p>
               </div>
             </div>
+      {loading && <p>Loading...</p>}
+      {error && <p>Error: {error}</p>}
           </div>
         </div>
       </div>
