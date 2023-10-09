@@ -3,14 +3,14 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { RoleWiseDataProvider } from "./Context/RoleWiseDataContext";
+import { DataProvider } from "./Context/DataContext";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <RoleWiseDataProvider>
+    <DataProvider>
     <App />
-    </RoleWiseDataProvider>
+    </DataProvider>
   </React.StrictMode>
 );
 

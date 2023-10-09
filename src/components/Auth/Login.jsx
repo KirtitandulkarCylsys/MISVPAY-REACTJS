@@ -4,110 +4,88 @@ import leftimage from "../Assets/images/utiloginfinal.png";
 import { useNavigate } from "react-router-dom";
 import { setEmpIdCookie, setAuthTokenCookie } from "./Cookie";
 import { API_LOGIN } from "../../Constant/apiConstant";
-// import Api from "../../Constant/apiConstant";
-// import { fetchRoleWiseData } from "../../Constant/apiService";
-import axiosInstance from "../../Constant/apiConstant";
-import {API_ROLEWISE} from "../../Constant/apiConstant";
-import { useRoleWiseData } from "../../Context/RoleWiseDataContext";
+import Api from "../../Constant/apiConstant";
+import { fetchRoleWiseData } from "../../Constant/apiService";
+// import axiosInstance from "../../Constant/apiConstant";
+// import {API_ROLEWISE} from "../../Constant/apiConstant";
+// import { useRoleWiseData } from "../../Context/DataContext";
+import Home from "../Dashboard/Home";
 
 const Login = () => {
   const [p_emp_id, setEmpID] = useState(" ");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  // const [roleWiseData, setRoleWiseData] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const navigate = useNavigate();
+  const [roleWiseData, setRoleWiseData] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // const [loading, setLoading] = useState(false);
+  // const [error, setError] = useState(null);
+  // const navigate = useNavigate();
   
   
-  const { setRoleWiseData } = useRoleWiseData();
+  // const { setRoleWiseData } = useRoleWiseData();
   const handleLogin = async (e) => {
     
     e.preventDefault();
-    setLoading(true);
-    try {
-      const response = await axiosInstance.post(API_LOGIN.DATA, {
-        p_emp_id,
-        password,
-      });
-      
-      if (response.status >= 200 && response.status < 300) {
-        const data = await response.data;
+    Api.post(API_LOGIN.DATA, { p_emp_id, password })
+      .then((response) => {
+        if (response.status >= 200 && response.status < 300) {
+          const contentType = response.headers.get("content-type");
+          console.log("Content-Type:", contentType);
+
+          if (contentType && contentType.includes("application/json")) {
+            return response.data;
+          } else {
+            console.error("Response is not in JSON format");
+            throw new Error("Response is not in JSON format");
+          }
+        } else {
+          console.error(`Network response was not ok (${response.status})`);
+          throw new Error(`Network response was not ok (${response.status})`);
+        }
+      })
+      .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
           const empId = data[0].p_emp_id;
           const token = data[0].p_auth_token;
-          
+
           localStorage.setItem("emp_id", empId);
           localStorage.setItem("token", token);
-          
+
           setEmpIdCookie(empId);
           setAuthTokenCookie(token);
-          
-          // Call fetchRoleWiseData here with empId and token
-          const roleWiseData = await fetchRoleWiseData(empId, token);
-          setRoleWiseData(roleWiseData);
-          console.log(roleWiseData);
+
           
           setEmpID("");
           setPassword("");
-
-          navigate("/Home");
+          
+          fetchRoleWiseData(empId, token)
+          .then((roleWiseData) => {
+            setRoleWiseData(roleWiseData);
+            // updateRoleWiseData = roleWiseData
+            
+            setIsLoggedIn(true);
+        })
+        .catch((error) => {
+          console.error("Error fetching role-wise data:", error);
+        });
         } else {
-          setError("Invalid API response format");
+          console.error("Invalid API response format");
         }
-      } else {
-        setError(`Network response was not ok (${response.status})`);
-      }
-    } catch (error) {
-      setError("Error fetching data: " + error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchRoleWiseData = async (empId, token) => {
-    const date = new Date();
-    const formattedDate = date.toLocaleDateString("en-GB", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    }).replace(/ /g, "-");
-    
-    try {
-      const response = await axiosInstance.get(API_ROLEWISE.DATA, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        params: {
-          emp_id: empId,
-          current_date: formattedDate.toString(),
-          quarter_no: 0,
-        },
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
       });
-      
-      if (response.status >= 200 && response.status < 300) {
-        const contentType = response.headers.get("content-type");
-        console.log("Content-Type:", contentType);
-        
-        if (contentType && contentType.includes("application/json")) {
-          return response.data;
-        } else {
-          console.error("Response is not in JSON format");
-          throw new Error("Response is not in JSON format");
-        }
-      } else {
-        console.error(`Network response was not ok (${response.status})`);
-        throw new Error(`Network response was not ok (${response.status})`);
-      }
-    } catch (error) {
-      console.error("Error fetching role-wise data:", error);
-      throw error;
-    }
   };
 
   return (
     <>
+      
+      {isLoggedIn ? (
+      <Home roleWiseData={roleWiseData} /> // Render Home component with data
+    ) : (
       <div className="container-fluid" id="main-container">
+        {<div className="container-fluid" id="main-container">
         <div className="col-md-12" id="main-login">
           <div className="col-md-6">
             <img src={leftimage} alt="images" className="main-image" />
@@ -163,6 +141,7 @@ const Login = () => {
                       className="btn w-100"
                       id="button-login"
                       onClick={handleLogin}
+                      onSubmit={roleWiseData}
                     >
                       Login
                     </button>
@@ -176,11 +155,11 @@ const Login = () => {
                 </p>
               </div>
             </div>
-      {loading && <p>Loading...</p>}
-      {error && <p>Error: {error}</p>}
           </div>
         </div>
+      </div>}
       </div>
+    )}
     </>
   );
 };

@@ -9,11 +9,11 @@ import Profile from "../Assets/images/profile.svg";
 import logout from "../Assets/images/logout icon.png";
 import { useNavigate } from "react-router-dom";
 import { removeEmpIdCookie, removeAuthTokenCookie } from "../Auth/Cookie";
-import {useRoleWiseData } from "../../Context/RoleWiseDataContext"
+// import { useDataContext } from "../../Context/DataContext"
  
 
-const Navbar = ({ onToggle }) => {
-  const { roleWiseData } = useRoleWiseData();
+const Navbar = ({ onToggle, roleWiseData }) => {
+  // const { roleWiseData } = useDataContext();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -37,10 +37,8 @@ const Navbar = ({ onToggle }) => {
     hour12: false,
   };
 
-  const empId = roleWiseData && roleWiseData.length > 0 ? roleWiseData[0].EMP_ID : null;
-
   const formattedDateTime = currentDateTime.toLocaleString(undefined, options);
-
+  const emp_name = roleWiseData ? roleWiseData[0].EMP_NAME : null;
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-light bg-white p-0">
@@ -54,11 +52,12 @@ const Navbar = ({ onToggle }) => {
                 </button>
               </div>
               <div className="col-md-2 pt-1">
-                <h5 className="nav-h4">Welcome,{empId}</h5>
+                <h5 className="nav-h4">Welcome,{emp_name}</h5>
                 <p>
                   Quarter <span>:</span>
+                  
                   <strong>
-                    <span>YEAR</span>
+                    <span>{  roleWiseData ? roleWiseData[0].YEAR : null}</span>
                   </strong>
                 </p>
               </div>
@@ -66,7 +65,7 @@ const Navbar = ({ onToggle }) => {
                 <div id="third-nav" className="pt-1">
                   <div>
                     <p className="nav-para">
-                      Channel <span>:</span>
+                      Channel<span>:</span> {  roleWiseData ? roleWiseData[0].CHANNEL_CODE : null}
                       <strong></strong>
                     </p>
                   </div>
@@ -98,7 +97,7 @@ const Navbar = ({ onToggle }) => {
                       className="mt-4"
                     />
                     <div className="m-2 w-100">
-                      <h5 className="nav-heading">Role : </h5>
+                      <h5 className="nav-heading">Role :{ roleWiseData ? roleWiseData[0].EMP_ROLE : null} </h5>
                       <p>{formattedDateTime}</p>
                     </div>
                   </li>
