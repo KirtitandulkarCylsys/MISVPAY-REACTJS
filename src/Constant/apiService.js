@@ -45,6 +45,6 @@ export const fetchRoleWiseData = async (
     }
   } catch (error) {
     console.error("Error fetching role-wise data:", error);
-    throw error; // Rethrow the error for the calling code to handle if needed
+    throw error;
   }
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import "../Assets/css/Auth/Login.css";
 import leftimage from "../Assets/images/utiloginfinal.png";
 import { useNavigate } from "react-router-dom";
@@ -6,15 +6,26 @@ import { setEmpIdCookie, setAuthTokenCookie } from "./Cookie";
 import { API_LOGIN } from "../../Constant/apiConstant";
 import Api from "../../Constant/apiConstant";
 import { fetchRoleWiseData } from "../../Constant/apiService";
-
+// import axiosInstance from "../../Constant/apiConstant";
+// import {API_ROLEWISE} from "../../Constant/apiConstant";
+// import { useRoleWiseData } from "../../Context/DataContext";
+import Home from "../Dashboard/Home";
 
 const Login = () => {
   const [p_emp_id, setEmpID] = useState(" ");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [roleWiseData, setRoleWiseData] = useState([]);
-  const navigate = useNavigate();
-  const handleLogin = (e) => {
+  const [roleWiseData, setRoleWiseData] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // const [loading, setLoading] = useState(false);
+  // const [error, setError] = useState(null);
+  // const navigate = useNavigate();
+  
+  
+  // const { setRoleWiseData } = useRoleWiseData();
+  const handleLogin = async (e) => {
+    
     e.preventDefault();
     Api.post(API_LOGIN.DATA, { p_emp_id, password })
       .then((response) => {
@@ -47,13 +58,13 @@ const Login = () => {
           
           setEmpID("");
           setPassword("");
-
+          
           fetchRoleWiseData(empId, token)
           .then((roleWiseData) => {
             setRoleWiseData(roleWiseData);
             // updateRoleWiseData = roleWiseData
-
-          navigate("/Home");
+            
+            setIsLoggedIn(true);
         })
         .catch((error) => {
           console.error("Error fetching role-wise data:", error);
@@ -69,7 +80,12 @@ const Login = () => {
 
   return (
     <>
+      
+      {isLoggedIn ? (
+      <Home roleWiseData={roleWiseData} /> // Render Home component with data
+    ) : (
       <div className="container-fluid" id="main-container">
+        {<div className="container-fluid" id="main-container">
         <div className="col-md-12" id="main-login">
           <div className="col-md-6">
             <img src={leftimage} alt="images" className="main-image" />
@@ -125,6 +141,7 @@ const Login = () => {
                       className="btn w-100"
                       id="button-login"
                       onClick={handleLogin}
+                      onSubmit={roleWiseData}
                     >
                       Login
                     </button>
@@ -140,7 +157,9 @@ const Login = () => {
             </div>
           </div>
         </div>
+      </div>}
       </div>
+    )}
     </>
   );
 };
