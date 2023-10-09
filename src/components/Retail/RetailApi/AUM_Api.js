@@ -4,6 +4,7 @@ import {API_AUM_period} from '../../../Constant/apiConstant';
 import { API_SCHEME_DETAILS } from '../../../Constant/apiConstant';
 import axiosInstance from '../../../Constant/apiConstant';
 import { API_ALL_REGION_AUM } from '../../../Constant/apiConstant';
+import { useDataContext } from '../../../Context/DataContext';
 
 
 export const AumDropdownApi = () => {
@@ -32,21 +33,46 @@ export const usePeriodApi = () => {
   const [aum_period, setAumperiod] = useState([]);
   const [loading, setLoading] = useState(false);
   const [report_period, setReportPeriod] = useState('');
-
+  const { roleWiseData } = useDataContext(); 
+  const emproles = roleWiseData ? roleWiseData[0].EMP_ROLE : null; 
+  const channel = roleWiseData ? roleWiseData[0].CHANNEL_CODE : null; 
+  const zoneData = roleWiseData ? roleWiseData[0].ZONE : null;
+  const REGIONData = roleWiseData ? roleWiseData[0].REGIONCODE : null;
+  const UFCData = roleWiseData ? roleWiseData[0].UFC_CODE : null;
+  const QUARTERData = roleWiseData ? roleWiseData[0].YEAR : null;
+  let commonReportValue = "";
+  switch (emproles) {
+    case "ZH":
+      commonReportValue = "ZONEWISE";
+      break;
+    case "RH":
+      commonReportValue = "REGIONWISE";
+      break;
+    case "CM":
+      commonReportValue = "UFCWISE";
+      break;
+    case "RM":
+      commonReportValue = "RMWISE";
+      break;
+    default:
+      commonReportValue = ""; 
+  }
   useEffect(() => {
+   
+
     const fetchData = async () => {
       setLoading(true);
       const queryParams = new URLSearchParams({
         empid: "1234",
-        emprole: "ADMIN",
+        emprole: emproles,
         quarter: "202324Q2",
-        period_code: "DD58180823",
-        zone: "",
-        region_code: "",
-        ufc_code: "",
+        period_code:  "DD58180823",
+        zone: zoneData ,
+        region_code: REGIONData,
+        ufc_code: UFCData ,
         rm_code: "",
-        chn_code: "",
-        common_report: ""
+        chn_code: channel,
+        common_report: commonReportValue
       });
 
       try {
@@ -69,7 +95,7 @@ export const usePeriodApi = () => {
     fetchData();
   }, []);
 
-  return { aum_period, report_period, setReportPeriod, loading };
+  return { aum_period, report_period, setReportPeriod, loading, emproles };
 };
 
 export const useAUMApi = (queryParams) => {
@@ -93,7 +119,7 @@ export const useAUMApi = (queryParams) => {
     fetchData();
   }, []);
 
-  return {aum_regions,loading};
+  return {aum_regions,loading,};
 };
 
 

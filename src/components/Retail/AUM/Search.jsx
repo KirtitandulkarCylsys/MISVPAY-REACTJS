@@ -20,14 +20,14 @@ import AumUfcReport from "./AumUfcReport";
 import AumRmReport from "./AumRmReport";
 
 const Search = () => {
-  const empid = "ZH";
+  
   const  ufc_code="203"
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [hide, setHide] = useState(false);
   const { aum_dropdown } = AumDropdownApi();
  
-  const { aum_period, report_period, setReportPeriod,loading } = usePeriodApi();
+  const { aum_period, report_period, setReportPeriod,loading,emproles } = usePeriodApi();
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
@@ -63,7 +63,9 @@ const Search = () => {
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return parts.join(".");
   };
-
+debugger
+  const empid = emproles;
+  console.log(empid)
   return (
     <>
       <ToastContainer
@@ -148,7 +150,7 @@ const Search = () => {
               </div>
               {hide && (
   <>
-    {empid === "ZH" ? (
+    {empid === "ZH" || empid=== "ADMIN" ? (
       <Aum report_period={report_period} />
     ) : empid === "RH" ? (
       <AumRegionReport
