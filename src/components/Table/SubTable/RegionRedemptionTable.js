@@ -1,12 +1,44 @@
-import React, { useState, useMemo } from "react";
-import "./SubTable-CSS/SubSalesTable.css";
-import TableRowWithCollapse from "./UFC/TableRowWithCollapse";
+import React, { useState } from "react";
+import "./SubTable-CSS/SubRedemptionTable.css";
 import Loader from "../Loader";
+import { RegionApi } from "../../Retail/RetailApi/RegionApi";
+import UfcRedemptionTable from "./UFC/UfcRedemptionTable";
+import { useMemo } from "react";
+import Api from "../../Retail/RetailApi/Api";
 
-const SubSalesTable = ({transaction_summary_report,formatNumberToIndianFormat}) => {
+const RegionRedemptionTable = ({formatNumberToIndianFormat,select_type,startDate,endDate,zone,transaction_summary_report}) => {
   const [clickedIndex, setClickedIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
+  const formattedStartDate = startDate.split("-").reverse().join("/");
+  const formattedEndDate = endDate.split("-").reverse().join("/");
+  const {emproles,channel,}= Api();
+  const queryParams = useMemo(() => {
+    return new URLSearchParams({
+      employee_id: '1234',
+      emprole: emproles,
+      quarter: '202324Q2',
+      start_date: formattedStartDate,
+      end_date: formattedEndDate,
+      select_type: select_type,
+      scheme_code: 'nill',
+      channel: channel,
+      zone: zone,
+      region: '',
+      ufc: '',
+      rm: 'nill',
+      common_report: 'INT_ZONEWISE'
+    });
+  }, [formattedStartDate, formattedEndDate, select_type, zone,emproles,channel]);
 
+  const {regions} = RegionApi(queryParams);
+
+  let dataToUse = [];
+
+  if (regions && regions.length > 0) {
+    dataToUse = regions;
+  } else if (transaction_summary_report && transaction_summary_report.length > 0) {
+    dataToUse = transaction_summary_report;
+  }
   const handleButtonClick = (index) => {
     setIsLoading(true);
     setTimeout(() => {
@@ -29,10 +61,10 @@ const SubSalesTable = ({transaction_summary_report,formatNumberToIndianFormat}) 
 
   return (
     <div className="new-component container-fluid p-0">
-      <div className="row mt-2 ">
+      <div className="row mt-2 bg-white">
         <div className="head">
           <h4>
-            <b className="black-color"> Data</b>
+            <b className="black-color">{zone} REDEMPTION DATA</b>
           </h4>
           <h5>
             <b className="gray-color">(In Lakhs)</b>
@@ -50,7 +82,7 @@ const SubSalesTable = ({transaction_summary_report,formatNumberToIndianFormat}) 
       >
         <thead>
           <tr className="colorwhite BgcolorOrange">
-            <th scope="col">REGION</th>
+            <th scope="col">REGION CODE</th>
             <th scope="col" className="text-end">
               Equity
             </th>
@@ -74,15 +106,16 @@ const SubSalesTable = ({transaction_summary_report,formatNumberToIndianFormat}) 
             </th>
           </tr>
         </thead>
-        <tbody style={{ backgroundColor: "#DADADA" }}>
-          {transaction_summary_report.map((summary, index) => {
-            totalEquity += parseFloat(summary.SEQUITY);
-            totalHybrid += parseFloat(summary.SHYBRID);
-            totalArbitrage += parseFloat(summary.SARBITRAGE);
-            totalPassive += parseFloat(summary.SPASSIVE);
-            totalFixedIncome += parseFloat(summary.SFIXED_INCOME);
-            totalCash += parseFloat(summary.SCASH);
-            grandTotal += parseFloat(summary.STOTAL);
+        <tbody style={{ backgroundColor: "#DDD" }}>
+          {dataToUse.map((summary, index) => {
+            totalEquity += parseFloat(summary.REQUITY);
+            totalHybrid += parseFloat(summary.RHYBRID);
+            totalArbitrage += parseFloat(summary.RARBITRAGE);
+            totalPassive += parseFloat(summary.RPASSIVE);
+            totalFixedIncome += parseFloat(summary.RFIXED_INCOME);
+            totalCash += parseFloat(summary.RCASH);
+            grandTotal += parseFloat(summary.RTOTAL);
+
             return (
               <React.Fragment key={index}>
                 <tr>
@@ -92,7 +125,7 @@ const SubSalesTable = ({transaction_summary_report,formatNumberToIndianFormat}) 
                       onClick={() => handleButtonClick(index)}
                       disabled={isLoading}
                     >
-                      <b className="sharp-font">{summary.REGION_NAME}</b>
+                      <b className="sharp-font">{summary.REGION}</b>
                     </button>
                     {isLoading && (
                       <div className="text-center mt-4">
@@ -102,38 +135,41 @@ const SubSalesTable = ({transaction_summary_report,formatNumberToIndianFormat}) 
                     )}
                   </td>
                   <td className="text-end">
-                    {formatNumberToIndianFormat(parseFloat(summary.SEQUITY))}
+                    {formatNumberToIndianFormat(parseFloat(summary.REQUITY))}
                   </td>
                   <td className="text-end">
-                    {formatNumberToIndianFormat(parseFloat(summary.SHYBRID))}
+                    {formatNumberToIndianFormat(parseFloat(summary.RHYBRID))}
                   </td>
                   <td className="text-end">
-                    {formatNumberToIndianFormat(parseFloat(summary.SARBITRAGE))}
+                    {formatNumberToIndianFormat(parseFloat(summary.RARBITRAGE))}
                   </td>
                   <td className="text-end">
-                    {formatNumberToIndianFormat(parseFloat(summary.SPASSIVE))}
+                    {formatNumberToIndianFormat(parseFloat(summary.RPASSIVE))}
                   </td>
                   <td className="text-end">
                     {formatNumberToIndianFormat(
-                      parseFloat(summary.SFIXED_INCOME)
+                      parseFloat(summary.RFIXED_INCOME)
                     )}
                   </td>
                   <td className="text-end">
-                    {formatNumberToIndianFormat(parseFloat(summary.SCASH))}
+                    {formatNumberToIndianFormat(parseFloat(summary.RCASH))}
                   </td>
-                  <td className="text-end color-biege" id="total">
-                    {formatNumberToIndianFormat(parseFloat(summary.STOTAL))}
+                  <td className="text-end" id="total">
+                    {formatNumberToIndianFormat(parseFloat(summary.RTOTAL))}
                   </td>
                 </tr>
                 {clickedIndex === index && (
                   <tr key={`subtable-${index}`}>
                     <td colSpan="8" className="p-0">
                       {clickedIndex === index && (
-                        <TableRowWithCollapse
-                          transaction_summary_report={transaction_summary_report}
+                        <UfcRedemptionTable
                           formatNumberToIndianFormat={
                             formatNumberToIndianFormat
                           }
+                          startDate={startDate}
+                          endDate = {endDate}
+                          select_type= {select_type}
+                          region= {summary.REGION}
                         />
                       )}
                     </td>
@@ -176,4 +212,4 @@ const SubSalesTable = ({transaction_summary_report,formatNumberToIndianFormat}) 
   );
 };
 
-export default SubSalesTable;
+export default RegionRedemptionTable;

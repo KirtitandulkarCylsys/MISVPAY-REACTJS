@@ -1,34 +1,53 @@
-import React, { useMemo, useState } from "react";
-import UfcApi from "../Api/UfcApi";
-import TableRowWithRedemption from "../RMWISE/TableRowWithRedemption";
+import React, { useState } from "react";
 import Loader from "../../Loader";
+import { UfcApi } from "../../../Retail/RetailApi/RegionApi";
+import RmSalesTable from "../RMWISE/RmSalesTable";
+import { useMemo } from "react";
+import Api from "../../../Retail/RetailApi/Api";
 
-const TableRowWithCollapseRedemption = ({
-  pzone,
+const UfcSalesTable = ({
+  formatNumberToIndianFormat,
+  select_type,
   startDate,
   endDate,
-  select_type,
-  region_name,
-  formatNumberToIndianFormat,
+  region,
+  transaction_summary_report,
 }) => {
   const [clickedIndex, setClickedIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
+  const formattedStartDate = startDate.split("-").reverse().join("/");
+  const formattedEndDate = endDate.split("-").reverse().join("/");
+  const {emproles,channel}= Api();
 
   const queryParams = useMemo(() => {
-    const formattedStartDate = startDate.split("-").reverse().join("/");
-    const formattedEndDate = endDate.split("-").reverse().join("/");
-
     return new URLSearchParams({
+      employee_id: "1234",
+      emprole: emproles,
+      quarter: "202324Q2",
       start_date: formattedStartDate,
       end_date: formattedEndDate,
-      asset_class: 1,
       select_type: select_type,
-      employee_code: 2941,
-      p_zone: pzone,
-      region_name: region_name,
+      scheme_code: "nill",
+      channel: channel,
+      zone: "",
+      region: region,
+      ufc: "",
+      rm: "nill",
+      common_report: "INT_REGIONWISE",
     });
-  }, [startDate, endDate, region_name, select_type, pzone]);
-  const transaction_summary_report_ufc = UfcApi(queryParams);
+  }, [formattedStartDate, formattedEndDate, select_type, region,emproles,channel]);
+
+  const { ufc } = UfcApi(queryParams);
+  let dataToUse = [];
+
+  if (ufc && ufc.length > 0) {
+    dataToUse = ufc;
+  } else if (
+    transaction_summary_report &&
+    transaction_summary_report.length > 0
+  ) {
+    dataToUse = transaction_summary_report;
+  }
   const handleButtonClick = (index) => {
     setIsLoading(true);
     setTimeout(() => {
@@ -40,6 +59,7 @@ const TableRowWithCollapseRedemption = ({
       setClickedIndex(index);
     }
   };
+
   let totalEquity = 0;
   let totalHybrid = 0;
   let totalArbitrage = 0;
@@ -80,14 +100,15 @@ const TableRowWithCollapseRedemption = ({
             </tr>
           </thead>
           <tbody style={{ backgroundColor: "#8080805c" }}>
-            {transaction_summary_report_ufc.map((ufc, index) => {
-              totalEquity += parseFloat(ufc.REQUITY);
-              totalHybrid += parseFloat(ufc.RHYBRID);
-              totalArbitrage += parseFloat(ufc.RARBITRAGE);
-              totalPassive += parseFloat(ufc.RPASSIVE);
-              totalFixedIncome += parseFloat(ufc.RFIXED_INCOME);
-              totalCash += parseFloat(ufc.RCASH);
-              grandTotal += parseFloat(ufc.RTOTAL);
+            {dataToUse.map((ufc, index) => {
+              totalEquity += parseFloat(ufc.SEQUITY);
+              totalHybrid += parseFloat(ufc.SHYBRID);
+              totalArbitrage += parseFloat(ufc.SARBITRAGE);
+              totalPassive += parseFloat(ufc.SPASSIVE);
+              totalFixedIncome += parseFloat(ufc.SFIXED_INCOME);
+              totalCash += parseFloat(ufc.SCASH);
+              grandTotal += parseFloat(ufc.STOTAL);
+
               return (
                 <React.Fragment key={index}>
                   <tr>
@@ -108,31 +129,31 @@ const TableRowWithCollapseRedemption = ({
                     </td>
                     <td>{ufc.UFC_NAME}</td>
                     <td className="text-end">
-                      {formatNumberToIndianFormat(parseFloat(ufc.REQUITY))}
+                      {formatNumberToIndianFormat(parseFloat(ufc.SEQUITY))}
                     </td>
                     <td className="text-end">
-                      {formatNumberToIndianFormat(parseFloat(ufc.RHYBRID))}
+                      {formatNumberToIndianFormat(parseFloat(ufc.SHYBRID))}
                     </td>
                     <td className="text-end">
-                      {formatNumberToIndianFormat(parseFloat(ufc.RARBITRAGE))}
+                      {formatNumberToIndianFormat(parseFloat(ufc.SARBITRAGE))}
                     </td>
                     <td className="text-end">
-                      {formatNumberToIndianFormat(parseFloat(ufc.RPASSIVE))}
+                      {formatNumberToIndianFormat(parseFloat(ufc.SPASSIVE))}
                     </td>
                     <td className="text-end">
                       {formatNumberToIndianFormat(
-                        parseFloat(ufc.RFIXED_INCOME)
+                        parseFloat(ufc.SFIXED_INCOME)
                       )}
                     </td>
                     <td className="text-end">
-                      {formatNumberToIndianFormat(parseFloat(ufc.RCASH))}
+                      {formatNumberToIndianFormat(parseFloat(ufc.SCASH))}
                     </td>
                     <td
                       className="text-end"
                       style={{ backgroundColor: "#8080805c" }}
                     >
                       <b>
-                        {formatNumberToIndianFormat(parseFloat(ufc.RTOTAL))}
+                        {formatNumberToIndianFormat(parseFloat(ufc.STOTAL))}
                       </b>
                     </td>
                   </tr>
@@ -140,16 +161,14 @@ const TableRowWithCollapseRedemption = ({
                     <tr key={`subtable-${index}`}>
                       <td colSpan="9" className="p-0">
                         {clickedIndex === index && (
-                          <TableRowWithRedemption
-                            startDate={startDate}
-                            endDate={endDate}
-                            select_type={select_type}
-                            pzone={pzone}
-                            region_name={region_name}
-                            ufc_code={ufc.UFC_CODE}
+                          <RmSalesTable
                             formatNumberToIndianFormat={
                               formatNumberToIndianFormat
                             }
+                            startDate={startDate}
+                            endDate={endDate}
+                            select_type={select_type}
+                            ufc={ufc.UFC_CODE}
                           />
                         )}
                       </td>
@@ -196,4 +215,4 @@ const TableRowWithCollapseRedemption = ({
   );
 };
 
-export default TableRowWithCollapseRedemption;
+export default UfcSalesTable;

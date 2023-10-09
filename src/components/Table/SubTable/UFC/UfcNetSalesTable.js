@@ -1,32 +1,40 @@
-import React, { useMemo, useState } from "react";
-import UfcApi from "../Api/UfcApi";
-import TableRowWithNetSales from "../RMWISE/TableRowWithNetSales";
+import React, { useState } from "react";
 import Loader from "../../Loader";
+import { UfcApi } from "../../../Retail/RetailApi/RegionApi";
+import RmNetSalesTable from "../RMWISE/RmNetSalesTable";
+import { useMemo } from "react";
+import Api from "../../../Retail/RetailApi/Api";
 
-const TableRowWithCollapseNetSales = ({
-  pzone,
-  startDate,
-  endDate,
-  select_type,
-  region_name,
-  formatNumberToIndianFormat,
-}) => {
+const UfcNetSalesTable = ({formatNumberToIndianFormat,select_type,startDate,endDate,region,transaction_summary_report}) => {
+  const formattedStartDate = startDate.split("-").reverse().join("/");
+  const formattedEndDate = endDate.split("-").reverse().join("/");
+  const {emproles,channel,}= Api();
+
   const queryParams = useMemo(() => {
-    const formattedStartDate = startDate.split("-").reverse().join("/");
-    const formattedEndDate = endDate.split("-").reverse().join("/");
-
     return new URLSearchParams({
+      employee_id: "1234",
+      emprole: emproles,
+      quarter: "202324Q2",
       start_date: formattedStartDate,
       end_date: formattedEndDate,
-      asset_class: 1,
       select_type: select_type,
-      employee_code: 2941,
-      p_zone: pzone,
-      region_name: region_name,
+      scheme_code: "nill",
+      channel: channel,
+      zone: "",
+      region: region,
+      ufc: "",
+      rm: "nill",
+      common_report: "INT_REGIONWISE",
     });
-  }, [startDate, endDate, region_name, select_type, pzone]);
-  const transaction_summary_report_ufc = UfcApi(queryParams);
+  }, [formattedStartDate, formattedEndDate, select_type, region]);
+  const {ufc}=UfcApi(queryParams);
+  let dataToUse = [];
 
+  if (ufc && ufc.length > 0) {
+    dataToUse = ufc;
+  } else if (transaction_summary_report && transaction_summary_report.length > 0) {
+    dataToUse = transaction_summary_report;
+  }
   const [clickedIndex, setClickedIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
   const handleButtonClick = (index) => {
@@ -81,7 +89,7 @@ const TableRowWithCollapseNetSales = ({
             </tr>
           </thead>
           <tbody style={{ backgroundColor: "#8080805c" }}>
-            {transaction_summary_report_ufc.map((ufc, index) => {
+            {dataToUse.map((ufc, index) => {
               totalEquity += parseFloat(ufc.NEQUITY);
               totalHybrid += parseFloat(ufc.NHYBRID);
               totalArbitrage += parseFloat(ufc.NARBITRAGE);
@@ -141,16 +149,14 @@ const TableRowWithCollapseNetSales = ({
                     <tr key={`subtable-${index}`}>
                       <td colSpan="9" className="p-0">
                         {clickedIndex === index && (
-                          <TableRowWithNetSales
-                            startDate={startDate}
-                            endDate={endDate}
-                            select_type={select_type}
-                            pzone={pzone}
-                            region_name={region_name}
-                            ufc_code={ufc.UFC_CODE}
+                          <RmNetSalesTable
                             formatNumberToIndianFormat={
                               formatNumberToIndianFormat
                             }
+                            startDate={startDate}
+                            endDate={endDate}
+                            select_type = {select_type}
+                            ufc = {ufc.UFC_CODE}
                           />
                         )}
                       </td>
@@ -197,4 +203,4 @@ const TableRowWithCollapseNetSales = ({
   );
 };
 
-export default TableRowWithCollapseNetSales;
+export default UfcNetSalesTable;

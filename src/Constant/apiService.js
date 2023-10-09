@@ -1,14 +1,21 @@
 import axiosInstance from "./apiConstant";
-import {API_ROLEWISE} from "./apiConstant";
+import { API_ROLEWISE } from "./apiConstant";
 // import { useDataContext } from '../Context/DateContext'
 
-export const fetchRoleWiseData = async (empId, token, currentDate, quarterNo) => {
-
-    const date = new Date();
-const formattedDate = date.toLocaleDateString('en-GB', {
-  day: '2-digit', month: 'short', year: 'numeric'
-}).replace(/ /g, '-');
-// console.log(formattedDate);
+export const fetchRoleWiseData = async (
+  empId,
+  token,
+  currentDate,
+  quarterNo
+) => {
+  const date = new Date();
+  const formattedDate = date
+    .toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    })
+    .replace(/ /g, "-");
 
   try {
     const response = await axiosInstance.get(API_ROLEWISE.DATA, {
@@ -28,7 +35,6 @@ const formattedDate = date.toLocaleDateString('en-GB', {
 
       if (contentType && contentType.includes("application/json")) {
         return response.data;
-
       } else {
         console.error("Response is not in JSON format");
         throw new Error("Response is not in JSON format");

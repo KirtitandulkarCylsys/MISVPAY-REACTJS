@@ -1,30 +1,34 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import Navbar from "../../Shared/Navbar";
 import SideBar from "../../Shared/SideBar/SideBar";
-import ExportToPDF from "../../Retail/AUM/ExportToPDF";
-import excel from "../../Assets/images/excel_icon.png";
-import { useRMApi } from "../../Retail/RetailApi/Link_api";
 import { Link, useParams } from "react-router-dom";
 import RmWiseNetsales from "./RmWiseNetsales";
 import RmWiseRedemption from "./RmWiseRedemption";
 import { ExportPdfRegion } from "./ExportPdfRegion";
 import { ExportExcelRM } from "./ExportExcel";
-
+import { AllRmwise } from "../../Retail/RetailApi/RegionApi";
+import ReactPaginate from "react-paginate";
+import "./RmPagination.css";
 const RmWise = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const { startDate, endDate, select_type } = useParams();
-  const formattedStartDate = startDate.split("-").reverse().join("/");
-  const formattedEndDate = endDate.split("-").reverse().join("/");
-  const queryParams = useMemo(() => {
-    return {
-      start_date: formattedStartDate,
-      end_date: formattedEndDate,
-      select_type: select_type,
-    };
-  }, [formattedStartDate, formattedEndDate, select_type]);
-
-  const queryParamsString = new URLSearchParams(queryParams).toString();
-  const { rm, loading } = useRMApi(queryParamsString);
+  const [currentPage, setCurrentPage] = useState(0);
+  const { select_type } = useParams();
+  const queryParams = new URLSearchParams({
+    employee_id: "1234",
+    emprole: "ADMIN",
+    quarter: "202324Q2",
+    start_date: "01/04/2023",
+    end_date: "30/09/2023",
+    select_type: select_type,
+    scheme_code: "nill",
+    channel: "RTL",
+    zone: "",
+    region: "",
+    ufc: "",
+    rm: "nill",
+    common_report: "ALL_RMWISE",
+  });
+  const { rmwise, loading } = AllRmwise(queryParams);
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
@@ -46,6 +50,15 @@ const RmWise = () => {
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return parts.join(".");
   };
+
+  const PER_PAGE = 10;
+  const offset = currentPage * PER_PAGE;
+  const currentPageData = rmwise.slice(offset, offset + PER_PAGE);
+  const pageCount = Math.ceil(rmwise.length / PER_PAGE);
+
+  function handlePageClick({ selected: selectedPage }) {
+    setCurrentPage(selectedPage);
+  }
 
   return (
     <div className="new-component container-fluid">
@@ -82,13 +95,22 @@ const RmWise = () => {
                     back
                   </Link>
                   <p className="icon">
-                  <ExportExcelRM/>
+                    <ExportExcelRM />
                     |
                     <ExportPdfRegion />
                   </p>
                 </div>
               </div>
-              <table className="mt-3 table active" id="rm1" style={{ fontSize: 14 }}>
+              <div className="d-flex">
+                <h4><b>SALES</b></h4>
+                <h4><b className="gray-color">(In Lakhs)</b></h4>
+                
+              </div>
+              <table
+                className="mt-3 table active"
+                id="rm1"
+                style={{ fontSize: 14 }}
+              >
                 <thead
                   style={{
                     backgroundColor: "rgb(58 94 147 / 98%)",
@@ -96,11 +118,8 @@ const RmWise = () => {
                   }}
                 >
                   <tr>
-                    <th scope="col">UFC Code</th>
-                    <th scope="col">UFC NAME</th>
                     <th scope="col">RM CODE</th>
-                    <th scope="col">RM NAME</th>
-                    <th scope="col">FUNCROLE</th>
+                    <th scope="col">EMPLOYEE NAME</th>
                     <th scope="col" className="text-end">
                       Equity
                     </th>
@@ -125,7 +144,7 @@ const RmWise = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {rm.map((rm, index) => {
+                  {currentPageData.map((rm, index) => {
                     totalEquity += parseFloat(rm.SEQUITY);
                     totalHybrid += parseFloat(rm.SHYBRID);
                     totalArbitrage += parseFloat(rm.SARBITRAGE);
@@ -135,11 +154,8 @@ const RmWise = () => {
                     grandTotal += parseFloat(rm.STOTAL);
                     return (
                       <tr key={index}>
-                        <td>{rm.UFC_CODE}</td>
-                        <td>{rm.UFC_NAME}</td>
                         <td>{rm.RMCODE}</td>
-                        <td>{rm.RMNAME}</td>
-                        <td>{rm.FUNCROLE}</td>
+                        <td>{rm.EMP_NAME}</td>
                         <td className="text-end">
                           {formatNumberToIndianFormat(
                             parseFloat(rm.REQUITY).toFixed(2)
@@ -186,9 +202,6 @@ const RmWise = () => {
                   >
                     <td>TOTAL</td>
                     <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
                     <td className="text-end">
                       {formatNumberToIndianFormat(
                         parseFloat(totalEquity.toFixed(2))
@@ -227,14 +240,27 @@ const RmWise = () => {
                   </tr>
                 </tbody>
               </table>
-              <RmWiseNetsales
-                formatNumberToIndianFormat={formatNumberToIndianFormat}
-                rm={rm}
-                loading={loading}
-              />
+              <div className="rmpagination-container">
+                <ReactPaginate
+                  previousLabel={"← Previous"}
+                  nextLabel={"Next →"}
+                  pageCount={pageCount}
+                  onPageChange={handlePageClick}
+                  containerClassName={"rmpagination"}
+                  previousLinkClassName={"pagination__link"}
+                  nextLinkClassName={"pagination__link"}
+                  disabledClassName={"pagination__link--disabled"}
+                  activeClassName={"pagination__link--active"}
+                />
+              </div>
               <RmWiseRedemption
                 formatNumberToIndianFormat={formatNumberToIndianFormat}
-                rm={rm}
+                rm={rmwise}
+                loading={loading}
+              />
+              <RmWiseNetsales
+                formatNumberToIndianFormat={formatNumberToIndianFormat}
+                rm={rmwise}
                 loading={loading}
               />
             </div>
