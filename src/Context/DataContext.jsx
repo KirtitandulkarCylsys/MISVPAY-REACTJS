@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState } from "react";
+// DataContext.js
+import React, { createContext, useContext, useState } from 'react';
 
 const DataContext = createContext();
 
@@ -6,16 +7,11 @@ export const useDataContext = () => {
   return useContext(DataContext);
 };
 
-export const DataProvider = ({ children }) => {
+export const DataContextProvider = ({ children }) => {
   const [roleWiseData, setRoleWiseData] = useState(null);
 
-  const updateRoleWiseData = (data) => {
-    setRoleWiseData(data);
-    console.log(roleWiseData);
-  };
-
   return (
-    <DataContext.Provider value={{ roleWiseData, updateRoleWiseData }}>
+    <DataContext.Provider value={{ roleWiseData, setRoleWiseData }}>
       {children}
     </DataContext.Provider>
   );

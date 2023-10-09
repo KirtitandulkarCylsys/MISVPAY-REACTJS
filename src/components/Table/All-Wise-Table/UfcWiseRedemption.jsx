@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import Loader from "../Loader";
+import ReactPaginate from "react-paginate";
 
 const UfcWiseRedemption = ({ formatNumberToIndianFormat, ufc, loading }) => {
+  const [currentPage, setCurrentPage] = useState(0);
+
   let totalEquity = 0;
   let totalHybrid = 0;
   let totalArbitrage = 0;
@@ -9,6 +12,15 @@ const UfcWiseRedemption = ({ formatNumberToIndianFormat, ufc, loading }) => {
   let totalFixedIncome = 0;
   let totalCash = 0;
   let grandTotal = 0;
+
+  const PER_PAGE = 10;
+  const offset = currentPage * PER_PAGE;
+  const currentPageData = ufc.slice(offset, offset + PER_PAGE);
+  const pageCount = Math.ceil(ufc.length / PER_PAGE);
+
+  function handlePageClick({ selected: selectedPage }) {
+    setCurrentPage(selectedPage);
+  }
 
   return (
     <div>
@@ -27,6 +39,7 @@ const UfcWiseRedemption = ({ formatNumberToIndianFormat, ufc, loading }) => {
         ) : ufc.length === 0 ? (
           <p>No data available.</p>
         ) : (
+          <>
           <table className="mt-3 table "id="ufc2" style={{ fontSize: 14 }}>
             <thead style={{ backgroundColor: "#4C6072", color: "white" }}>
               <tr>
@@ -56,7 +69,7 @@ const UfcWiseRedemption = ({ formatNumberToIndianFormat, ufc, loading }) => {
               </tr>
             </thead>
             <tbody style={{ backgroundColor: "#DADADA" }}>
-              {ufc.map((ufc, index) => {
+              {currentPageData.map((ufc, index) => {
                 totalEquity += parseFloat(ufc.REQUITY);
                 totalHybrid += parseFloat(ufc.RHYBRID);
                 totalArbitrage += parseFloat(ufc.RARBITRAGE);
@@ -145,6 +158,20 @@ const UfcWiseRedemption = ({ formatNumberToIndianFormat, ufc, loading }) => {
               </tr>
             </tbody>
           </table>
+           <div className="ufcpagination-container">
+           <ReactPaginate
+             previousLabel={"← Previous"}
+             nextLabel={"Next →"}
+             pageCount={pageCount}
+             onPageChange={handlePageClick}
+             containerClassName={"ufcpagination"}
+             previousLinkClassName={"pagination__link"}
+             nextLinkClassName={"pagination__link"}
+             disabledClassName={"pagination__link--disabled"}
+             activeClassName={"pagination__link--active"}
+           />
+         </div>
+         </>
         )}
       </div>
     </div>

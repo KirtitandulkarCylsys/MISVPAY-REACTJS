@@ -1,17 +1,16 @@
 import React, { useState } from "react";
-import SubNetSalesTable from "./SubTable/SubNetSalesTable";
 import Loader from "./Loader";
+import RegionNetSalesTable from "./SubTable/RegionNetSalesTable";
 
 const NetSalesTable = ({
   transaction_summary_report,
   startDate,
   endDate,
   select_type,
-  assetClass,
+
   formatNumberToIndianFormat,
 }) => {
   const [clickedIndex, setClickedIndex] = useState(-1);
-  const [sortOrder, setSortOrder] = useState({ column: null, order: "asc" });
   const [isLoading, setIsLoading] = useState(false);
 
   let totalEquity = 0;
@@ -21,44 +20,6 @@ const NetSalesTable = ({
   let totalFixedIncome = 0;
   let totalCash = 0;
   let grandTotal = 0;
-
-  const handleHeaderClick = (column) => {
-    const order =
-      sortOrder.column === column && sortOrder.order === "asc" ? "desc" : "asc";
-    setSortOrder({ column, order });
-  };
-
-  const sortedData = [...transaction_summary_report].sort((a, b) => {
-    const columnA = a[sortOrder.column] || "";
-    const columnB = b[sortOrder.column] || "";
-    if (sortOrder.order === "asc") {
-      if (sortOrder.column === "ZONE") {
-        return columnA.localeCompare(columnB);
-      } else if (
-        sortOrder.column === "NEQUITY" ||
-        sortOrder.column === "NHYBRID" ||
-        sortOrder.column === "NARBITRAGE" ||
-        sortOrder.column === "NPASSIVE" ||
-        sortOrder.column === "NFIXED_INCOME" ||
-        sortOrder.column === "NCASH"
-      ) {
-        return parseFloat(columnA) - parseFloat(columnB);
-      }
-    } else if (sortOrder.order === "desc") {
-      if (sortOrder.column === "ZONE") {
-        return columnB.localeCompare(columnA);
-      } else if (
-        sortOrder.column === "NEQUITY" ||
-        sortOrder.column === "NHYBRID" ||
-        sortOrder.column === "NARBITRAGE" ||
-        sortOrder.column === "NPASSIVE" ||
-        sortOrder.column === "NFIXED_INCOME" ||
-        sortOrder.column === "NCASH"
-      ) {
-        return parseFloat(columnB) - parseFloat(columnA);
-      }
-    }
-  });
 
   const handleButtonClick = (index) => {
     setIsLoading(true);
@@ -87,49 +48,24 @@ const NetSalesTable = ({
         <table className="mt-3 table small border" id="table3">
           <thead>
             <tr className="bgcolorBlue text-white">
-              <th scope="col" onClick={() => handleHeaderClick("ZONE")}>
-                ZONE
-              </th>
-              <th
-                scope="col"
-                className="text-end"
-                onClick={() => handleHeaderClick("NEQUITY")}
-              >
+              <th scope="col">ZONE</th>
+
+              <th scope="col" className="text-end">
                 Equity
               </th>
-              <th
-                scope="col"
-                className="text-end"
-                onClick={() => handleHeaderClick("NHYBRID")}
-              >
+              <th scope="col" className="text-end">
                 Hybrid
               </th>
-              <th
-                scope="col"
-                className="text-end"
-                onClick={() => handleHeaderClick("NARBITRAGE")}
-              >
+              <th scope="col" className="text-end">
                 Arbitrage
               </th>
-              <th
-                scope="col"
-                className="text-end"
-                onClick={() => handleHeaderClick("NPASSIVE")}
-              >
+              <th scope="col" className="text-end">
                 Passive(ex-Debt)
               </th>
-              <th
-                scope="col"
-                className="text-end"
-                onClick={() => handleHeaderClick("NFIXED_INCOME")}
-              >
+              <th scope="col" className="text-end">
                 Fixed Income
               </th>
-              <th
-                scope="col"
-                className="text-end"
-                onClick={() => handleHeaderClick("NCASH")}
-              >
+              <th scope="col" className="text-end">
                 {" "}
                 Cash{" "}
               </th>
@@ -156,10 +92,11 @@ const NetSalesTable = ({
                         onClick={() => handleButtonClick(index)}
                         disabled={isLoading}
                       >
-                        <b className="sharp-font">{summary.ZONE}</b>
+                        <b className="sharp-font"> {summary.ZONE}</b>
                       </button>
                       {isLoading && <Loader />}
                     </td>
+
                     <td className="text-end">
                       {formatNumberToIndianFormat(parseFloat(summary.NEQUITY))}
                     </td>
@@ -189,11 +126,10 @@ const NetSalesTable = ({
                   {clickedIndex === index && (
                     <tr key={`subtable-${index}`}>
                       <td colSpan="8" className="p-0">
-                        <SubNetSalesTable
+                        <RegionNetSalesTable
                           pzone={summary.ZONE}
                           startDate={startDate}
                           endDate={endDate}
-                          assetClass={assetClass}
                           select_type={select_type}
                           formatNumberToIndianFormat={
                             formatNumberToIndianFormat

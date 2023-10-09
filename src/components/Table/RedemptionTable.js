@@ -1,25 +1,17 @@
 import React, { useState } from "react";
 import "./Table-CSS/RedemptionTable.css";
-import SubRedemptionTable from "./SubTable/SubRedemptionTable";
 import Loader from "./Loader";
+import RegionRedemptionTable from "./SubTable/RegionRedemptionTable";
 
 const RedemptionTable = ({
   transaction_summary_report,
+  formatNumberToIndianFormat,
   startDate,
   endDate,
   select_type,
-  assetClass,
-  formatNumberToIndianFormat,
 }) => {
   const [clickedIndex, setClickedIndex] = useState(-1);
-  const [sortOrder, setSortOrder] = useState({ column: null, order: "asc" });
   const [isLoading, setIsLoading] = useState(false);
-
-  const handleHeaderClick = (column) => {
-    const order =
-      sortOrder.column === column && sortOrder.order === "asc" ? "desc" : "asc";
-    setSortOrder({ column, order });
-  };
 
   let totalEquity = 0;
   let totalHybrid = 0;
@@ -28,38 +20,6 @@ const RedemptionTable = ({
   let totalFixedIncome = 0;
   let totalCash = 0;
   let grandTotal = 0;
-
-  const sortedData = [...transaction_summary_report].sort((a, b) => {
-    const columnA = a[sortOrder.column] || "";
-    const columnB = b[sortOrder.column] || "";
-    if (sortOrder.order === "asc") {
-      if (sortOrder.column === "ZONE") {
-        return columnA.localeCompare(columnB);
-      } else if (
-        sortOrder.column === "REQUITY" ||
-        sortOrder.column === "RHYBRID" ||
-        sortOrder.column === "RARBITRAGE" ||
-        sortOrder.column === "RPASSIVE" ||
-        sortOrder.column === "RFIXED_INCOME" ||
-        sortOrder.column === "RCASH"
-      ) {
-        return parseFloat(columnA) - parseFloat(columnB);
-      }
-    } else if (sortOrder.order === "desc") {
-      if (sortOrder.column === "ZONE") {
-        return columnB.localeCompare(columnA);
-      } else if (
-        sortOrder.column === "REQUITY" ||
-        sortOrder.column === "RHYBRID" ||
-        sortOrder.column === "RARBITRAGE" ||
-        sortOrder.column === "RPASSIVE" ||
-        sortOrder.column === "RFIXED_INCOME" ||
-        sortOrder.column === "RCASH"
-      ) {
-        return parseFloat(columnB) - parseFloat(columnA);
-      }
-    }
-  });
 
   const handleButtonClick = (index) => {
     setIsLoading(true);
@@ -88,49 +48,23 @@ const RedemptionTable = ({
         <table className="mt-3 table small border" id="table2">
           <thead>
             <tr className="bgcolorBlue text-white">
-              <th scope="col" onClick={() => handleHeaderClick("ZONE")}>
-                ZONE
-              </th>
-              <th
-                scope="col"
-                className="text-end"
-                onClick={() => handleHeaderClick("REQUITY")}
-              >
+              <th scope="col">ZONE</th>
+              <th scope="col" className="text-end">
                 Equity
               </th>
-              <th
-                scope="col"
-                className="text-end"
-                onClick={() => handleHeaderClick("RHYBRID")}
-              >
+              <th scope="col" className="text-end">
                 Hybrid
               </th>
-              <th
-                scope="col"
-                className="text-end"
-                onClick={() => handleHeaderClick("RARBITRAGE")}
-              >
+              <th scope="col" className="text-end">
                 Arbitrage
               </th>
-              <th
-                scope="col"
-                className="text-end"
-                onClick={() => handleHeaderClick("RPASSIVE")}
-              >
+              <th scope="col" className="text-end">
                 Passive(ex-Debt)
               </th>
-              <th
-                scope="col"
-                className="text-end"
-                onClick={() => handleHeaderClick("RFIXED_INCOME")}
-              >
+              <th scope="col" className="text-end">
                 Fixed Income
               </th>
-              <th
-                scope="col"
-                className="text-end"
-                onClick={() => handleHeaderClick("RCASH")}
-              >
+              <th scope="col" className="text-end">
                 {" "}
                 Cash{" "}
               </th>
@@ -140,8 +74,7 @@ const RedemptionTable = ({
             </tr>
           </thead>
           <tbody>
-            {sortedData.map((summary, index) => {
-              // Update the column-wise totals
+            {transaction_summary_report.map((summary, index) => {
               totalEquity += parseFloat(summary.REQUITY);
               totalHybrid += parseFloat(summary.RHYBRID);
               totalArbitrage += parseFloat(summary.RARBITRAGE);
@@ -159,10 +92,13 @@ const RedemptionTable = ({
                         onClick={() => handleButtonClick(index)}
                         disabled={isLoading}
                       >
-                        <b className="sharp-font">{summary.ZONE}</b>
+                        <b className="sharp-font">
+                          { summary.ZONE }
+                        </b>
                       </button>
                       {isLoading && <Loader />}
                     </td>
+                   
                     <td className="text-end">
                       {formatNumberToIndianFormat(
                         parseFloat(summary.REQUITY).toFixed(2)
@@ -202,15 +138,14 @@ const RedemptionTable = ({
                   {clickedIndex === index && (
                     <tr key={`subtable-${index}`}>
                       <td colSpan="8" className="p-0">
-                        <SubRedemptionTable
-                          pzone={summary.ZONE}
-                          startDate={startDate}
-                          endDate={endDate}
-                          assetClass={assetClass}
-                          select_type={select_type}
+                        <RegionRedemptionTable
                           formatNumberToIndianFormat={
                             formatNumberToIndianFormat
                           }
+                          startDate={startDate}
+                          endDate={endDate}
+                          select_type={select_type}
+                          zone={summary.ZONE}
                         />
                       </td>
                     </tr>

@@ -2,29 +2,34 @@ import React, { useMemo, useState } from "react";
 import Navbar from "../../Shared/Navbar";
 import SideBar from "../../Shared/SideBar/SideBar";
 import ExportToPDF from "../../Retail/AUM/ExportToPDF";
-import excel from "../../Assets/images/excel_icon.png";
 import { Link, useParams } from "react-router-dom";
-import { useUFCApi } from "../../Retail/RetailApi/Link_api";
+import ReactPaginate from "react-paginate";
 import UfcWiseRedemption from "./UfcWiseRedemption";
 import UfcWiseNetsales from "./UfcWiseNetsales";
 import { ExportExcelUfc } from "./ExportExcel";
-
+import { AllUfcwise } from "../../Retail/RetailApi/RegionApi";
+import './UfcPagination.css'
 const UfcWise = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const { startDate, endDate, select_type } = useParams();
-  const formattedStartDate = startDate.split("-").reverse().join("/");
-  const formattedEndDate = endDate.split("-").reverse().join("/");
+  const [currentPage, setCurrentPage] = useState(0);
 
-  const queryParams = useMemo(() => {
-    return {
-      start_date: formattedStartDate,
-      end_date: formattedEndDate,
-      select_type: select_type,
-    };
-  }, [formattedStartDate, formattedEndDate, select_type]);
-
-  const queryParamsString = new URLSearchParams(queryParams).toString();
-  const { ufc, loading } = useUFCApi(queryParamsString);
+  const { select_type } = useParams();
+  const queryParams = new URLSearchParams({
+    employee_id: "1234",
+    emprole: "ADMIN",
+    quarter: "202324Q2",
+    start_date: "01/04/2023",
+    end_date: "30/09/2023",
+    select_type: select_type,
+    scheme_code: "nill",
+    channel: "RTL",
+    zone: "",
+    region: "",
+    ufc: "",
+    rm: "nill",
+    common_report: "ALL_UFCWISE",
+  });
+  const { ufcwise, loading } = AllUfcwise(queryParams);
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
@@ -46,6 +51,15 @@ const UfcWise = () => {
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return parts.join(".");
   };
+
+  const PER_PAGE = 10;
+  const offset = currentPage * PER_PAGE;
+  const currentPageData = ufcwise.slice(offset, offset + PER_PAGE);
+  const pageCount = Math.ceil(ufcwise.length / PER_PAGE);
+
+  function handlePageClick({ selected: selectedPage }) {
+    setCurrentPage(selectedPage);
+  }
 
   return (
     <div className="new-component container-fluid">
@@ -71,19 +85,18 @@ const UfcWise = () => {
                   style={{ marginTop: "30px" }}
                 >
                   <Link
-                   to='/Transaction'
+                    to="/Transaction"
                     className="btn"
                     style={{
                       backgroundColor: "#4C6072",
                       color: "white",
                       height: "fit-content",
                     }}
-
                   >
                     back
                   </Link>
                   <p className="icon">
-                  <ExportExcelUfc/>
+                    <ExportExcelUfc />
                     |
                     <ExportToPDF />
                   </p>
@@ -118,7 +131,7 @@ const UfcWise = () => {
                   </tr>
                 </thead>
                 <tbody style={{ backgroundColor: "#DADADA" }}>
-                  {ufc.map((ufc, index) => {
+                  {currentPageData.map((ufc, index) => {
                     totalEquity += parseFloat(ufc.SEQUITY);
                     totalHybrid += parseFloat(ufc.SHYBRID);
                     totalArbitrage += parseFloat(ufc.SARBITRAGE);
@@ -199,13 +212,26 @@ const UfcWise = () => {
                   </tr>
                 </tbody>
               </table>
+              <div className="ufcpagination-container">
+                <ReactPaginate
+                  previousLabel={"← Previous"}
+                  nextLabel={"Next →"}
+                  pageCount={pageCount}
+                  onPageChange={handlePageClick}
+                  containerClassName={"ufcpagination"}
+                  previousLinkClassName={"pagination__link"}
+                  nextLinkClassName={"pagination__link"}
+                  disabledClassName={"pagination__link--disabled"}
+                  activeClassName={"pagination__link--active"}
+                />
+              </div>
               <UfcWiseRedemption
-                ufc={ufc}
+                ufc={ufcwise}
                 formatNumberToIndianFormat={formatNumberToIndianFormat}
                 loading={loading}
               />
               <UfcWiseNetsales
-                ufc={ufc}
+                ufc={ufcwise}
                 formatNumberToIndianFormat={formatNumberToIndianFormat}
                 loading={loading}
               />

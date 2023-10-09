@@ -9,11 +9,12 @@ import Profile from "../Assets/images/profile.svg";
 import logout from "../Assets/images/logout icon.png";
 import { useNavigate } from "react-router-dom";
 import { removeEmpIdCookie, removeAuthTokenCookie } from "../Auth/Cookie";
+import { useDataContext } from "../../Context/DataContext";
 // import { useDataContext } from "../../Context/DataContext"
  
 
-const Navbar = ({ onToggle, roleWiseData }) => {
-  // const { roleWiseData } = useDataContext();
+const Navbar = ({ onToggle }) => {
+  const { roleWiseData } = useDataContext(); 
   const navigate = useNavigate();
 
   const handleLogout = () => {

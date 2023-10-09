@@ -24,7 +24,7 @@ const Filter = () => {
   };
 
   return (
-    <div className="form-group mt-5 ">
+    <div className="form-group mt-4 ">
       <label>
         <img src={filter} alt="filter" />
         <b> Select Table</b>

@@ -2,6 +2,12 @@
     color: rgb(140, 140, 142);;
 
 }
+#table{
+  width: 100%;
+  overflow: hidden;
+  overflow-x: scroll;
+
+}
 .theader{
     color: #352D94;
 }
