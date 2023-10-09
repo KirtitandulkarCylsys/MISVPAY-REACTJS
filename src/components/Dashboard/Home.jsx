@@ -7,18 +7,16 @@ import pie2 from "../Assets/images/Retail bank.png";
 import pie3 from "../Assets/images/Strategic Alliance.png";
 import overall from "../Assets/images/overall survey.png";
 import overall2 from "../Assets/images/Overall Zone survey.png";
-import { useLocation } from "react-router-dom";
-const Home = ({roleWiseData}) => {
+const Home = () => {
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
-console.log(roleWiseData, 'rolwise');
   return (
     <>
       <div className="container-fluid p-0 home-main ">
-        <Navbar onToggle={toggleSidebar} roleWiseData={roleWiseData}/>
+        <Navbar onToggle={toggleSidebar} />
         <div className=" d-flex">
           <SideBar isOpen={sidebarOpen} />
           <div

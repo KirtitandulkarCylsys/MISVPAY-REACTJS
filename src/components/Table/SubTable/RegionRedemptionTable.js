@@ -3,27 +3,33 @@ import "./SubTable-CSS/SubRedemptionTable.css";
 import Loader from "../Loader";
 import { RegionApi } from "../../Retail/RetailApi/RegionApi";
 import UfcRedemptionTable from "./UFC/UfcRedemptionTable";
+import { useMemo } from "react";
+import Api from "../../Retail/RetailApi/Api";
 
 const RegionRedemptionTable = ({formatNumberToIndianFormat,select_type,startDate,endDate,zone,transaction_summary_report}) => {
   const [clickedIndex, setClickedIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
   const formattedStartDate = startDate.split("-").reverse().join("/");
   const formattedEndDate = endDate.split("-").reverse().join("/");
-  const queryParams = new URLSearchParams({
-    employee_id: '1234',
-    emprole: 'ADMIN',
-    quarter: '202324Q2',
-    start_date: formattedStartDate,
-    end_date: formattedEndDate,
-    select_type: select_type,
-    scheme_code: 'nill',
-    channel: 'RTL',
-    zone: zone,
-    region: '',
-    ufc: '',
-    rm: 'nill',
-    common_report: 'INT_ZONEWISE'
-  });
+  const {emproles,channel,}= Api();
+  const queryParams = useMemo(() => {
+    return new URLSearchParams({
+      employee_id: '1234',
+      emprole: emproles,
+      quarter: '202324Q2',
+      start_date: formattedStartDate,
+      end_date: formattedEndDate,
+      select_type: select_type,
+      scheme_code: 'nill',
+      channel: channel,
+      zone: zone,
+      region: '',
+      ufc: '',
+      rm: 'nill',
+      common_report: 'INT_ZONEWISE'
+    });
+  }, [formattedStartDate, formattedEndDate, select_type, zone,emproles,channel]);
+
   const {regions} = RegionApi(queryParams);
 
   let dataToUse = [];

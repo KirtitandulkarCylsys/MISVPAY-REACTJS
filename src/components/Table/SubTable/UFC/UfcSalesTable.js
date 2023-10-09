@@ -2,33 +2,50 @@ import React, { useState } from "react";
 import Loader from "../../Loader";
 import { UfcApi } from "../../../Retail/RetailApi/RegionApi";
 import RmSalesTable from "../RMWISE/RmSalesTable";
+import { useMemo } from "react";
+import Api from "../../../Retail/RetailApi/Api";
 
-const UfcSalesTable = ({formatNumberToIndianFormat,select_type,startDate,endDate,region,transaction_summary_report}) => {
+const UfcSalesTable = ({
+  formatNumberToIndianFormat,
+  select_type,
+  startDate,
+  endDate,
+  region,
+  transaction_summary_report,
+}) => {
   const [clickedIndex, setClickedIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
   const formattedStartDate = startDate.split("-").reverse().join("/");
   const formattedEndDate = endDate.split("-").reverse().join("/");
-  const queryParams = new URLSearchParams({
-    employee_id: '1234',
-    emprole: 'ADMIN',
-    quarter: '202324Q2',
-    start_date: formattedStartDate,
-    end_date: formattedEndDate,
-    select_type: select_type,
-    scheme_code: 'nill',
-    channel: 'RTL',
-    zone: "",
-    region: region,
-    ufc: '',
-    rm: 'nill',
-    common_report: 'INT_REGIONWISE'
-  });
-  const {ufc}=UfcApi(queryParams);
+  const {emproles,channel}= Api();
+
+  const queryParams = useMemo(() => {
+    return new URLSearchParams({
+      employee_id: "1234",
+      emprole: emproles,
+      quarter: "202324Q2",
+      start_date: formattedStartDate,
+      end_date: formattedEndDate,
+      select_type: select_type,
+      scheme_code: "nill",
+      channel: channel,
+      zone: "",
+      region: region,
+      ufc: "",
+      rm: "nill",
+      common_report: "INT_REGIONWISE",
+    });
+  }, [formattedStartDate, formattedEndDate, select_type, region,emproles,channel]);
+
+  const { ufc } = UfcApi(queryParams);
   let dataToUse = [];
 
   if (ufc && ufc.length > 0) {
     dataToUse = ufc;
-  } else if (transaction_summary_report && transaction_summary_report.length > 0) {
+  } else if (
+    transaction_summary_report &&
+    transaction_summary_report.length > 0
+  ) {
     dataToUse = transaction_summary_report;
   }
   const handleButtonClick = (index) => {
@@ -150,8 +167,8 @@ const UfcSalesTable = ({formatNumberToIndianFormat,select_type,startDate,endDate
                             }
                             startDate={startDate}
                             endDate={endDate}
-                            select_type = {select_type}
-                            ufc = {ufc.UFC_CODE}
+                            select_type={select_type}
+                            ufc={ufc.UFC_CODE}
                           />
                         )}
                       </td>

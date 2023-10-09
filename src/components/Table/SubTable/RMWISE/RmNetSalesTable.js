@@ -1,25 +1,31 @@
 import React from "react";
 import { RMApi } from "../../../Retail/RetailApi/RegionApi";
+import { useMemo } from "react";
+import Api from "../../../Retail/RetailApi/Api";
 
 
 const RmNetSalesTable = ({formatNumberToIndianFormat,select_type,startDate,endDate,ufc,transaction_summary_report}) => {
   const formattedStartDate = startDate.split("-").reverse().join("/");
   const formattedEndDate = endDate.split("-").reverse().join("/");
-  const queryParams = new URLSearchParams({
-    employee_id: '1234',
-    emprole: 'ADMIN',
+  const {emproles,channel,}= Api();
+
+  const queryParams = useMemo(() => {
+    return new URLSearchParams({
+      employee_id: '1234',
+    emprole: emproles,
     quarter: '202324Q2',
     start_date: formattedStartDate,
     end_date: formattedEndDate,
     select_type: select_type,
     scheme_code: 'nill',
-    channel: 'RTL',
+    channel: channel,
     zone: '',
     region: '',
     ufc: ufc,
     rm: 'nill',
     common_report: 'INT_UFCWISE'
-  });
+    });
+  }, [formattedStartDate, formattedEndDate, select_type, ufc,emproles,channel]);
   const {rm}= RMApi(queryParams);
   let dataToUse = [];
 

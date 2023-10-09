@@ -3,6 +3,7 @@ import { API_SUMMARY_TRANSACTION } from "../../../Constant/apiConstant";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axiosInstance from "../../../Constant/apiConstant";
+import { useDataContext } from "../../../Context/DataContext";
 const Api = () => {
   const [hide, setHide] = useState(false);
   const [startDate, setStartDate] = useState();
@@ -12,27 +13,48 @@ const Api = () => {
     []
   );
   const [loading, setLoading] = useState(false);
-
-
-
+  const { roleWiseData } = useDataContext(); 
+  const emproles = roleWiseData ? roleWiseData[0].EMP_ROLE : null; 
+  const channel = roleWiseData ? roleWiseData[0].CHANNEL_CODE : null; 
+  const zoneData = roleWiseData ? roleWiseData[0].ZONE : null;
+  const REGIONData = roleWiseData ? roleWiseData[0].REGIONCODE : null;
+  const UFCData = roleWiseData ? roleWiseData[0].UFC_CODE : null;
+  const QUARTERData = roleWiseData ? roleWiseData[0].YEAR : null;
+  let commonReportValue = "";
+  switch (emproles) {
+    case "ZH":
+      commonReportValue = "ZONEWISE";
+      break;
+    case "RH":
+      commonReportValue = "REGIONWISE";
+      break;
+    case "CM":
+      commonReportValue = "UFCWISE";
+      break;
+    case "RM":
+      commonReportValue = "RMWISE";
+      break;
+    default:
+      commonReportValue = ""; 
+  }
   const fetchTransactionSummary = async () => {
     try {
       const formattedStartDate = startDate.split("-").reverse().join("/");
       const formattedEndDate = endDate.split("-").reverse().join("/");
       const queryParams = new URLSearchParams({
         employee_id: "1234",
-        emprole: "ADMIN",
-        quarter: "202324Q2",
+        emprole: emproles,
+        quarter: '202324Q2',
         start_date: formattedStartDate,
         end_date: formattedEndDate,
         select_type: select_type,
         scheme_code: "nill",
-        channel: "RTL",
-        zone: "",
-        region: "BIHR",
-        ufc: "",
+        channel: channel,
+        zone: zoneData,
+        region: REGIONData,
+        ufc: UFCData,
         rm: "",
-        common_report: "REGIONWISE",
+        common_report: commonReportValue,
       });
 
       if (startDate > endDate) {
@@ -89,6 +111,7 @@ const Api = () => {
     setHide,
     setLoading,
     formatNumberToIndianFormat,
+    emproles
   };
 };
 

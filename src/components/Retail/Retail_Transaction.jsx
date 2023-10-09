@@ -30,7 +30,7 @@ import RmRedemptionTable from "../Table/SubTable/RMWISE/RmRedemptionTable";
 import RmNetSalesTable from "../Table/SubTable/RMWISE/RmNetSalesTable";
 const Retail_Transaction = ({ headers }) => {
   // const { scheme_details } = Scheme();
-  const Data = "BIHR";
+
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const {
@@ -44,9 +44,12 @@ const Retail_Transaction = ({ headers }) => {
     togglehide,
     select_type,
     setSelectType,
-    formatNumberToIndianFormat,
+    formatNumberToIndianFormat,emproles
   } = Api({ headers });
+  
+  const  commonReport= emproles  ;
 
+  
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
@@ -182,15 +185,15 @@ const Retail_Transaction = ({ headers }) => {
                         <div className="col-md-4">
                           <div className="form-group col-md-3  mt-4">
                             <label className="form-lables">
-                              <b> Scheme</b>
+                              {/* <b> Scheme</b> */}
                             </label>
-                            <Multiselect
-                            // options={options}
-                            // selectedValues={selectedSchemes}
-                            // onSelect={functionToHandleSelect}
-                            // onRemove={functionToHandleRemove}
-                            // displayValue="name"
-                            />
+                            {/* <Multiselect
+                            options={options}
+                            selectedValues={selectedSchemes}
+                            onSelect={functionToHandleSelect}
+                            onRemove={functionToHandleRemove}
+                            displayValue="name"
+                            /> */}
                           </div>
                         </div>
                         {/* coloumn and filter
@@ -239,7 +242,7 @@ const Retail_Transaction = ({ headers }) => {
                             </div>
                           ) : hide ? (
                             <>
-                              {Data === "EAST" ? (
+                              {commonReport === 'ZH' || 'ADMIN'? (
                                 <>
                                   <SalesTable
                                     transaction_summary_report={
@@ -275,7 +278,7 @@ const Retail_Transaction = ({ headers }) => {
                                     select_type={select_type}
                                   />
                                 </>
-                              ) : Data === "BIHR" ? (
+                              ) : commonReport === 'RH' ? (
                                 <>
                                   <RegionSalesTable
                                     startDate={startDate}
@@ -311,7 +314,7 @@ const Retail_Transaction = ({ headers }) => {
                                     }
                                   />
                                 </>
-                              ) : Data === "203" ? (
+                              ) : commonReport === 'CM' ? (
                                 <>
                                   <UfcSalesTable
                                     startDate={startDate}
@@ -347,7 +350,7 @@ const Retail_Transaction = ({ headers }) => {
                                     }
                                   />
                                 </>
-                              ) : Data === "1498" ? (
+                              ) : commonReport === 'RM' ? (
                                 <>
                                   <RmSalesTable
                                     startDate={startDate}

@@ -2,25 +2,31 @@ import React, { useState } from "react";
 import Loader from "../../Loader";
 import { UfcApi } from "../../../Retail/RetailApi/RegionApi";
 import RmNetSalesTable from "../RMWISE/RmNetSalesTable";
+import { useMemo } from "react";
+import Api from "../../../Retail/RetailApi/Api";
 
 const UfcNetSalesTable = ({formatNumberToIndianFormat,select_type,startDate,endDate,region,transaction_summary_report}) => {
   const formattedStartDate = startDate.split("-").reverse().join("/");
   const formattedEndDate = endDate.split("-").reverse().join("/");
-  const queryParams = new URLSearchParams({
-    employee_id: '1234',
-    emprole: 'ADMIN',
-    quarter: '202324Q2',
-    start_date: formattedStartDate,
-    end_date: formattedEndDate,
-    select_type: select_type,
-    scheme_code: 'nill',
-    channel: 'RTL',
-    zone: "",
-    region: region,
-    ufc: '',
-    rm: 'nill',
-    common_report: 'INT_REGIONWISE'
-  });
+  const {emproles,channel,}= Api();
+
+  const queryParams = useMemo(() => {
+    return new URLSearchParams({
+      employee_id: "1234",
+      emprole: emproles,
+      quarter: "202324Q2",
+      start_date: formattedStartDate,
+      end_date: formattedEndDate,
+      select_type: select_type,
+      scheme_code: "nill",
+      channel: channel,
+      zone: "",
+      region: region,
+      ufc: "",
+      rm: "nill",
+      common_report: "INT_REGIONWISE",
+    });
+  }, [formattedStartDate, formattedEndDate, select_type, region]);
   const {ufc}=UfcApi(queryParams);
   let dataToUse = [];
 
