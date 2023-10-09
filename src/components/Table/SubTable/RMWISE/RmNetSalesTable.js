@@ -1,8 +1,8 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { RMApi } from "../../../Retail/RetailApi/RegionApi";
 
 
-const TableRowWithNetSales = ({formatNumberToIndianFormat,select_type,startDate,endDate,ufc,transaction_summary_report}) => {
+const RmNetSalesTable = ({formatNumberToIndianFormat,select_type,startDate,endDate,ufc,transaction_summary_report}) => {
   const formattedStartDate = startDate.split("-").reverse().join("/");
   const formattedEndDate = endDate.split("-").reverse().join("/");
   const queryParams = new URLSearchParams({
@@ -149,4 +149,4 @@ const TableRowWithNetSales = ({formatNumberToIndianFormat,select_type,startDate,
   );
 };
 
-export default TableRowWithNetSales;
+export default RmNetSalesTable;

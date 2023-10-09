@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import "./Table-CSS/SalesTable.css";
-import SubSalesTable from "./SubTable/SubSalesTable";
 import Loader from "./Loader";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import RegionSalesTable from "./SubTable/RegionSalesTable";
 
 const SalesTable = ({
   transaction_summary_report,
@@ -13,7 +13,6 @@ const SalesTable = ({
 }) => {
   const [clickedIndex, setClickedIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
   let totalEquity = 0;
   let totalHybrid = 0;
   let totalArbitrage = 0;
@@ -76,11 +75,7 @@ const SalesTable = ({
                   <thead>
                     <tr className="bgcolorBlue text-white">
                       <th scope="col">ZONE</th>
-                      {/* {displayEmpNameColumn && (
-                        <>
-                          <th scope="col">EMP_NAME</th>
-                        </>
-                      )} */}
+
                       <th scope="col" className="text-end">
                         Equity
                       </th>
@@ -123,7 +118,7 @@ const SalesTable = ({
                                 onClick={() => handleButtonClick(index)}
                                 disabled={isLoading}
                               >
-                                <b className="sharp-font">{summary.ZONE}</b>
+                                <b className="sharp-font"> {summary.ZONE}</b>
                               </button>
                               {isLoading && (
                                 <div className="text-center mt-4">
@@ -171,7 +166,7 @@ const SalesTable = ({
                           {clickedIndex === index && (
                             <tr key={`subtable-${index}`}>
                               <td colSpan="8" className="p-0">
-                                <SubSalesTable
+                                <RegionSalesTable
                                   transaction_summary_report={
                                     transaction_summary_report
                                   }

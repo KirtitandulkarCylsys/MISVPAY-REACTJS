@@ -1,10 +1,10 @@
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import "./SubTable-CSS/SubRedemptionTable.css";
 import Loader from "../Loader";
-import TableRowWithCollapseRedemption from "./UFC/TableRowWithCollapseRedemption";
 import { RegionApi } from "../../Retail/RetailApi/RegionApi";
+import UfcRedemptionTable from "./UFC/UfcRedemptionTable";
 
-const SubRedemptionTable = ({formatNumberToIndianFormat,select_type,startDate,endDate,zone,transaction_summary_report}) => {
+const RegionRedemptionTable = ({formatNumberToIndianFormat,select_type,startDate,endDate,zone,transaction_summary_report}) => {
   const [clickedIndex, setClickedIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
   const formattedStartDate = startDate.split("-").reverse().join("/");
@@ -58,7 +58,7 @@ const SubRedemptionTable = ({formatNumberToIndianFormat,select_type,startDate,en
       <div className="row mt-2 bg-white">
         <div className="head">
           <h4>
-            <b className="black-color">Data</b>
+            <b className="black-color">{zone} REDEMPTION DATA</b>
           </h4>
           <h5>
             <b className="gray-color">(In Lakhs)</b>
@@ -156,8 +156,7 @@ const SubRedemptionTable = ({formatNumberToIndianFormat,select_type,startDate,en
                   <tr key={`subtable-${index}`}>
                     <td colSpan="8" className="p-0">
                       {clickedIndex === index && (
-                        <TableRowWithCollapseRedemption
-
+                        <UfcRedemptionTable
                           formatNumberToIndianFormat={
                             formatNumberToIndianFormat
                           }
@@ -207,4 +206,4 @@ const SubRedemptionTable = ({formatNumberToIndianFormat,select_type,startDate,en
   );
 };
 
-export default SubRedemptionTable;
+export default RegionRedemptionTable;

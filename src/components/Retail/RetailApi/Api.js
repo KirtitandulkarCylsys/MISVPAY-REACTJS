@@ -1,36 +1,27 @@
 import { useState } from "react";
 import { API_SUMMARY_TRANSACTION } from "../../../Constant/apiConstant";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axiosInstance from "../../../Constant/apiConstant";
-import { useContext } from "react";
-import RollWiseContext from "../../../Context/RollWiseContext";
-const Api = ({ headers }) => {
+const Api = () => {
   const [hide, setHide] = useState(false);
-  const [employee_id, setEmployeeId] = useState("");
-  const [quarter, setQuarter] = useState("");
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [select_type, setSelectType] = useState("");
-  const [scheme_code, setSchemeCode] = useState("");
-  const [channel, setChannel] = useState("");
-  const [zone, setZone] = useState("");
-  const [region, setRegion] = useState("");
-  const [ufc, setUfc] = useState("");
-  const [rm, setRm] = useState("");
-  const [common_report, setCommonReport] = useState("");
-  const [transaction_summary_report, setTransactionSummaryReport] = useState([]);
+  const [transaction_summary_report, setTransactionSummaryReport] = useState(
+    []
+  );
   const [loading, setLoading] = useState(false);
-  debugger
-  const rollwiseData= useContext(RollWiseContext);
-  const emprole = rollwiseData.FUNC_ROLE;
+
+
+
   const fetchTransactionSummary = async () => {
     try {
       const formattedStartDate = startDate.split("-").reverse().join("/");
       const formattedEndDate = endDate.split("-").reverse().join("/");
       const queryParams = new URLSearchParams({
         employee_id: "1234",
-        emprole: emprole,
+        emprole: "ADMIN",
         quarter: "202324Q2",
         start_date: formattedStartDate,
         end_date: formattedEndDate,
@@ -38,11 +29,12 @@ const Api = ({ headers }) => {
         scheme_code: "nill",
         channel: "RTL",
         zone: "",
-        region: "",
+        region: "BIHR",
         ufc: "",
         rm: "",
-        common_report: "",
+        common_report: "REGIONWISE",
       });
+
       if (startDate > endDate) {
         toast.error("End Date must be Greater Than Start Date");
         setLoading(false);
@@ -52,7 +44,6 @@ const Api = ({ headers }) => {
         const response = await axiosInstance.get(
           API_SUMMARY_TRANSACTION.DATA(queryParams)
         );
-        // const data = await response.json();
         const data = response.data;
         setTransactionSummaryReport(data);
         setLoading(false);
@@ -74,20 +65,31 @@ const Api = ({ headers }) => {
       toast.error("Please fill all the fields");
     }
   };
+
   const formatNumberToIndianFormat = (number) => {
     if (typeof number !== "number") {
       return number;
     }
-
     const parts = number.toString().split(".");
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return parts.join(".");
   };
 
-  return{
-   employee_id,emprole,quarter,ufc,rm,channel, zone, region, common_report,hide,startDate, endDate, setStartDate, setEndDate,select_type, setSelectType, transaction_summary_report,loading,togglehide,setHide,setLoading,formatNumberToIndianFormat
-  }
-  
-}
+  return {
+    hide,
+    startDate,
+    endDate,
+    setStartDate,
+    setEndDate,
+    select_type,
+    setSelectType,
+    transaction_summary_report,
+    loading,
+    togglehide,
+    setHide,
+    setLoading,
+    formatNumberToIndianFormat,
+  };
+};
 
 export default Api;

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 
-import TableRowWithSales from "../RMWISE/TableRowWithSales";
 import Loader from "../../Loader";
 import { UfcApi } from "../../../Retail/RetailApi/RegionApi";
+import RmRedemptionTable from "../RMWISE/RmRedemptionTable";
 
-const TableRowWithCollapse = ({formatNumberToIndianFormat,select_type,startDate,endDate,region,transaction_summary_report}) => {
+const UfcRedemptionTable = ({formatNumberToIndianFormat,select_type,startDate,endDate,region,transaction_summary_report}) => {
   const [clickedIndex, setClickedIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
   const formattedStartDate = startDate.split("-").reverse().join("/");
@@ -43,7 +43,6 @@ const TableRowWithCollapse = ({formatNumberToIndianFormat,select_type,startDate,
       setClickedIndex(index);
     }
   };
-
   let totalEquity = 0;
   let totalHybrid = 0;
   let totalArbitrage = 0;
@@ -85,14 +84,13 @@ const TableRowWithCollapse = ({formatNumberToIndianFormat,select_type,startDate,
           </thead>
           <tbody style={{ backgroundColor: "#8080805c" }}>
             {dataToUse.map((ufc, index) => {
-              totalEquity += parseFloat(ufc.SEQUITY);
-              totalHybrid += parseFloat(ufc.SHYBRID);
-              totalArbitrage += parseFloat(ufc.SARBITRAGE);
-              totalPassive += parseFloat(ufc.SPASSIVE);
-              totalFixedIncome += parseFloat(ufc.SFIXED_INCOME);
-              totalCash += parseFloat(ufc.SCASH);
-              grandTotal += parseFloat(ufc.STOTAL);
-
+              totalEquity += parseFloat(ufc.REQUITY);
+              totalHybrid += parseFloat(ufc.RHYBRID);
+              totalArbitrage += parseFloat(ufc.RARBITRAGE);
+              totalPassive += parseFloat(ufc.RPASSIVE);
+              totalFixedIncome += parseFloat(ufc.RFIXED_INCOME);
+              totalCash += parseFloat(ufc.RCASH);
+              grandTotal += parseFloat(ufc.RTOTAL);
               return (
                 <React.Fragment key={index}>
                   <tr>
@@ -113,31 +111,31 @@ const TableRowWithCollapse = ({formatNumberToIndianFormat,select_type,startDate,
                     </td>
                     <td>{ufc.UFC_NAME}</td>
                     <td className="text-end">
-                      {formatNumberToIndianFormat(parseFloat(ufc.SEQUITY))}
+                      {formatNumberToIndianFormat(parseFloat(ufc.REQUITY))}
                     </td>
                     <td className="text-end">
-                      {formatNumberToIndianFormat(parseFloat(ufc.SHYBRID))}
+                      {formatNumberToIndianFormat(parseFloat(ufc.RHYBRID))}
                     </td>
                     <td className="text-end">
-                      {formatNumberToIndianFormat(parseFloat(ufc.SARBITRAGE))}
+                      {formatNumberToIndianFormat(parseFloat(ufc.RARBITRAGE))}
                     </td>
                     <td className="text-end">
-                      {formatNumberToIndianFormat(parseFloat(ufc.SPASSIVE))}
+                      {formatNumberToIndianFormat(parseFloat(ufc.RPASSIVE))}
                     </td>
                     <td className="text-end">
                       {formatNumberToIndianFormat(
-                        parseFloat(ufc.SFIXED_INCOME)
+                        parseFloat(ufc.RFIXED_INCOME)
                       )}
                     </td>
                     <td className="text-end">
-                      {formatNumberToIndianFormat(parseFloat(ufc.SCASH))}
+                      {formatNumberToIndianFormat(parseFloat(ufc.RCASH))}
                     </td>
                     <td
                       className="text-end"
                       style={{ backgroundColor: "#8080805c" }}
                     >
                       <b>
-                        {formatNumberToIndianFormat(parseFloat(ufc.STOTAL))}
+                        {formatNumberToIndianFormat(parseFloat(ufc.RTOTAL))}
                       </b>
                     </td>
                   </tr>
@@ -145,7 +143,8 @@ const TableRowWithCollapse = ({formatNumberToIndianFormat,select_type,startDate,
                     <tr key={`subtable-${index}`}>
                       <td colSpan="9" className="p-0">
                         {clickedIndex === index && (
-                          <TableRowWithSales
+                          <RmRedemptionTable
+                            ufc_code={ufc.UFC_CODE}
                             formatNumberToIndianFormat={
                               formatNumberToIndianFormat
                             }
@@ -199,4 +198,4 @@ const TableRowWithCollapse = ({formatNumberToIndianFormat,select_type,startDate,
   );
 };
 
-export default TableRowWithCollapse;
+export default UfcRedemptionTable;

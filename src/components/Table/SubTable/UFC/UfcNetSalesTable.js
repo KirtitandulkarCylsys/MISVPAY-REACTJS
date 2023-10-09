@@ -1,12 +1,9 @@
-import React, { useMemo, useState } from "react";
-
-import TableRowWithRedemption from "../RMWISE/TableRowWithRedemption";
+import React, { useState } from "react";
 import Loader from "../../Loader";
 import { UfcApi } from "../../../Retail/RetailApi/RegionApi";
+import RmNetSalesTable from "../RMWISE/RmNetSalesTable";
 
-const TableRowWithCollapseRedemption = ({formatNumberToIndianFormat,select_type,startDate,endDate,region,transaction_summary_report}) => {
-  const [clickedIndex, setClickedIndex] = useState(-1);
-  const [isLoading, setIsLoading] = useState(false);
+const UfcNetSalesTable = ({formatNumberToIndianFormat,select_type,startDate,endDate,region,transaction_summary_report}) => {
   const formattedStartDate = startDate.split("-").reverse().join("/");
   const formattedEndDate = endDate.split("-").reverse().join("/");
   const queryParams = new URLSearchParams({
@@ -32,6 +29,8 @@ const TableRowWithCollapseRedemption = ({formatNumberToIndianFormat,select_type,
   } else if (transaction_summary_report && transaction_summary_report.length > 0) {
     dataToUse = transaction_summary_report;
   }
+  const [clickedIndex, setClickedIndex] = useState(-1);
+  const [isLoading, setIsLoading] = useState(false);
   const handleButtonClick = (index) => {
     setIsLoading(true);
     setTimeout(() => {
@@ -43,6 +42,7 @@ const TableRowWithCollapseRedemption = ({formatNumberToIndianFormat,select_type,
       setClickedIndex(index);
     }
   };
+
   let totalEquity = 0;
   let totalHybrid = 0;
   let totalArbitrage = 0;
@@ -84,13 +84,13 @@ const TableRowWithCollapseRedemption = ({formatNumberToIndianFormat,select_type,
           </thead>
           <tbody style={{ backgroundColor: "#8080805c" }}>
             {dataToUse.map((ufc, index) => {
-              totalEquity += parseFloat(ufc.REQUITY);
-              totalHybrid += parseFloat(ufc.RHYBRID);
-              totalArbitrage += parseFloat(ufc.RARBITRAGE);
-              totalPassive += parseFloat(ufc.RPASSIVE);
-              totalFixedIncome += parseFloat(ufc.RFIXED_INCOME);
-              totalCash += parseFloat(ufc.RCASH);
-              grandTotal += parseFloat(ufc.RTOTAL);
+              totalEquity += parseFloat(ufc.NEQUITY);
+              totalHybrid += parseFloat(ufc.NHYBRID);
+              totalArbitrage += parseFloat(ufc.NARBITRAGE);
+              totalPassive += parseFloat(ufc.NPASSIVE);
+              totalFixedIncome += parseFloat(ufc.NFIXED_INCOME);
+              totalCash += parseFloat(ufc.NCASH);
+              grandTotal += parseFloat(ufc.NTOTAL);
               return (
                 <React.Fragment key={index}>
                   <tr>
@@ -111,31 +111,31 @@ const TableRowWithCollapseRedemption = ({formatNumberToIndianFormat,select_type,
                     </td>
                     <td>{ufc.UFC_NAME}</td>
                     <td className="text-end">
-                      {formatNumberToIndianFormat(parseFloat(ufc.REQUITY))}
+                      {formatNumberToIndianFormat(parseFloat(ufc.NEQUITY))}
                     </td>
                     <td className="text-end">
-                      {formatNumberToIndianFormat(parseFloat(ufc.RHYBRID))}
+                      {formatNumberToIndianFormat(parseFloat(ufc.NHYBRID))}
                     </td>
                     <td className="text-end">
-                      {formatNumberToIndianFormat(parseFloat(ufc.RARBITRAGE))}
+                      {formatNumberToIndianFormat(parseFloat(ufc.NARBITRAGE))}
                     </td>
                     <td className="text-end">
-                      {formatNumberToIndianFormat(parseFloat(ufc.RPASSIVE))}
+                      {formatNumberToIndianFormat(parseFloat(ufc.NPASSIVE))}
                     </td>
                     <td className="text-end">
                       {formatNumberToIndianFormat(
-                        parseFloat(ufc.RFIXED_INCOME)
+                        parseFloat(ufc.NFIXED_INCOME)
                       )}
                     </td>
                     <td className="text-end">
-                      {formatNumberToIndianFormat(parseFloat(ufc.RCASH))}
+                      {formatNumberToIndianFormat(parseFloat(ufc.NCASH))}
                     </td>
                     <td
                       className="text-end"
                       style={{ backgroundColor: "#8080805c" }}
                     >
                       <b>
-                        {formatNumberToIndianFormat(parseFloat(ufc.RTOTAL))}
+                        {formatNumberToIndianFormat(parseFloat(ufc.NTOTAL))}
                       </b>
                     </td>
                   </tr>
@@ -143,8 +143,7 @@ const TableRowWithCollapseRedemption = ({formatNumberToIndianFormat,select_type,
                     <tr key={`subtable-${index}`}>
                       <td colSpan="9" className="p-0">
                         {clickedIndex === index && (
-                          <TableRowWithRedemption
-                            ufc_code={ufc.UFC_CODE}
+                          <RmNetSalesTable
                             formatNumberToIndianFormat={
                               formatNumberToIndianFormat
                             }
@@ -198,4 +197,4 @@ const TableRowWithCollapseRedemption = ({formatNumberToIndianFormat,select_type,
   );
 };
 
-export default TableRowWithCollapseRedemption;
+export default UfcNetSalesTable;

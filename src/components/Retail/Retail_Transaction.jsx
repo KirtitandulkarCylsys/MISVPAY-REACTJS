@@ -11,27 +11,26 @@ import LoaderSearch from "../Table/SubTable/LoaderSearch";
 import Api from "./RetailApi/Api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Scheme } from "../Retail/RetailApi/AUM_Api";
-import RedemptionTable from "../Table/RedemptionTable";
+// import { Scheme } from "../Retail/RetailApi/AUM_Api";
 import NetSalesTable from "../Table/NetSalesTable";
 import { ExcelToExport } from "./ExcelToExport";
 import ExportToPdf from "./ExportToPdf";
-import Filter from "./Filter";
-import DropDown from "./DropDown";
+// import Filter from "./Filter";
+// import DropDown from "./DropDown";
 import Multiselect from "multiselect-react-dropdown";
-import SubSalesTable from "../Table/SubTable/SubSalesTable";
-import SubRedemptionTable from "../Table/SubTable/SubRedemptionTable";
-import SubNetSalesTable from "../Table/SubTable/SubNetSalesTable";
-import TableRowWithCollapse from "../Table/SubTable/UFC/TableRowWithCollapse";
-import TableRowWithCollapseRedemption from "../Table/SubTable/UFC/TableRowWithCollapseRedemption";
-import TableRowWithCollapseNetSales from "../Table/SubTable/UFC/TableRowWithCollapseNetSales";
-import TableRowWithNetSales from "../Table/SubTable/RMWISE/TableRowWithNetSales";
-import TableRowWithRedemption from "../Table/SubTable/RMWISE/TableRowWithRedemption";
-import TableRowWithSales from "../Table/SubTable/RMWISE/TableRowWithSales";
-
+import RegionSalesTable from "../Table/SubTable/RegionSalesTable";
+import RegionRedemptionTable from "../Table/SubTable/RegionRedemptionTable";
+import RegionNetSalesTable from "../Table/SubTable/RegionNetSalesTable";
+import RedemptionTable from "../Table/RedemptionTable";
+import UfcSalesTable from "../Table/SubTable/UFC/UfcSalesTable";
+import UfcRedemptionTable from "../Table/SubTable/UFC/UfcRedemptionTable";
+import UfcNetSalesTable from "../Table/SubTable/UFC/UfcNetSalesTable";
+import RmSalesTable from "../Table/SubTable/RMWISE/RmSalesTable";
+import RmRedemptionTable from "../Table/SubTable/RMWISE/RmRedemptionTable";
+import RmNetSalesTable from "../Table/SubTable/RMWISE/RmNetSalesTable";
 const Retail_Transaction = ({ headers }) => {
-  const { scheme_details } = Scheme();
-  const Data = "EAST";
+  // const { scheme_details } = Scheme();
+  const Data = "BIHR";
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const {
@@ -46,13 +45,6 @@ const Retail_Transaction = ({ headers }) => {
     select_type,
     setSelectType,
     formatNumberToIndianFormat,
-    employee_id,
-    emprole,
-    quarter,
-    channel,
-    zone,
-    region,
-    common_report,
   } = Api({ headers });
 
   const toggleSidebar = () => {
@@ -119,7 +111,7 @@ const Retail_Transaction = ({ headers }) => {
                       </div>
                       <div className="row d-flex justify-content-around">
                         {/* start datw */}
-                        <div className="form-group col-md-3">
+                        <div className="form-group col-md-2">
                           <label for="">
                             <b> Start Date </b>
                           </label>
@@ -134,7 +126,7 @@ const Retail_Transaction = ({ headers }) => {
                           />
                         </div>
                         {/* end Date */}
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-2">
                           <label for="">
                             <b> End Date </b>
                           </label>
@@ -149,7 +141,7 @@ const Retail_Transaction = ({ headers }) => {
                           />
                         </div>
                         {/* asset class */}
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-2">
                           <label for="">
                             <b>Asset Class</b>
                           </label>
@@ -166,7 +158,7 @@ const Retail_Transaction = ({ headers }) => {
                           </select>
                         </div>
                         {/* select type */}
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-2">
                           <label for="">
                             <b> Select Type</b>
                           </label>
@@ -187,8 +179,8 @@ const Retail_Transaction = ({ headers }) => {
 
                       <div className="row d-flex justify-content-around">
                         {/* <div class="col-md-1"></div> */}
-                        <div className="col-md-6">
-                          <div className="form-group col-md-2  mt-4">
+                        <div className="col-md-4">
+                          <div className="form-group col-md-3  mt-4">
                             <label className="form-lables">
                               <b> Scheme</b>
                             </label>
@@ -209,31 +201,32 @@ const Retail_Transaction = ({ headers }) => {
                           <DropDown />
                         </div> */}
                         {/* search button */}
-                        <div className="col-md-6">
+                        <div className="col-md-4"></div>
+                        <div className="col-md-4 d-flex">
                           <div className="col-md-6 mt-5 search ">
                             <button
-                              className="btn  BgcolorOrange "
+                              className="btn  BgcolorOrange float-end mx-2 "
                               onClick={togglehide}
                             >
                               <b className="colorwhite"> Search</b>
                             </button>
                           </div>
-                        
-                        {/* export, pdf, model */}
-                        <div className="col-md-6 mt-5 tabs ">
-                          <p className="exporttab">
-                            <ExcelToExport />
-                            |<ExportToPdf />|
-                            <img src={msg} alt="msgicon" /> |{" "}
-                            <img
-                              id="myImg"
-                              src={calender}
-                              alt="calendericon"
-                              data-bs-toggle="modal"
-                              data-bs-target="#scheduleModal"
-                            />
-                          </p>
-                        </div>
+
+                          {/* export, pdf, model */}
+                          <div className="col-md-6 mt-5 tabs ">
+                            <p className="exporttab">
+                              <ExcelToExport />
+                              |<ExportToPdf />|
+                              <img src={msg} alt="msgicon" /> |{" "}
+                              <img
+                                id="myImg"
+                                src={calender}
+                                alt="calendericon"
+                                data-bs-toggle="modal"
+                                data-bs-target="#scheduleModal"
+                              />
+                            </p>
+                          </div>
                         </div>
                       </div>
                       <ScheduleModal />
@@ -284,7 +277,7 @@ const Retail_Transaction = ({ headers }) => {
                                 </>
                               ) : Data === "BIHR" ? (
                                 <>
-                                  <SubSalesTable
+                                  <RegionSalesTable
                                     startDate={startDate}
                                     endDate={endDate}
                                     select_type={select_type}
@@ -295,7 +288,7 @@ const Retail_Transaction = ({ headers }) => {
                                       transaction_summary_report
                                     }
                                   />
-                                  <SubRedemptionTable
+                                  <RegionRedemptionTable
                                     startDate={startDate}
                                     endDate={endDate}
                                     select_type={select_type}
@@ -306,7 +299,7 @@ const Retail_Transaction = ({ headers }) => {
                                       transaction_summary_report
                                     }
                                   />
-                                  <SubNetSalesTable
+                                  <RegionNetSalesTable
                                     startDate={startDate}
                                     endDate={endDate}
                                     select_type={select_type}
@@ -320,7 +313,7 @@ const Retail_Transaction = ({ headers }) => {
                                 </>
                               ) : Data === "203" ? (
                                 <>
-                                  <TableRowWithCollapse
+                                  <UfcSalesTable
                                     startDate={startDate}
                                     endDate={endDate}
                                     select_type={select_type}
@@ -331,7 +324,7 @@ const Retail_Transaction = ({ headers }) => {
                                       transaction_summary_report
                                     }
                                   />
-                                  <TableRowWithCollapseRedemption
+                                  <UfcRedemptionTable
                                     startDate={startDate}
                                     endDate={endDate}
                                     select_type={select_type}
@@ -342,7 +335,7 @@ const Retail_Transaction = ({ headers }) => {
                                       transaction_summary_report
                                     }
                                   />
-                                  <TableRowWithCollapseNetSales
+                                  <UfcNetSalesTable
                                     startDate={startDate}
                                     endDate={endDate}
                                     select_type={select_type}
@@ -356,7 +349,7 @@ const Retail_Transaction = ({ headers }) => {
                                 </>
                               ) : Data === "1498" ? (
                                 <>
-                                  <TableRowWithSales
+                                  <RmSalesTable
                                     startDate={startDate}
                                     endDate={endDate}
                                     select_type={select_type}
@@ -367,7 +360,7 @@ const Retail_Transaction = ({ headers }) => {
                                       transaction_summary_report
                                     }
                                   />
-                                  <TableRowWithNetSales
+                                  <RmRedemptionTable
                                     startDate={startDate}
                                     endDate={endDate}
                                     select_type={select_type}
@@ -378,7 +371,7 @@ const Retail_Transaction = ({ headers }) => {
                                       transaction_summary_report
                                     }
                                   />
-                                  <TableRowWithRedemption
+                                  <RmNetSalesTable
                                     startDate={startDate}
                                     endDate={endDate}
                                     select_type={select_type}

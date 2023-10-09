@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import "./SubTable-CSS/SubRedemptionTable.css";
-import TableRowWithCollapseNetSales from "./UFC/TableRowWithCollapseNetSales";
+import "./SubTable-CSS/SubSalesTable.css";
 import Loader from "../Loader";
 import { RegionApi } from "../../Retail/RetailApi/RegionApi";
+import UfcSalesTable from "./UFC/UfcSalesTable";
 
-const SubNetSalesTable = ({formatNumberToIndianFormat,select_type,startDate,endDate,zone,transaction_summary_report}) => {
+const RegionSalesTable = ({formatNumberToIndianFormat, select_type,startDate,endDate,zone, transaction_summary_report}) => {
   const [clickedIndex, setClickedIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
   const formattedStartDate = startDate.split("-").reverse().join("/");
@@ -25,7 +25,6 @@ const SubNetSalesTable = ({formatNumberToIndianFormat,select_type,startDate,endD
     common_report: 'INT_ZONEWISE'
   });
   const {regions} = RegionApi(queryParams);
-
   let dataToUse = [];
 
   if (regions && regions.length > 0) {
@@ -33,7 +32,9 @@ const SubNetSalesTable = ({formatNumberToIndianFormat,select_type,startDate,endD
   } else if (transaction_summary_report && transaction_summary_report.length > 0) {
     dataToUse = transaction_summary_report;
   }
-  const handleButtonClick = (index) => {
+  
+  // Rest of your component remains the same
+    const handleButtonClick = (index) => {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
@@ -55,10 +56,10 @@ const SubNetSalesTable = ({formatNumberToIndianFormat,select_type,startDate,endD
 
   return (
     <div className="new-component container-fluid p-0">
-      <div className="row mt-2 bg-white">
+      <div className="row mt-2 ">
         <div className="head">
           <h4>
-            <b className="black-color"> Data</b>
+            <b className="black-color">{zone} SALES DATA</b>
           </h4>
           <h5>
             <b className="gray-color">(In Lakhs)</b>
@@ -76,7 +77,7 @@ const SubNetSalesTable = ({formatNumberToIndianFormat,select_type,startDate,endD
       >
         <thead>
           <tr className="colorwhite BgcolorOrange">
-            <th scope="col">REGION  CODE</th>
+            <th scope="col">REGION CODE</th>
             <th scope="col" className="text-end">
               Equity
             </th>
@@ -100,15 +101,15 @@ const SubNetSalesTable = ({formatNumberToIndianFormat,select_type,startDate,endD
             </th>
           </tr>
         </thead>
-        <tbody style={{ backgroundColor: "#DDD" }}>
+        <tbody style={{ backgroundColor: "#DADADA" }}>
           {dataToUse.map((summary, index) => {
-            totalEquity += parseFloat(summary.NEQUITY);
-            totalHybrid += parseFloat(summary.NHYBRID);
-            totalArbitrage += parseFloat(summary.NARBITRAGE);
-            totalPassive += parseFloat(summary.NPASSIVE);
-            totalFixedIncome += parseFloat(summary.NFIXED_INCOME);
-            totalCash += parseFloat(summary.NCASH);
-            grandTotal += parseFloat(summary.NTOTAL);
+            totalEquity += parseFloat(summary.SEQUITY);
+            totalHybrid += parseFloat(summary.SHYBRID);
+            totalArbitrage += parseFloat(summary.SARBITRAGE);
+            totalPassive += parseFloat(summary.SPASSIVE);
+            totalFixedIncome += parseFloat(summary.SFIXED_INCOME);
+            totalCash += parseFloat(summary.SCASH);
+            grandTotal += parseFloat(summary.STOTAL);
             return (
               <React.Fragment key={index}>
                 <tr>
@@ -118,7 +119,7 @@ const SubNetSalesTable = ({formatNumberToIndianFormat,select_type,startDate,endD
                       onClick={() => handleButtonClick(index)}
                       disabled={isLoading}
                     >
-                      <b>{summary.REGION}</b>
+                      <b className="sharp-font">{summary.REGION}</b>
                     </button>
                     {isLoading && (
                       <div className="text-center mt-4">
@@ -128,34 +129,34 @@ const SubNetSalesTable = ({formatNumberToIndianFormat,select_type,startDate,endD
                     )}
                   </td>
                   <td className="text-end">
-                    {formatNumberToIndianFormat(parseFloat(summary.NEQUITY))}
+                    {formatNumberToIndianFormat(parseFloat(summary.SEQUITY))}
                   </td>
                   <td className="text-end">
-                    {formatNumberToIndianFormat(parseFloat(summary.NHYBRID))}
+                    {formatNumberToIndianFormat(parseFloat(summary.SHYBRID))}
                   </td>
                   <td className="text-end">
-                    {formatNumberToIndianFormat(parseFloat(summary.NARBITRAGE))}
+                    {formatNumberToIndianFormat(parseFloat(summary.SARBITRAGE))}
                   </td>
                   <td className="text-end">
-                    {formatNumberToIndianFormat(parseFloat(summary.NPASSIVE))}
+                    {formatNumberToIndianFormat(parseFloat(summary.SPASSIVE))}
                   </td>
                   <td className="text-end">
                     {formatNumberToIndianFormat(
-                      parseFloat(summary.NFIXED_INCOME)
+                      parseFloat(summary.SFIXED_INCOME)
                     )}
                   </td>
                   <td className="text-end">
-                    {formatNumberToIndianFormat(parseFloat(summary.NCASH))}
+                    {formatNumberToIndianFormat(parseFloat(summary.SCASH))}
                   </td>
-                  <td className="text-end" id="total">
-                    {formatNumberToIndianFormat(parseFloat(summary.NTOTAL))}
+                  <td className="text-end color-biege" id="total">
+                    {formatNumberToIndianFormat(parseFloat(summary.STOTAL))}
                   </td>
                 </tr>
                 {clickedIndex === index && (
                   <tr key={`subtable-${index}`}>
                     <td colSpan="8" className="p-0">
                       {clickedIndex === index && (
-                        <TableRowWithCollapseNetSales
+                        <UfcSalesTable
                           formatNumberToIndianFormat={
                             formatNumberToIndianFormat
                           }
@@ -205,4 +206,4 @@ const SubNetSalesTable = ({formatNumberToIndianFormat,select_type,startDate,endD
   );
 };
 
-export default SubNetSalesTable;
+export default RegionSalesTable;

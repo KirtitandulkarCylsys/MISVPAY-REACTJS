@@ -1,9 +1,11 @@
-import React, { useMemo, useState } from "react";
-import TableRowWithNetSales from "../RMWISE/TableRowWithNetSales";
+import React, { useState } from "react";
 import Loader from "../../Loader";
 import { UfcApi } from "../../../Retail/RetailApi/RegionApi";
+import RmSalesTable from "../RMWISE/RmSalesTable";
 
-const TableRowWithCollapseNetSales = ({formatNumberToIndianFormat,select_type,startDate,endDate,region,transaction_summary_report}) => {
+const UfcSalesTable = ({formatNumberToIndianFormat,select_type,startDate,endDate,region,transaction_summary_report}) => {
+  const [clickedIndex, setClickedIndex] = useState(-1);
+  const [isLoading, setIsLoading] = useState(false);
   const formattedStartDate = startDate.split("-").reverse().join("/");
   const formattedEndDate = endDate.split("-").reverse().join("/");
   const queryParams = new URLSearchParams({
@@ -29,8 +31,6 @@ const TableRowWithCollapseNetSales = ({formatNumberToIndianFormat,select_type,st
   } else if (transaction_summary_report && transaction_summary_report.length > 0) {
     dataToUse = transaction_summary_report;
   }
-  const [clickedIndex, setClickedIndex] = useState(-1);
-  const [isLoading, setIsLoading] = useState(false);
   const handleButtonClick = (index) => {
     setIsLoading(true);
     setTimeout(() => {
@@ -84,13 +84,14 @@ const TableRowWithCollapseNetSales = ({formatNumberToIndianFormat,select_type,st
           </thead>
           <tbody style={{ backgroundColor: "#8080805c" }}>
             {dataToUse.map((ufc, index) => {
-              totalEquity += parseFloat(ufc.NEQUITY);
-              totalHybrid += parseFloat(ufc.NHYBRID);
-              totalArbitrage += parseFloat(ufc.NARBITRAGE);
-              totalPassive += parseFloat(ufc.NPASSIVE);
-              totalFixedIncome += parseFloat(ufc.NFIXED_INCOME);
-              totalCash += parseFloat(ufc.NCASH);
-              grandTotal += parseFloat(ufc.NTOTAL);
+              totalEquity += parseFloat(ufc.SEQUITY);
+              totalHybrid += parseFloat(ufc.SHYBRID);
+              totalArbitrage += parseFloat(ufc.SARBITRAGE);
+              totalPassive += parseFloat(ufc.SPASSIVE);
+              totalFixedIncome += parseFloat(ufc.SFIXED_INCOME);
+              totalCash += parseFloat(ufc.SCASH);
+              grandTotal += parseFloat(ufc.STOTAL);
+
               return (
                 <React.Fragment key={index}>
                   <tr>
@@ -111,31 +112,31 @@ const TableRowWithCollapseNetSales = ({formatNumberToIndianFormat,select_type,st
                     </td>
                     <td>{ufc.UFC_NAME}</td>
                     <td className="text-end">
-                      {formatNumberToIndianFormat(parseFloat(ufc.NEQUITY))}
+                      {formatNumberToIndianFormat(parseFloat(ufc.SEQUITY))}
                     </td>
                     <td className="text-end">
-                      {formatNumberToIndianFormat(parseFloat(ufc.NHYBRID))}
+                      {formatNumberToIndianFormat(parseFloat(ufc.SHYBRID))}
                     </td>
                     <td className="text-end">
-                      {formatNumberToIndianFormat(parseFloat(ufc.NARBITRAGE))}
+                      {formatNumberToIndianFormat(parseFloat(ufc.SARBITRAGE))}
                     </td>
                     <td className="text-end">
-                      {formatNumberToIndianFormat(parseFloat(ufc.NPASSIVE))}
+                      {formatNumberToIndianFormat(parseFloat(ufc.SPASSIVE))}
                     </td>
                     <td className="text-end">
                       {formatNumberToIndianFormat(
-                        parseFloat(ufc.NFIXED_INCOME)
+                        parseFloat(ufc.SFIXED_INCOME)
                       )}
                     </td>
                     <td className="text-end">
-                      {formatNumberToIndianFormat(parseFloat(ufc.NCASH))}
+                      {formatNumberToIndianFormat(parseFloat(ufc.SCASH))}
                     </td>
                     <td
                       className="text-end"
                       style={{ backgroundColor: "#8080805c" }}
                     >
                       <b>
-                        {formatNumberToIndianFormat(parseFloat(ufc.NTOTAL))}
+                        {formatNumberToIndianFormat(parseFloat(ufc.STOTAL))}
                       </b>
                     </td>
                   </tr>
@@ -143,7 +144,7 @@ const TableRowWithCollapseNetSales = ({formatNumberToIndianFormat,select_type,st
                     <tr key={`subtable-${index}`}>
                       <td colSpan="9" className="p-0">
                         {clickedIndex === index && (
-                          <TableRowWithNetSales
+                          <RmSalesTable
                             formatNumberToIndianFormat={
                               formatNumberToIndianFormat
                             }
@@ -197,4 +198,4 @@ const TableRowWithCollapseNetSales = ({formatNumberToIndianFormat,select_type,st
   );
 };
 
-export default TableRowWithCollapseNetSales;
+export default UfcSalesTable;
