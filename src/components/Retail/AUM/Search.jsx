@@ -17,9 +17,11 @@ import { ExcelToExport } from "../ExcelToExport";
 import ExportToPdf from "../ExportToPdf";
 import AumRegionReport from "./AumRegionReport";
 import AumUfcReport from "./AumUfcReport";
+import AumRmReport from "./AumRmReport";
 
 const Search = () => {
   const empid = "ZH";
+  const  ufc_code="203"
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [hide, setHide] = useState(false);
@@ -145,25 +147,31 @@ const Search = () => {
                 </div>
               </div>
               {hide && (
-                <>
-                  {empid === "ZH" ? (
-                    <Aum report_period={report_period} />
-                  ) : empid === "RH" ? (
-                    <AumRegionReport
-                      formatNumberToIndianFormat={formatNumberToIndianFormat}
-                      aum_period={aum_period}
-                      report_period={report_period}
-                    />
-                  ) : empid === "UF" ? (
-                    <AumUfcReport
-                      aum_period={aum_period}
-                      report_period={report_period}
-                      
-                      formatNumberToIndianFormat={formatNumberToIndianFormat}
-                    />
-                  ) : null}
-                </>
-              )}
+  <>
+    {empid === "ZH" ? (
+      <Aum report_period={report_period} />
+    ) : empid === "RH" ? (
+      <AumRegionReport
+        formatNumberToIndianFormat={formatNumberToIndianFormat}
+        aum_period={aum_period}
+        report_period={report_period}
+      />
+    ) : empid === "UF" ? (
+      <AumUfcReport
+        aum_period={aum_period}
+        report_period={report_period}
+        formatNumberToIndianFormat={formatNumberToIndianFormat}
+      />
+    ) : empid === "RM" ? (
+      <AumRmReport
+        ufc_code={ufc_code}
+        report_period={report_period}
+        formatNumberToIndianFormat={formatNumberToIndianFormat}
+      />
+    ) : null}
+  </>
+)}
+
             </div>
           </div>
         </div>
