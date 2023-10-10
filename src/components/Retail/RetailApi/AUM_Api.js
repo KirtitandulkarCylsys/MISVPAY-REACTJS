@@ -50,6 +50,7 @@ export const usePeriodApi = () => {
       break;
     case "CM":
       commonReportValue = "UFCWISE";
+      
       break;
     case "RM":
       commonReportValue = "RMWISE";

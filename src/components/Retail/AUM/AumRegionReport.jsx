@@ -179,37 +179,37 @@ const AumRegionReport = ({
                   )}
                 </React.Fragment>
               ))}
-              <tr className="totalhead">
+              <tr className="totalhead" >
                 <td colSpan="3">Total</td>
-                <td className="totalheaad">
+                <td className="totalhead" >
                   {formatNumberToIndianFormat(calculateTotalAum().toFixed(2))}
                 </td>
-                <td className="totalheaad">
+                <td className="totalhead">
                   {formatNumberToIndianFormat(
                     calculateTotal("EQUITY_AUM").toFixed(2)
                   )}
                 </td>
-                <td className="totalheaad">
+                <td className="totalhead">
                   {formatNumberToIndianFormat(
                     calculateTotal("HYBRID_AUM").toFixed(2)
                   )}
                 </td>
-                <td className="totalheaad">
+                <td className="totalhead">
                   {formatNumberToIndianFormat(
                     calculateTotal("ARBITRAGE_AUM").toFixed(2)
                   )}
                 </td>
-                <td className="totalheaad">
+                <td className="totalhead">
                   {formatNumberToIndianFormat(
                     calculateTotal("PASSIVE_AUM").toFixed(2)
                   )}
                 </td>
-                <td className="totalheaad">
+                <td className="totalhead">
                   {formatNumberToIndianFormat(
                     calculateTotal("FIXED_INCOME_AUM").toFixed(2)
                   )}
                 </td>
-                <td className="totalheaad">
+                <td className="totalhead">
                   {formatNumberToIndianFormat(
                     calculateTotal("CASH_AUM").toFixed(2)
                   )}
