@@ -6,7 +6,7 @@ import Api from "../../../Retail/RetailApi/Api";
 const RmSalesTable = ({formatNumberToIndianFormat,select_type,startDate,endDate,ufc,transaction_summary_report}) => {
   const formattedStartDate = startDate.split("-").reverse().join("/");
   const formattedEndDate = endDate.split("-").reverse().join("/");
-  const {emproles,channel,}= Api();
+  const {emproles,channel}= Api();
 
   const queryParams = useMemo(() => {
     return new URLSearchParams({

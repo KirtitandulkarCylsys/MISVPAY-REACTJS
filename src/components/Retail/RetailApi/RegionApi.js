@@ -3,19 +3,22 @@ import axiosInstance, { API_SUMMARY_TRANSACTION } from "../../../Constant/apiCon
 // nested regions api
 export const RegionApi = (queryParams) => {
   const [regions, setRegion] = useState([]);
+  const [loading, setLoading]= useState();
   useEffect(() => {
     const fetchRegionData = async () => {
+      setLoading(true);
       try {
         const response = await axiosInstance.get(API_SUMMARY_TRANSACTION.DATA(queryParams));
         const data = response.data;
         setRegion(data);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching  details", error);
       }
     };
     fetchRegionData();
   }, [queryParams]);
-  return { regions };
+  return { regions, loading };
 };
 
 // nested ufcApi

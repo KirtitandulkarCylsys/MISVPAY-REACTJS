@@ -127,13 +127,13 @@ const NetSalesTable = ({
                     <tr key={`subtable-${index}`}>
                       <td colSpan="8" className="p-0">
                         <RegionNetSalesTable
-                          pzone={summary.ZONE}
+                           formatNumberToIndianFormat={
+                            formatNumberToIndianFormat
+                          }
                           startDate={startDate}
                           endDate={endDate}
                           select_type={select_type}
-                          formatNumberToIndianFormat={
-                            formatNumberToIndianFormat
-                          }
+                          zone={summary.ZONE}
                         />
                       </td>
                     </tr>

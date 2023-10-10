@@ -46,7 +46,6 @@ const Retail_Transaction = ({ headers }) => {
     setSelectType,
     formatNumberToIndianFormat,emproles
   } = Api({ headers });
-  
   const  commonReport= emproles  ;
 
   
@@ -242,7 +241,7 @@ const Retail_Transaction = ({ headers }) => {
                             </div>
                           ) : hide ? (
                             <>
-                              {commonReport === 'ZH' || 'ADMIN'? (
+                              {commonReport === 'ZH' || commonReport === 'ADMIN'? (
                                 <>
                                   <SalesTable
                                     transaction_summary_report={

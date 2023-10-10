@@ -53,7 +53,7 @@ const Api = () => {
         zone: zoneData,
         region: REGIONData,
         ufc: UFCData,
-        rm: "",
+        rm: "1498",
         common_report: commonReportValue,
       });
 

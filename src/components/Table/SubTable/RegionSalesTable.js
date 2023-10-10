@@ -8,7 +8,6 @@ import Api from "../../Retail/RetailApi/Api";
 
 const RegionSalesTable = ({formatNumberToIndianFormat, select_type,startDate,endDate,zone, transaction_summary_report}) => {
   const [clickedIndex, setClickedIndex] = useState(-1);
-  const [isLoading, setIsLoading] = useState(false);
   const formattedStartDate = startDate.split("-").reverse().join("/");
   const formattedEndDate = endDate.split("-").reverse().join("/");
   const {emproles,channel,}= Api();
@@ -29,7 +28,7 @@ const RegionSalesTable = ({formatNumberToIndianFormat, select_type,startDate,end
       common_report: "INT_ZONEWISE",
     });
   }, [formattedStartDate, formattedEndDate, select_type, zone,emproles,channel]);
-  const {regions} = RegionApi(queryParams);
+  const {regions, loading} = RegionApi(queryParams);
   let dataToUse = [];
 
   if (regions && regions.length > 0) {
@@ -40,10 +39,6 @@ const RegionSalesTable = ({formatNumberToIndianFormat, select_type,startDate,end
   
   // Rest of your component remains the same
     const handleButtonClick = (index) => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1500);
     if (index === clickedIndex) {
       setClickedIndex(-1);
     } else {
@@ -122,11 +117,10 @@ const RegionSalesTable = ({formatNumberToIndianFormat, select_type,startDate,end
                     <button
                       className="textlink"
                       onClick={() => handleButtonClick(index)}
-                      disabled={isLoading}
                     >
                       <b className="sharp-font">{summary.REGION}</b>
                     </button>
-                    {isLoading && (
+                    {loading && (
                       <div className="text-center mt-4">
                         <i className="fas fa-spinner fa-spin fa-2x loder"></i>{" "}
                         <Loader className="loder" />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import Navbar from "../../Shared/Navbar";
 import SideBar from "../../Shared/SideBar/SideBar";
 import ReactPaginate from "react-paginate";
@@ -8,13 +8,13 @@ import Loader from "../Loader";
 import RegionWiseNetsales from "./RegionWiseNetsales";
 import { ExportExcelRegion } from "./ExportExcel";
 import { ExportPdfRegion } from "./ExportPdfRegion";
-import { AllRegionwise, RegionApi } from "../../Retail/RetailApi/RegionApi";
+import { AllRegionwise } from "../../Retail/RetailApi/RegionApi";
 import "./RegionPagination.css";
 const RegionWiseSales = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
   const { select_type } = useParams();
-  const queryParams = new URLSearchParams({
+  const queryParams = useMemo=(()=>{new URLSearchParams({
     employee_id: "1234",
     emprole: "ADMIN",
     quarter: "202324Q2",
@@ -28,7 +28,7 @@ const RegionWiseSales = () => {
     ufc: "",
     rm: "nill",
     common_report: "ALL_REGIONWISE",
-  });
+  })},[select_type]);
   const { regionwise, loading } = AllRegionwise(queryParams);
 
   const toggleSidebar = () => {
