@@ -91,3 +91,21 @@
   font-weight: bold;
 }
 
+@media only screen and (max-width: 1024px) {
+  .Quarter1 {
+    position: relative;
+    left: 37px;
+    font-size: 12px;
+    top: -8px;
+  }
+  .nav-h4{
+    font-size: 18px;
+    position: relative;
+    left: 34px;
+  }
+  #nav-fifth{
+    position: relative;
+    left: -45px;
+  }
+}
+

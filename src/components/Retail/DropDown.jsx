@@ -9,7 +9,7 @@ const DropDown = () => {
   };
 
   return (
-    <div className="form-group  mt-5">
+    <div className="form-group  mt-4">
       <label htmlFor="">
         <b>Select Column</b>
       </label>

@@ -1,5 +1,36 @@
+import axios from 'axios';
 
 const API = 'http://localhost:3000/api/v1';
+
+const axiosInstance = axios.create({
+    baseURL: API,
+  });
+
+  axiosInstance.interceptors.request.use(
+    (config) => {
+      const token = localStorage.getItem('token'); 
+      const empId = localStorage.getItem('emp_id'); 
+
+      if (token && empId) {
+        config.headers['Authorization'] = `Bearer ${token}`;
+        config.headers['emp_id'] = empId;
+      }
+  
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
+
+  axiosInstance.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
 
 export const API_LOGIN = {
     DATA: `${API}/login_details`,
@@ -53,7 +84,6 @@ export const API_ALL_RM_RETAIL = {
     DATA: (queryParams) => `${API}/all_rm_retail?${queryParams}`,
 };
 
-
 export const API_MANAGE_USER_CHANNEL_CODE_DROPDOWN = {
     DATA: `${API}/manage_user_channel_code_dropdown`,
   };
@@ -101,3 +131,8 @@ export const API_MANAGE_USER_CHANNEL_CODE_DROPDOWN = {
     export const API_SEARCH_MANAGE_USER_TABLE= {
         DATA: (queryParams) => `${API}/search_manage_user_table?${queryParams}`
       };
+export const API_ROLEWISE = {
+  DATA: `${API}/rolewiselogin`,
+}
+
+export default axiosInstance;

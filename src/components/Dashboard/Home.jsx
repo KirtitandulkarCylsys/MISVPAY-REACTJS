@@ -8,11 +8,11 @@ import pie3 from "../Assets/images/Strategic Alliance.png";
 import overall from "../Assets/images/overall survey.png";
 import overall2 from "../Assets/images/Overall Zone survey.png";
 const Home = () => {
+
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
-
   return (
     <>
       <div className="container-fluid p-0 home-main ">

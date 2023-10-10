@@ -24,11 +24,11 @@ function App() {
         <Route path='/Transaction' element={<Retail_Transaction/>}/>
         <Route path='/Table' element={<Table/>}/>
         <Route path='/Aum' element={<Search/>}/>
-        <Route path='/RegionWiseSales/:startDate/:endDate/:select_type' element={<RegionWiseSales/>}/>
-        <Route path='/UfcWise/:startDate/:endDate/:select_type' element={<UfcWise/>}/>
-        <Route path='/RmWise/:startDate/:endDate/:select_type' element={<RmWise/>}/>
-        <Route path='/AumRegionReport/:zone/:report_period' element={<AumRegionReport/>}/>
-        <Route path="/AumUfcReport/:zone/:report_period/:region_code" element={<AumUfcReport />} />
+        <Route path='/RegionWiseSales/:select_type' element={<RegionWiseSales/>}/>
+        <Route path='/UfcWise/:select_type' element={<UfcWise/>}/>
+        <Route path='/RmWise/:select_type' element={<RmWise/>}/>
+        <Route path='/AumRegionReport' element={<AumRegionReport/>}/>
+        <Route path="/AumUfcReport" element={<AumUfcReport />} />
         <Route path='TransactionReport' element={<TransactionReport/>}/>
         <Route path='/manageuser' element={<Manage_user/>}/>
         <Route path='/employeedetails' element={<Employee_details/>}/>

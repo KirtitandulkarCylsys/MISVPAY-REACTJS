@@ -9,8 +9,12 @@ import Profile from "../Assets/images/profile.svg";
 import logout from "../Assets/images/logout icon.png";
 import { useNavigate } from "react-router-dom";
 import { removeEmpIdCookie, removeAuthTokenCookie } from "../Auth/Cookie";
+import { useDataContext } from "../../Context/DataContext";
+// import { useDataContext } from "../../Context/DataContext"
+ 
 
 const Navbar = ({ onToggle }) => {
+  const { roleWiseData } = useDataContext(); 
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -33,8 +37,9 @@ const Navbar = ({ onToggle }) => {
     minute: 'numeric',
     hour12: false,
   };
-  const formattedDateTime = currentDateTime.toLocaleString(undefined, options);
 
+  const formattedDateTime = currentDateTime.toLocaleString(undefined, options);
+  const emp_name = roleWiseData ? roleWiseData[0].EMP_NAME : null;
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-light bg-white p-0">
@@ -48,11 +53,12 @@ const Navbar = ({ onToggle }) => {
                 </button>
               </div>
               <div className="col-md-2 pt-1">
-                <h5 className="nav-h4">Welcome, Admin</h5>
+                <h5 className="nav-h4">Welcome,{emp_name}</h5>
                 <p>
                   Quarter <span>:</span>
+                  
                   <strong>
-                    <span>2023-24 Q1</span>
+                    <span>{  roleWiseData ? roleWiseData[0].YEAR : null}</span>
                   </strong>
                 </p>
               </div>
@@ -60,12 +66,12 @@ const Navbar = ({ onToggle }) => {
                 <div id="third-nav" className="pt-1">
                   <div>
                     <p className="nav-para">
-                      Channel <span>:</span>
-                      <strong>All</strong>
+                      Channel<span>:</span> {  roleWiseData ? roleWiseData[0].CHANNEL_CODE : null}
+                      <strong></strong>
                     </p>
                   </div>
                   <div className="nav-div">
-                    <img src={Navi} alt="navi" /> <strong>Mumbai</strong>
+                    <img src={Navi} alt="navi" /> <strong></strong>
                   </div>
                 </div>
               </div>
@@ -92,7 +98,7 @@ const Navbar = ({ onToggle }) => {
                       className="mt-4"
                     />
                     <div className="m-2 w-100">
-                      <h5 className="nav-heading">Role : Admin</h5>
+                      <h5 className="nav-heading">Role :{ roleWiseData ? roleWiseData[0].EMP_ROLE : null} </h5>
                       <p>{formattedDateTime}</p>
                     </div>
                   </li>

@@ -1,6 +1,39 @@
-import React, { useMemo } from "react";
+import React from "react";
+import { RMApi } from "../../../Retail/RetailApi/RegionApi";
+import { useMemo } from "react";
+import Api from "../../../Retail/RetailApi/Api";
 
-const TableRowWithSales = ({transaction_summary_report,formatNumberToIndianFormat}) => {
+
+const RmNetSalesTable = ({formatNumberToIndianFormat,select_type,startDate,endDate,ufc,transaction_summary_report}) => {
+  const formattedStartDate = startDate.split("-").reverse().join("/");
+  const formattedEndDate = endDate.split("-").reverse().join("/");
+  const {emproles,channel,}= Api();
+
+  const queryParams = useMemo(() => {
+    return new URLSearchParams({
+      employee_id: '1234',
+    emprole: emproles,
+    quarter: '202324Q2',
+    start_date: formattedStartDate,
+    end_date: formattedEndDate,
+    select_type: select_type,
+    scheme_code: 'nill',
+    channel: channel,
+    zone: '',
+    region: '',
+    ufc: ufc,
+    rm: 'nill',
+    common_report: 'INT_UFCWISE'
+    });
+  }, [formattedStartDate, formattedEndDate, select_type, ufc,emproles,channel]);
+  const {rm}= RMApi(queryParams);
+  let dataToUse = [];
+
+  if (rm && rm.length > 0) {
+    dataToUse = rm;
+  } else if (transaction_summary_report && transaction_summary_report.length > 0) {
+    dataToUse = transaction_summary_report;
+  }
   let totalEquity = 0;
   let totalHybrid = 0;
   let totalArbitrage = 0;
@@ -17,11 +50,8 @@ const TableRowWithSales = ({transaction_summary_report,formatNumberToIndianForma
             style={{ backgroundColor: "rgb(58 94 147 / 98%)", color: "white" }}
           >
             <tr className="">
-              <th scope="col">UFC Code</th>
-              <th scope="col">UFC NAME</th>
               <th scope="col">RM CODE</th>
-              <th scope="col">RM NAME</th>
-              <th scope="col">FUNCROLE</th>
+              <th scope="col">EMPLOYEE NAME</th>
               <th scope="col" className="text-end">
                 Equity
               </th>
@@ -46,67 +76,49 @@ const TableRowWithSales = ({transaction_summary_report,formatNumberToIndianForma
             </tr>
           </thead>
           <tbody>
-            {transaction_summary_report.map((rm) => {
-              totalEquity += parseFloat(rm.SEQUITY);
-              totalHybrid += parseFloat(rm.SHYBRID);
-              totalArbitrage += parseFloat(rm.SARBITRAGE);
-              totalPassive += parseFloat(rm.SPASSIVE);
-              totalFixedIncome += parseFloat(rm.SFIXED_INCOME);
-              totalCash += parseFloat(rm.SCASH);
-              grandTotal += parseFloat(rm.STOTAL);
+            {dataToUse.map((rm) => {
+              totalEquity += parseFloat(rm.NEQUITY);
+              totalHybrid += parseFloat(rm.NHYBRID);
+              totalArbitrage += parseFloat(rm.NARBITRAGE);
+              totalPassive += parseFloat(rm.NPASSIVE);
+              totalFixedIncome += parseFloat(rm.NFIXED_INCOME);
+              totalCash += parseFloat(rm.NCASH);
+              grandTotal += parseFloat(rm.NTOTAL);
               return (
                 <tr style={{ backgroundColor: "#dee2e69c" }}>
-                  <td>
-                    <button className="textlink">
-                      <b className="sharp-font">{rm.UFC_CODE}</b>
-                    </button>
-                  </td>
-                  <td>
-                    <button className="textlink">
-                      <b className="sharp-font">{rm.UFC_NAME}</b>
-                    </button>
-                  </td>
+
                   <td>
                     <button className="textlink">
                       <b className="sharp-font">{rm.RMCODE}</b>
                     </button>
                   </td>
-                  <td>{rm.RMNAME}</td>
-                  <td>{rm.FUNCROLE}</td>
+                  <td>{rm.EMP_NAME}</td>
                   <td className="text-end">
-                    {formatNumberToIndianFormat(parseFloat(rm.SEQUITY))}
+                    {formatNumberToIndianFormat(parseFloat(rm.NEQUITY))}
                   </td>
                   <td className="text-end">
-                    {formatNumberToIndianFormat(parseFloat(rm.SHYBRID))}
+                    {formatNumberToIndianFormat(parseFloat(rm.NHYBRID))}
                   </td>
                   <td className="text-end">
-                    {formatNumberToIndianFormat(parseFloat(rm.SARBITRAGE))}
+                    {formatNumberToIndianFormat(parseFloat(rm.NARBITRAGE))}
                   </td>
                   <td className="text-end">
-                    {formatNumberToIndianFormat(parseFloat(rm.SPASSIVE))}
+                    {formatNumberToIndianFormat(parseFloat(rm.NPASSIVE))}
                   </td>
                   <td className="text-end">
-                    {formatNumberToIndianFormat(parseFloat(rm.SFIXED_INCOME))}
+                    {formatNumberToIndianFormat(parseFloat(rm.NFIXED_INCOME))}
                   </td>
                   <td className="text-end">
-                    {formatNumberToIndianFormat(parseFloat(rm.SCASH))}
+                    {formatNumberToIndianFormat(parseFloat(rm.NCASH))}
                   </td>
                   <td className="text-end">
-                    <b>{formatNumberToIndianFormat(parseFloat(rm.STOTAL))}</b>
+                    <b>{formatNumberToIndianFormat(parseFloat(rm.NTOTAL))}</b>
                   </td>
                 </tr>
               );
             })}
-            <tr
-              style={{
-                backgroundColor: "rgb(58 94 147 / 98%)",
-                color: "white",
-              }}
-            >
+            <tr style={{ backgroundColor: "rgb(58 94 147 / 98%)", color: "white" }}>
               <td>TOTAL</td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td className="text-end">
                 {formatNumberToIndianFormat(parseFloat(totalEquity.toFixed(2)))}
@@ -143,4 +155,4 @@ const TableRowWithSales = ({transaction_summary_report,formatNumberToIndianForma
   );
 };
 
-export default TableRowWithSales;
+export default RmNetSalesTable;
