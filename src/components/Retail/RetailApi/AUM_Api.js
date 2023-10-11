@@ -40,6 +40,7 @@ export const usePeriodApi = () => {
   const REGIONData = roleWiseData ? roleWiseData[0].REGIONCODE : null;
   const UFCData = roleWiseData ? roleWiseData[0].UFC_CODE : null;
   const QUARTERData = roleWiseData ? roleWiseData[0].YEAR : null;
+  const emp_id = roleWiseData ? roleWiseData[0].EMP_ID : null;
   let commonReportValue = "";
   switch (emproles) {
     case "ZH":
@@ -64,14 +65,14 @@ export const usePeriodApi = () => {
     const fetchData = async () => {
       setLoading(true);
       const queryParams = new URLSearchParams({
-        empid: "1234",
+        empid: emp_id,
         emprole: emproles,
         quarter: "202324Q2",
         period_code:  "DD58180823",
         zone: zoneData ,
         region_code: REGIONData,
         ufc_code: UFCData ,
-        rm_code: "",
+        rm_code: emp_id,
         chn_code: channel,
         common_report: commonReportValue
       });

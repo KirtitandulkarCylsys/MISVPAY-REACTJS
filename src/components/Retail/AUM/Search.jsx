@@ -21,7 +21,7 @@ import AumRmReport from "./AumRmReport";
 
 const Search = () => {
   
-  const  ufc_code="203"
+ 
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [hide, setHide] = useState(false);
@@ -63,7 +63,7 @@ const Search = () => {
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return parts.join(".");
   };
-debugger
+
   const empid = emproles;
   console.log(empid)
   return (
@@ -158,15 +158,16 @@ debugger
         aum_period={aum_period}
         report_period={report_period}
       />
-    ) : empid === "UF" ? (
+    ) : empid === "CM" ? (
       <AumUfcReport
         aum_period={aum_period}
+        
         report_period={report_period}
         formatNumberToIndianFormat={formatNumberToIndianFormat}
       />
     ) : empid === "RM" ? (
       <AumRmReport
-        ufc_code={ufc_code}
+      aum_period={aum_period}
         report_period={report_period}
         formatNumberToIndianFormat={formatNumberToIndianFormat}
       />
