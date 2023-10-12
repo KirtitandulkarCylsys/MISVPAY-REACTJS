@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "../Assets/css/Auth/Login.css";
 import leftimage from "../Assets/images/utiloginfinal.png";
 import { useNavigate } from "react-router-dom";
@@ -6,14 +6,14 @@ import { setEmpIdCookie, setAuthTokenCookie } from "./Cookie";
 import { API_LOGIN } from "../../Constant/apiConstant";
 import Api from "../../Constant/apiConstant";
 import { fetchRoleWiseData } from "../../Constant/apiService";
-import { useDataContext } from "../../Context/DataContext";
+import { ApiContext } from "../contexts/APIContext";
 import { useEffect } from "react";
 
 const Login = () => {
   const [p_emp_id, setEmpID] = useState(" ");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const { roleWiseData, setRoleWiseData } = useDataContext();
+  const { roleWiseData,setRoleWiseData } = useContext(ApiContext);
 const navigate = useNavigate();
   useEffect(() => {
     const empId = localStorage.getItem("emp_id");

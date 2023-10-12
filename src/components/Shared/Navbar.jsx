@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useState, useEffect } from 'react';
 import "../Assets/css/navbar.css";
 import logo from "../Assets/images/logo.svg";
@@ -9,12 +9,13 @@ import Profile from "../Assets/images/profile.svg";
 import logout from "../Assets/images/logout icon.png";
 import { useNavigate } from "react-router-dom";
 import { removeEmpIdCookie, removeAuthTokenCookie } from "../Auth/Cookie";
-import { useDataContext } from "../../Context/DataContext";
+// import { useDataContext } from "../../Context/DataContext";
 // import { useDataContext } from "../../Context/DataContext"
+import { ApiContext } from "../../components/contexts/APIContext";
  
 
 const Navbar = ({ onToggle }) => {
-  const { roleWiseData } = useDataContext(); 
+  const { roleWiseData } = useContext(ApiContext); 
   const navigate = useNavigate();
 
   const handleLogout = () => {

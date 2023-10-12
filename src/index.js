@@ -3,14 +3,13 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { DataContextProvider } from "./Context/DataContext";
-
+import Store from './components/contexts/Store';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <DataContextProvider>
+    <Store>
     <App />
-    </DataContextProvider>
+    </Store>
   </React.StrictMode>
 );
 

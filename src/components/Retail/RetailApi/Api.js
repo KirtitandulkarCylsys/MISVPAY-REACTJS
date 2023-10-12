@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { API_SUMMARY_TRANSACTION } from "../../../Constant/apiConstant";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axiosInstance from "../../../Constant/apiConstant";
-import { useDataContext } from "../../../Context/DataContext";
+import { ApiContext } from "../../contexts/APIContext";
 const Api = () => {
   const [hide, setHide] = useState(false);
   const [startDate, setStartDate] = useState();
@@ -13,7 +13,7 @@ const Api = () => {
     []
   );
   const [loading, setLoading] = useState(false);
-  const { roleWiseData } = useDataContext(); 
+  const { roleWiseData } = useContext(ApiContext); 
   const emproles = roleWiseData ? roleWiseData[0].EMP_ROLE : null; 
   const channel = roleWiseData ? roleWiseData[0].CHANNEL_CODE : null; 
   const zoneData = roleWiseData ? roleWiseData[0].ZONE : null;
