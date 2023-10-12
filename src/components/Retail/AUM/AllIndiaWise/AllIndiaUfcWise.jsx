@@ -6,6 +6,8 @@ import Navbar from '../../../Shared/Navbar';
 import SideBar from '../../../Shared/SideBar/SideBar';
 import { ExcelToExport } from '../../ExcelToExport';
 import ExportToPdf from '../../ExportToPdf';
+import { ExportToExcel } from '../ExportToExcel';
+import ExportToPDF from '../ExportToPDF';
 
 function AllIndiaUfcWise() {
     const [isLoading, setIsLoading] = useState(false);
@@ -110,14 +112,14 @@ function AllIndiaUfcWise() {
                             {/* <button onClick={handleExport} className="border-0">
                           <img src={excel} alt="excelicon" />
                         </button> */}
-                            <ExcelToExport />
-                            | <ExportToPdf />
+                            <ExportToExcel />
+                            | <ExportToPDF />
                           </div>
                         </div>
           {!loading && (
             <table
               className="table table-bordered nested-table active"
-              id="table3"
+              id="table1"
             >
               <thead
                 className="Bgcolor "
@@ -126,7 +128,7 @@ function AllIndiaUfcWise() {
                 <tr className="mid">
                   <th rowSpan="2">Zone</th>
                   <th rowSpan="2">Region</th>
-                  <th rowSpan="2">Region Code</th>
+                  
                   <th rowSpan="2">UFC Code</th>
                   <th rowSpan="2">UFC</th>
                
@@ -147,7 +149,7 @@ function AllIndiaUfcWise() {
                   <tr key={item.SrNo}>
                     <td className="">{item.ZONE}</td>
                     <td className="">{item.REGION_NAME}</td>
-                    <td className="">{item.REGION_CODE}</td>
+                   
                     <td className="">{item.UFC_CODE}</td>
                     <td className="">{item.UFC_NAME}</td>
                    

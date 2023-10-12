@@ -6,6 +6,8 @@ import Navbar from "../../../Shared/Navbar";
 import SideBar from "../../../Shared/SideBar/SideBar";
 import { ExcelToExport } from "../../ExcelToExport";
 import ExportToPdf from "../../ExportToPdf";
+import { ExportToExcel } from "../ExportToExcel";
+import ExportToPDF from "../ExportToPDF";
 
 const AllIndiaRegionwWise = ( ) => {
   const {report_period}= useParams();
@@ -95,13 +97,13 @@ const formatNumberToIndianFormat = (number) => {
                             {/* <button onClick={handleExport} className="border-0">
                           <img src={excel} alt="excelicon" />
                         </button> */}
-                            <ExcelToExport />
-                            | <ExportToPdf />
+                            <ExportToExcel />
+                            | <ExportToPDF />
                           </div>
                         </div>
           <table
             className="table table-bordered active nested-table"
-            id="table2"
+            id="table1"
           >
             <thead className="bgcolorBlue text-white mainhead">
               <tr className="mid">

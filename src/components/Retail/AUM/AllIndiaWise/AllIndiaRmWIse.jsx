@@ -6,6 +6,8 @@ import { useParams } from 'react-router-dom';
 import LoaderSearch from '../../../Table/SubTable/LoaderSearch';
 import { ExcelToExport } from '../../ExcelToExport';
 import ExportToPdf from '../../ExportToPdf';
+import { ExportToExcel } from '../ExportToExcel';
+import ExportToPDF from '../ExportToPDF';
 
 const AllIndiaRmWIse = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -110,14 +112,14 @@ const AllIndiaRmWIse = () => {
                             {/* <button onClick={handleExport} className="border-0">
                           <img src={excel} alt="excelicon" />
                         </button> */}
-                            <ExcelToExport />
-                            | <ExportToPdf />
+                            <ExportToExcel />
+                            | <ExportToPDF />
                           </div>
                         </div>
           {!loading && (
             <table
               className="table table-bordered nested-table active"
-              id="table3"
+              id="table1"
             >
               <thead
                 className="Bgcolor "
@@ -126,7 +128,7 @@ const AllIndiaRmWIse = () => {
                 <tr className="mid">
                   <th rowSpan="2">Zone</th>
                   <th rowSpan="2">Region</th>
-                  <th rowSpan="2">Region Code</th>
+                  
                   <th rowSpan="2">UFC Code</th>
                   <th rowSpan="2">UFC</th>
                   <th rowSpan="2">RMCODE</th>
@@ -148,7 +150,6 @@ const AllIndiaRmWIse = () => {
                   <tr key={item.SrNo}>
                     <td className="">{item.ZONE}</td>
                     <td className="">{item.REGION_NAME}</td>
-                    <td className="">{item.REGION_CODE}</td>
                     <td className="">{item.UFC_CODE}</td>
                     <td className="">{item.UFC_NAME}</td>
                     <td className="">{item.RMCODE}</td>

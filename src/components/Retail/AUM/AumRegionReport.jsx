@@ -90,7 +90,7 @@ const AumRegionReport = ({
 
           <table
             className="table table-bordered active nested-table"
-            id="table2"
+            id="table1"
           >
             <thead className="bgcolorBlue text-white mainhead">
               <tr className="mid">
