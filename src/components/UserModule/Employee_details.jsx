@@ -4,6 +4,7 @@ import Navbar from "../Shared/Navbar";
 import "../UserModule/Employee_details.css";
 import { Link } from "react-router-dom";
 import { API_MANAGE_USER_CHANNEL_CODE_DROPDOWN } from "../../Constant/apiConstant";
+import { API_MANAGE_USER_GET_EDIT_DATA } from "../../Constant/apiConstant";
 import { API_MANAGE_EMPLOYEE_ROLE_DROPDOWN } from "../../Constant/apiConstant";
 import { API_MANAGE_REGION_DROPDOWN } from "../../Constant/apiConstant";
 import { API_MANAGE_UFC_LOCATION_DROPDOWN } from "../../Constant/apiConstant";
@@ -101,9 +102,8 @@ const Employee_details = () => {
         setLoadingDropdown(false);
       }
     };
-    if (selectedRole !== "") {
+    if (selectedChannel !== "") {
       fetchData();
-      setZone([]);
     }
   }, [selectedChannel]);
 
@@ -126,7 +126,7 @@ const Employee_details = () => {
         setLoadingDropdown(false);
       }
     };
-    if (selectedRole !== "") {
+    if (selectedChannel !== "") {
       fetchData();
     }
   }, [selectedChannel]);
@@ -181,9 +181,8 @@ const Employee_details = () => {
   const formattedvalid_upto = valid_upto.split("-").reverse().join("/");
   const formattedaccess_from = access_from.split("-").reverse().join("/");
   const formattedaccess_upto = access_upto.split("-").reverse().join("/");
-
+ 
   const storeData = async (e) => {
-
     setIsLoading(true)
     const response = await fetch('http://localhost:3000/api/v1/employees', {
       method: 'POST',
@@ -227,6 +226,30 @@ const Employee_details = () => {
     }
   }
 
+  const [getData, setGetdata] = useState([])
+  const searchData = async () => {
+    const queryParams = new URLSearchParams({
+      emp_id: emp_id,
+      channel_code: selectedChannel,
+      emp_role: selectedRole,
+      location: location,
+      start_date: formattedStartDate,
+      status: status
+    });
+    try {
+      const response = await fetch(API_MANAGE_USER_GET_EDIT_DATA.DATA(queryParams));
+      const data = await response.json();
+      setGetdata(data);
+      console.log(getData, "getdata")
+    } catch (error) {
+      console.error("Error fetching locations/UFC", error);
+    }
+  }
+
+  useEffect(()=>{
+    searchData();
+  },[])
+
   return (
     <>
       <Navbar onToggle={toggleSidebar} />
@@ -265,7 +288,7 @@ const Employee_details = () => {
                   <label><b>Channel Code</b></label>
                   <select class="form-select" value={selectedChannel} onChange={(e) => setSelectedChannel(e.target.value)}>
                     <option>Select</option>
-                    {channelCode.map((item) =>
+                    {channelCode.length > 0 && channelCode.map((item) =>
                       <option key={item.CHANNEL_CODE} value={item.CHANNEL_CODE}>{item.CHANNEL_CODE}</option>
                     )}
                   </select>
@@ -287,7 +310,7 @@ const Employee_details = () => {
                   <label><b>CRM Reporting Role</b></label>
                   <select class="form-select" value={reporting_role} onChange={(e) => setReporting_role(e.target.value)} >
                     <option>Select</option>
-                    {crm_role.map((item) =>
+                    {crm_role.length > 0 && crm_role.map((item) =>
                       <option >{item.REPORTING_ROLE}</option>
                     )}
                   </select>
@@ -353,7 +376,7 @@ const Employee_details = () => {
                   <label><b>Functional Role</b></label>
                   <select class="form-select" value={func_role} onChange={(e) => setFunc_role(e.target.value)}>
                     <option value="">select</option>
-                    {functional_role.map((item) =>
+                    {functional_role.length > 0 && functional_role.map((item) =>
                       <option >{item.FUNCTION}</option>
                     )}
                   </select>
@@ -362,7 +385,7 @@ const Employee_details = () => {
                   <label><b>City</b></label>
                   <select class="form-select" value={city} onChange={(e) => setCity(e.target.value)}>
                     <option value="">select</option>
-                    {employee_city.map((item) =>
+                    {employee_city.length > 0 && employee_city.map((item) =>
                       <option >{item.CITY_NAME}</option>
                     )}
                   </select>
@@ -407,7 +430,7 @@ const Employee_details = () => {
                   <label><b>Select Quarter</b></label>
                   <select className="form-select" value={select_quarter} onChange={(e) => setSelect_quarter(e.target.value)}>
                     <option value="">select</option>
-                    {quarter.map((item) =>
+                    {quarter.length > 0 && quarter.map((item) =>
                       <option >{item.YEAR}</option>
                     )}
                   </select>

@@ -128,7 +128,6 @@ const Manage_user = () => {
       console.error("Error fetching locations/UFC", error);
       setHide(false);
     }
-
   }
 
   return (

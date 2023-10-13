@@ -135,4 +135,8 @@ export const API_ROLEWISE = {
   DATA: `${API}/rolewiselogin`,
 }
 
+export const API_MANAGE_USER_GET_EDIT_DATA= {
+  DATA: (queryParams) => `${API}/manage_user_get_edit_data?${queryParams}`
+};
+
 export default axiosInstance;

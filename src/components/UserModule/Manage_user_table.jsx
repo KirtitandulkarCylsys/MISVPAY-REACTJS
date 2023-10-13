@@ -1,5 +1,6 @@
 import React from "react";
-
+import icon from "../Assets/images/edit-icon.png";
+import { Link } from "react-router-dom";
 const Manage_user_table = ({getData}) => {
 
   return (
@@ -73,6 +74,11 @@ const Manage_user_table = ({getData}) => {
               >
                 Functional Role
               </th>
+              <th
+                scope="col" className=" text-center"
+              >
+                View
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -91,6 +97,7 @@ const Manage_user_table = ({getData}) => {
                       <td className="p-0">{item.STATUS}</td>
                       <td className="p-0">{item.DV_FLAG}</td>
                       <td className="p-0">{item.FUNC_ROLE}</td>
+                      <td><Link to={`/employeedetails/${item.EMP_ID}`}>{item.STATUS == "Y" ? (<img src={icon} width="18px" height="18px"/>):""}</Link></td>
                     </tr>
                    )}  
                   </tbody>
