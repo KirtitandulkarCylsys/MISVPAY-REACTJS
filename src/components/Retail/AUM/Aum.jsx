@@ -1,10 +1,11 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo,useEffect } from "react";
 import { useNavigate ,Link} from "react-router-dom";
 import "./Aum.css";
 import { usePeriodApi } from "../RetailApi/AUM_Api";
 import LoaderSearch from "../../Table/SubTable/LoaderSearch";
 import AumRegionReport from "./AumRegionReport";
 import Loader from "../../Table/Loader";
+import { useDataContext } from "../../../Context/DataContext";
 
 const Aum = ({ report_period }) => {
   const [clickedIndex, setClickedIndex] = useState(-1);
@@ -51,6 +52,34 @@ const Aum = ({ report_period }) => {
       setClickedIndex(index);
     }
   };
+
+  const [items, setItems] = useState([...Array(100).keys()].map((i) => i + 1));
+  const {currentPage, setCurrentPage,entriesPerPage, setEntriesPerPage}= useDataContext();
+
+  const totalPages = Math.ceil(items.length / entriesPerPage);
+  const indexOfLastItem = currentPage * entriesPerPage;
+  const indexOfFirstItem = indexOfLastItem - entriesPerPage;
+  const currentItems = aum_period.slice(indexOfFirstItem, indexOfLastItem);
+
+  const handleEntriesChange = (e) => {
+    setEntriesPerPage(parseInt(e.target.value));
+    setCurrentPage(1);
+  };
+
+  const handlePrev = () => {
+    setCurrentPage(currentPage - 1);
+  };
+
+  const handleNext = () => {
+    setCurrentPage(currentPage + 1);
+  };
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
+
   return (
     <>
       <div className="">
@@ -105,7 +134,15 @@ const Aum = ({ report_period }) => {
           </div>
         )}
        
-        
+       <label htmlFor="entries">Show entries: </label>
+      <select id="entries" onChange={handleEntriesChange}>
+        {[5, 10, 50].map((entry) => (
+          <option key={entry} value={entry}>
+            {entry}
+          </option>
+        ))}
+      </select>
+      
 
        
        
@@ -131,7 +168,7 @@ const Aum = ({ report_period }) => {
               </tr>
             </thead>
             <tbody>
-              {aum_period.map((item, index) => (
+              {currentItems.map((item, index) => (
                 <React.Fragment key={index}>
                   <tr key={item.ZONE}>
                     <td>
@@ -231,6 +268,15 @@ const Aum = ({ report_period }) => {
             </tbody>
           </table>
         )}
+         <div>
+        <button onClick={handlePrev} disabled={currentPage === 1}>
+          Previous
+        </button>
+        <span>Page {currentPage} of {totalPages}</span>
+        <button onClick={handleNext} disabled={currentPage === totalPages}>
+          Next
+        </button>
+      </div>
       </div>
     </>
   );

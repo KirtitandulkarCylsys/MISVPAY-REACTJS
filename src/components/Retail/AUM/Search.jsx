@@ -139,8 +139,12 @@ const Search = () => {
                             {/* <button onClick={handleExport} className="border-0">
                           <img src={excel} alt="excelicon" />
                         </button> */}
+                            {hide && (
+  <>
                             <ExportToExcel />
                             | <ExportToPDF />
+                            </>
+)}
                           </div>
                         </div>
                       </div>

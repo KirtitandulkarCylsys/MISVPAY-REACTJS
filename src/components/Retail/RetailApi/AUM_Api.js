@@ -33,7 +33,8 @@ export const usePeriodApi = () => {
   const [aum_period, setAumperiod] = useState([]);
   const [loading, setLoading] = useState(false);
   const [report_period, setReportPeriod] = useState('');
-  const { roleWiseData } = useDataContext(); 
+  const {currentPage,entriesPerPage,roleWiseData}= useDataContext();
+
   const emproles = roleWiseData ? roleWiseData[0].EMP_ROLE : null; 
   const channel = roleWiseData ? roleWiseData[0].CHANNEL_CODE : null; 
   const zoneData = roleWiseData ? roleWiseData[0].ZONE : null;
@@ -74,7 +75,9 @@ export const usePeriodApi = () => {
         ufc_code: UFCData ,
         rm_code: emp_id,
         chn_code: channel,
-        common_report: commonReportValue
+        common_report: commonReportValue,
+        page_number:currentPage,
+        page_size : entriesPerPage
       });
 
       try {
