@@ -88,4 +88,13 @@ export const API_ROLEWISE = {
   DATA: `${API}/rolewiselogin`,
 }
 
+export const API_ACCOUNT_DROPDOWN = {
+  DATA: `${API}/account_dropdown`,
+};
+
+export const API_ACCOUNT_SUMMARY = {
+  DATA: (queryParams) => `${API}/account_summary?${queryParams}`,
+};
+
+
 export default axiosInstance;
