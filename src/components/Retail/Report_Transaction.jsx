@@ -13,9 +13,29 @@ import { AccExcelDownload } from "./AccExcelDownload";
 
 const TransactionReport = ({ headers }) => {
   const { ufc_details } = Ufc_Drop();
-  console.log(ufc_details,"kfghdfg");
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const { hide, startDate, endDate, transaction_account_report, transaction_type, amount, condition, ufc, loading, setLoading, setHide, setTransactionType, setEndDate, setStartDate, formatNumberToIndianFormat, togglehide, } = Account_Api({ headers });
+  const {
+    hide,
+    startDate,
+    endDate,
+    transaction_account_report,
+    loading,
+    transaction_type,
+    amount,
+    condition,
+    no_mapping,
+    setTransactionType,
+    setEndDate,
+    setHide,
+    setStartDate,
+    setLoading,
+    formatNumberToIndianFormat,
+    togglehide,
+    setAmount,
+    setCondition,
+    setNoMapping,
+    emproles,
+  } = Account_Api({ headers });
   const toggleSidebar = () => { setSidebarOpen(!sidebarOpen); };
   const handleStartDateChange = (e) => {
     const newStartDate = e.target.value;
@@ -36,14 +56,13 @@ const TransactionReport = ({ headers }) => {
 
   return (
     <div className="container-fluid p-0 home-main ">
-    <Navbar onToggle={toggleSidebar} />
-    <div className="d-flex">
-      <SideBar isOpen={sidebarOpen} />
-      <div
-        className={` ${
-          sidebarOpen ? "dashboard-closed" : "dashboard-full"
-        }`}
-      >
+      <Navbar onToggle={toggleSidebar} />
+      <div className="d-flex">
+        <SideBar isOpen={sidebarOpen} />
+        <div
+          className={` ${sidebarOpen ? "dashboard-closed" : "dashboard-full"
+            }`}
+        >
           <div className="bg-white card m-4">
             <div className="col-l-12  ">
               <div className=" rounded-lg p-3"></div>
@@ -106,17 +125,23 @@ const TransactionReport = ({ headers }) => {
                       <label className="form-lables" style={{ marginRight: "5px" }} >
                         <b>Amount</b>
                       </label>
-                      <input type="text" className="form-control mt-2" placeholder="Enter Amount" />
+                      <input type="text" className="form-control mt-2" placeholder="Enter Amount" value={amount}
+                      onChange={(e) => setAmount(e.target.value)}
+                      />
                     </div>
                     <div className="form-group col-md-2">
                       <label className="form-lables">
                         <b>Condition</b>
                       </label>
-                      <select name="" id="ab" className="form-select form-control mt-2" >
+                      <select name="" id="ab" 
+                      className="form-select form-control mt-2"
+                      value={condition}
+                      onChange={(e) => setCondition(e.target.value)}
+                      >
                         <option value="">Select</option>
-                        <option value="">Less than </option>
-                        <option value="">Greater than </option>
-                        <option value="">Equal to </option>
+                        <option value="LESS_THAN">LESS_THAN </option>
+                        <option value="GREATER_THAN">GREATER_THAN </option>
+                        <option value="EQUAL_TO">EQUAL_TO </option>
                       </select>
                     </div>
                     <div className="form-group col-md-2">
@@ -178,7 +203,12 @@ const TransactionReport = ({ headers }) => {
                           <label className="form-lables" style={{ marginRight: "5px" }} >
                             <b> Scheme Type </b>
                           </label>
-                          <select name="" id="ab" className="form-select form-control mt-2" >
+                          <select name="" 
+                          id="ab" 
+                          className="form-select form-control mt-2"
+                          // value={select_type}
+                          // onChange={(e) => setSelectType(e.target.value)}
+                          >
                             <option value="">Select</option>
                             <option value="">ALL </option>
                             <option value="">ARBITRAGE </option>
@@ -199,16 +229,21 @@ const TransactionReport = ({ headers }) => {
                           <label className="form-lables">
                             <b>Transaction Type</b>
                           </label>
-                          <select name="" id="ab" className="form-select form-control mt-2" value={transaction_type} onChange={(e) => setTransactionType(e.target.value)} >
+                          <select name="" 
+                          id="ab" 
+                          className="form-select form-control mt-2"
+                           value={transaction_type} 
+                           onChange={(e) => setTransactionType(e.target.value)}
+                            >
                             <option value="">Select</option>
-                            <option value="transaction_type">Sales</option>
-                            <option value="">Gross Sales </option>
-                            <option value="">Live-SIP/STP </option>
-                            <option value="">SIP/STP New Registration </option>
-                            <option value="">Live-SIP/STP-Base </option>
+                            <option value="SALES">SALES</option>
+                            <option value="GROSS">Gross Sales </option>
+                            <option value="LIVE">Live-SIP/STP </option>
+                            <option value="NEW">SIP/STP New Registration </option>
+                            <option value="BASE">Live-SIP/STP-Base </option>
                             <option value="">Terminated SIP/STP </option>
-                            <option value="">Farewell Login Contest </option>
-                            <option value="">SIP Maturity </option>
+                            <option value="FARE">Farewell Login Contest </option>
+                            <option value="MATURE">SIP Maturity </option>
                           </select>
                         </div>
                         <div className="form-group col-md-2">
@@ -221,13 +256,18 @@ const TransactionReport = ({ headers }) => {
                           <label className="form-lables">
                             <b>No Mapping</b>
                           </label>
-                          <select name="" id="ab" className="form-select form-control mt-2" >
+                          <select name="" 
+                          id="ab" 
+                          className="form-select form-control mt-2"
+                          value={no_mapping}
+                            onChange={(e) => setNoMapping(e.target.value)}
+                          >
                             <option value="">Select</option>
-                            <option value="">All </option>
-                            <option value="">Zone Wise </option>
-                            <option value="">Region Wise </option>
-                            <option value="">UFC Wise </option>
-                            <option value="">RM Wise </option>
+                            <option value="All">All </option>
+                            <option value="ZONEWISE">ZONEWISE </option>
+                            <option value="REGIONWISE">REGIONWISE </option>
+                            <option value="UFCWISE">UFCWISE </option>
+                            <option value="RMWISE">RMWISE </option>
                           </select>
                         </div>
                         <div />
@@ -238,11 +278,11 @@ const TransactionReport = ({ headers }) => {
                         <div className="col-md-4 d-flex justify-content-around mt-5">
                           <div className="col-md-2 "></div>
                           <div className="col-md-2 ">
-                          <p className="icon">
-                            <AccExcelDownload/>
-                            |<AccPdfDownload/>
-                          </p>
-                        </div>
+                            <p className="icon">
+                              <AccExcelDownload />
+                              |<AccPdfDownload />
+                            </p>
+                          </div>
                           <div className="col-md-2 ">
                             <button className="btn Button">
                               <b className="colorwhite" onClick={togglehide}>
@@ -264,8 +304,8 @@ const TransactionReport = ({ headers }) => {
                           hide && (
                             <div>
                               <SalesTransaction
-                                transaction_account_report={ transaction_account_report }
-                                formatNumberToIndianFormat={ formatNumberToIndianFormat }
+                                transaction_account_report={transaction_account_report}
+                                formatNumberToIndianFormat={formatNumberToIndianFormat}
                               />
                             </div>
                           )

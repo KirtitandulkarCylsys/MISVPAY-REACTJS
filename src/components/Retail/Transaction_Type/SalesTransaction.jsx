@@ -7,11 +7,14 @@ const SalesTransaction = ({ transaction_account_report }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const startIndex = (currentPage) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const displayedItems = transaction_account_report.slice(startIndex, endIndex);
+  // const displayedItems = transaction_account_report.slice(startIndex, endIndex);
 
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected);
   };
+console.log(transaction_account_report, "data")
+
+
   return (
     <div className="new-component">
       <div className="bg-white card m-4">
@@ -113,7 +116,7 @@ const SalesTransaction = ({ transaction_account_report }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {displayedItems.map((AccountApi, index) => (
+                    {transaction_account_report.map((AccountApi, index) => (
                       <tr key={index}>
                         <td className="d-none d-sm-table-cell">{startIndex + index + 1}</td>
                         <td className="text-end">{AccountApi.RMCODE}</td>
