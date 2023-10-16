@@ -101,4 +101,10 @@ export const API_ROLEWISE = {
   DATA: `${API}/rolewiselogin`,
 }
 
+
+export const API_ALL_ETF_SALE = {
+  DATA: (queryParams) => `${API}/etf_sale?${queryParams}`,
+};
+
 export default axiosInstance;
+

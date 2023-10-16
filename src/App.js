@@ -14,6 +14,8 @@ import TransactionReport from './components/Retail/Report_Transaction';
 import AllIndiaRegionwWise from './components/Retail/AUM/AllIndiaWise/AllIndiaRegionwWise';
 import AllIndiaUfcWise from './components/Retail/AUM/AllIndiaWise/AllIndiaUfcWise';
 import AllIndiaRmWIse from './components/Retail/AUM/AllIndiaWise/AllIndiaRmWIse';
+import EtfSale from './components/Retail/ETF/EtfSale';
+import EtfSaleTable from './components/Retail/ETF/EtfSaleTable';
 function App() {
   return (
     <div className="App">
@@ -33,6 +35,8 @@ function App() {
         <Route path='/AllIndiaAumRegionWise/:report_period' element={<AllIndiaRegionwWise/>}/>
         <Route path='/AllIndiaAumUfcWise/:report_period' element={<AllIndiaUfcWise/>}/>
         <Route path='/AllIndiaAumRMWise/:report_period' element={<AllIndiaRmWIse/>}/>
+        <Route path="/EtfSale" element={<EtfSale />} />
+        
       </Routes>
     </BrowserRouter>         
     </div>
