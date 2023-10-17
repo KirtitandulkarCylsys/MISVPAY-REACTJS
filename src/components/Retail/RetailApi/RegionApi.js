@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState ,useContext} from "react";
 import axiosInstance, { API_SUMMARY_TRANSACTION } from "../../../Constant/apiConstant";
+import { ApiContext } from "../../contexts/APIContext";
+
 // nested regions api
 export const RegionApi = (queryParams) => {
   const [regions, setRegion] = useState([]);
+  const {empId} = useContext(ApiContext);
   useEffect(() => {
     const fetchRegionData = async () => {
       try {

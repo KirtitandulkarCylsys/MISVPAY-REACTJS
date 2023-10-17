@@ -13,7 +13,7 @@ const Login = () => {
   const [p_emp_id, setEmpID] = useState(" ");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const { roleWiseData,setRoleWiseData } = useContext(ApiContext);
+  const { roleWiseData,setRoleWiseData ,setEmpId} = useContext(ApiContext);
 const navigate = useNavigate();
   useEffect(() => {
     const empId = localStorage.getItem("emp_id");
