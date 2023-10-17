@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import SideBar from "../Shared/SideBar/SideBar";
 import Navbar from "../Shared/Navbar";
 import "../UserModule/Employee_details.css";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { API_MANAGE_USER_CHANNEL_CODE_DROPDOWN } from "../../Constant/apiConstant";
 import { API_MANAGE_USER_GET_EDIT_DATA } from "../../Constant/apiConstant";
 import { API_MANAGE_EMPLOYEE_ROLE_DROPDOWN } from "../../Constant/apiConstant";
@@ -25,7 +25,8 @@ const Employee_details = () => {
   const [regionCode, setRegionCode] = useState("");
   const [isDropdownActive, setDropdownActive] = useState(false);
   const [isLoadingDropdown, setLoadingDropdown] = useState(false);
-
+  const {EMP_ID,CHANNEL_CODE,EMP_ROLE,LOCATION,START_DATE,STATUS}=useParams();
+  console.log(EMP_ID,CHANNEL_CODE,EMP_ROLE,LOCATION,START_DATE,STATUS,"asfdf")
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
@@ -181,7 +182,7 @@ const Employee_details = () => {
   const formattedvalid_upto = valid_upto.split("-").reverse().join("/");
   const formattedaccess_from = access_from.split("-").reverse().join("/");
   const formattedaccess_upto = access_upto.split("-").reverse().join("/");
- 
+
   const storeData = async (e) => {
     setIsLoading(true)
     const response = await fetch('http://localhost:3000/api/v1/employees', {
@@ -227,15 +228,8 @@ const Employee_details = () => {
   }
 
   const [getData, setGetdata] = useState([])
-  const searchData = async () => {
-    const queryParams = new URLSearchParams({
-      emp_id: emp_id,
-      channel_code: selectedChannel,
-      emp_role: selectedRole,
-      location: location,
-      start_date: formattedStartDate,
-      status: status
-    });
+  const SearchData = async () => {
+    
     try {
       const response = await fetch(API_MANAGE_USER_GET_EDIT_DATA.DATA(queryParams));
       const data = await response.json();
@@ -245,10 +239,11 @@ const Employee_details = () => {
       console.error("Error fetching locations/UFC", error);
     }
   }
-
   useEffect(()=>{
-    searchData();
+    SearchData();
   },[])
+
+
 
   return (
     <>
@@ -259,7 +254,7 @@ const Employee_details = () => {
           className={` ${sidebarOpen ? "dashboard-closed" : "dashboard-full"
             }`}
         >
-
+          
           <div className="container-fluid pt-3 home-main">
             <div className="card" style={{ borderRadius: "10px 10px 10px 10px " }}>
               <div>
@@ -268,7 +263,7 @@ const Employee_details = () => {
               <div className="d-flex justify-content-around mt-3">
                 <div className="col-md-3">
                   <label><b>Employee ID</b></label>
-                  <input type="text" className="form-control" value={emp_id} onChange={(e) => setEmp_id(e.target.value)} />
+                  <input type="text" className="form-control" value={EMP_ID} onChange={(e) => setEmp_id(e.target.value)} />
                 </div>
                 <div className="col-md-3">
                   <label><b>Employee Name</b></label>

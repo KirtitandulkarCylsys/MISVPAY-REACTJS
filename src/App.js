@@ -32,7 +32,7 @@ function App() {
         <Route path='TransactionReport' element={<TransactionReport/>}/>
         <Route path='/manageuser' element={<Manage_user/>}/>
         <Route path='/employeedetails' element={<Employee_details/>}/>
-        <Route path='/employeedetails/:id' element={<Employee_details/>}/>
+        <Route path='/employeedetails/:EMP_ID/:CHANNEL_CODE/:EMP_ROLE/:LOCATION/:START_DATE/:STATUS' element={<Employee_details/>}/>
       </Routes>
     </BrowserRouter>         
     </div>
