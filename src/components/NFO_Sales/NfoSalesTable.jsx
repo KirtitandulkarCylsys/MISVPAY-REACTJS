@@ -4,16 +4,19 @@ import SideBar from "../Shared/SideBar/SideBar";
 import { NfoApi } from "./NfoApi";
 import "./NfoSales.css";
 import excel from "../Assets/images/excel_icon.png";
-import pdf from "../Assets/images/pdf_icon.png";
 import LoaderSearch from "../Table/LoaderSearch";
 import TablePagination from '@mui/material/TablePagination';
 import { ExportToExcel } from "../Retail/AUM/ExportToExcel";
 import ExportToPDF from "../Retail/AUM/ExportToPDF";
+import { read, utils } from "xlsx";
+
 
 const NfoSalesTable = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [page, setPage] = React.useState(2);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [excelData, setExcelData] = useState([]);
+  const [selectedFile, setSelectedFile]= useState(null);
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -27,14 +30,42 @@ const NfoSalesTable = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-  const { nfo_details, loading,handleUpload,setFile } = NfoApi();
+  const { nfo_details, loading,setFile, handleUpload } = NfoApi();
 
   const handleExport = () => {
     ExportToExcel(nfo_details, "NFO Sales Details");
   };
   const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
+    setSelectedFile(event.target.files[0]);
   };
+
+  const handleExcel =  () => {
+    if (selectedFile) {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const data = e.target.result;
+          const workbook = await read(data, { type: "array" });
+          const sheetName = await workbook.SheetNames[0];
+          const sheet = await workbook.Sheets[sheetName];
+          const parsedData = await utils.sheet_to_json(sheet, { header: 1 }); 
+          console.log("Parsed Excel Data:", parsedData);
+          setExcelData(parsedData);
+          handleUpload(parsedData);
+        } catch (error) {
+          console.error("Error reading the Excel file:", error);
+        }
+      };
+      reader.readAsArrayBuffer(selectedFile);
+    } else {
+      console.log("No file selected.");
+    }
+  };
+  
+  console.log("excelData:", excelData);
+
+  
+
   return (
     <div className="home-main">
       <Navbar onToggle={toggleSidebar} />
@@ -56,11 +87,11 @@ const NfoSalesTable = () => {
                 <div className="col-md-12 d-flex">
                   <div className="col-md-4"></div>
                   <div className="col-md-4 mx-2">
-                  <input type="file" className="form-control" name="file" accept=".xlsx, .xls" onChange={handleFileChange} />
+                  <input type="file" className="form-control" name="file" accept=".xlsx, .xls"onChange={handleFileChange} />
 
                   </div>
                   <div className="col-md-2 t">
-                    <button className="btn BgcolorOrange" onClick={handleUpload}>Upload</button>
+                    <button className="btn BgcolorOrange" onClick={handleExcel}>Upload</button>
                   </div>
                   <div className="col-md-2">
                     <p className="exportmodule">
@@ -80,7 +111,7 @@ const NfoSalesTable = () => {
                       <LoaderSearch />
                     </div>
                   ) : (
-                    <table className="table " id="nfoTable">
+                    <table className="table active " id="nfoTable">
                       <thead className="bgcolorBlue text-white">
                         <tr>
                           <th>TRNTYPE</th>

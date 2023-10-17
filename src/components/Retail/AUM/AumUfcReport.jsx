@@ -6,8 +6,8 @@ import { useUfc } from "../RetailApi/AUM_Api";
 import ExportToPDF from "./ExportToPDF";
 import excel from "../../Assets/images/excel_icon.png";
 import { ExportToExcel } from "./ExportToExcel";
-import LoaderSearch from "../../Table/SubTable/LoaderSearch";
 import { useParams } from "react-router-dom";
+import LoaderSearch from "../../Table/LoaderSearch";
 const AumUfcReport = () => {
   const { zone, report_period, region_code } = useParams();
   const queryParams = useMemo(

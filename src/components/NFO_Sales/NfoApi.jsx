@@ -32,12 +32,14 @@ export const NfoApi = () => {
     fetchData();
   }, []);
 
-  const handleUpload = async () => {
-    const formData = new FormData();
-    formData.append("file", file);
-  
+  const handleUpload = async (excelData) => {
+    // const formData = new FormData();
+    // formData.append("file", file);
+    console.log(excelData, "nfoAPi")
+  for(let i=1; i < excelData.length; i++)
+  {
     try {
-      const response = await axiosInstance.post(API_NFO.DATA(queryParams), formData);
+      const response = await axiosInstance.post(API_NFO.DATA(queryParams), excelData[i]);
       if (response.status === 200) {
         console.log("File uploaded and data inserted.");
       } else {
@@ -47,7 +49,7 @@ export const NfoApi = () => {
       console.error("Error:", error);
     }
   };
-  
-
-  return { nfo_details, loading,handleUpload,setFile };
+  }
+   
+  return { nfo_details, loading,setFile,handleUpload };
 };
