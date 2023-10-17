@@ -53,7 +53,7 @@
 }
 
 .dashboard-closed {
-    width: calc(100% - 17%); /* Adjust the width based on your sidebar's width */
+    width: calc(104% - 17%); /* Adjust the width based on your sidebar's width */
     transition: width 0.3s ease-in-out;   
 }
 
