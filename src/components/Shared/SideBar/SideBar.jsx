@@ -139,6 +139,19 @@ const SideBar = ({ isOpen }) => {
                               </span>
                             </Link>
                           </button>
+                          <button className=" p-0 pb-2 pt-2" id="sub-accor-active" >
+                            <Link to="/aif" style={{ textDecoration: "none",color:"white" }} >
+                              <span
+                                className={`sidebar ${isOpen ? "" : "closed"}`}
+                                style={{
+                                  marginLeft: "21px",
+                                  marginRight: "11px",
+                                }}
+                              >
+                                AIF Sales Report
+                              </span>
+                            </Link>
+                          </button>
                         </div>
                       </div>
                     </div>
