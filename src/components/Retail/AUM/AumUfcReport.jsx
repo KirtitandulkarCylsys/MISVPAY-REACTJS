@@ -6,10 +6,10 @@ import { UfcApi, useUfc } from "../RetailApi/AUM_Api";
 import ExportToPDF from "./ExportToPDF";
 import excel from "../../Assets/images/excel_icon.png";
 import { ExportToExcel } from "./ExportToExcel";
-import LoaderSearch from "../../Table/SubTable/LoaderSearch";
 import { Link, useParams } from "react-router-dom";
 import Loader from "../../Table/Loader";
 import AumRmReport from "./AumRmReport";
+import LoaderSearch from "../../Table/LoaderSearch";
 const AumUfcReport = ({
   report_period,
   region_code,

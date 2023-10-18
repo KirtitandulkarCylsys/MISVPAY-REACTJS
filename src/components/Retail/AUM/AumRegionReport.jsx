@@ -1,14 +1,6 @@
 import React, { useMemo, useState } from "react";
 import "./AumRegionReport.css";
-import { Link, useNavigate } from "react-router-dom";
-import SideBar from "../../Shared/SideBar/SideBar";
-import Navbar from "../../Shared/Navbar";
 import { useAUMApi, usePeriodApi } from "../RetailApi/AUM_Api";
-import excel from "../../Assets/images/excel_icon.png";
-import { ExportToExcel } from "./ExportToExcel";
-import { ExcelToExport } from "../ExcelToExport";
-
-import LoaderSearch from "../../Table/SubTable/LoaderSearch";
 import AumUfcReport from "./AumUfcReport";
 import Loader from "../../Table/Loader";
 

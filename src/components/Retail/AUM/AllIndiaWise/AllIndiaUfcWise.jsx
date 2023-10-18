@@ -1,5 +1,4 @@
 import {React,useState} from 'react'
-import LoaderSearch from '../../../Table/SubTable/LoaderSearch'
 import { useAllUfc } from '../../RetailApi/AUM_Api';
 import { useParams } from 'react-router-dom';
 import Navbar from '../../../Shared/Navbar';
@@ -8,6 +7,7 @@ import { ExcelToExport } from '../../ExcelToExport';
 import ExportToPdf from '../../ExportToPdf';
 import { ExportToExcel } from '../ExportToExcel';
 import ExportToPDF from '../ExportToPDF';
+import LoaderSearch from '../../../Table/LoaderSearch';
 
 function AllIndiaUfcWise() {
     const [isLoading, setIsLoading] = useState(false);

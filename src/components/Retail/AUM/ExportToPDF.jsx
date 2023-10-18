@@ -43,6 +43,21 @@ const ExportToPDF = () => {
   };
 
   const pdfExport = () => {
+    const AUM = document.getElementById("AUM");
+    const REGION = document.getElementById("REGION");
+    const UFC = document.getElementById("UFC");
+    const NFO = document.getElementById("nfoTable");
+
+  
+    if (AUM && AUM.className.includes("active")) {
+      generatePdf(AUM, "AUMReport");
+    } else if (REGION && REGION.className.includes("active")) {
+      generatePdf(REGION, "RegionReport");
+    }else if (UFC && UFC.className.includes("active")) {
+      generatePdf(UFC, "UfcReport");
+    }else if (NFO && NFO.className.includes("active")) {
+      generatePdf(NFO, "NFOReport");
+    }
     const SalesTable = document.getElementById("table1");
    
     processTable(SalesTable, "AumReport");

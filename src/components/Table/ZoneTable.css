@@ -2,11 +2,35 @@
     color: rgb(140, 140, 142);;
 
 }
+.zoneTable{
+  background-color: #352D94;
+  color: white;
+}
 #table{
   width: 100%;
   overflow: hidden;
   overflow-x: scroll;
 
+}
+.schrollbar{
+  overflow-y: scroll;
+  height: 450px;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px rgb(192, 190, 190); 
+  border-radius: 5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(192, 190, 190); 
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(192, 190, 190); 
 }
 .theader{
     color: #352D94;
@@ -37,6 +61,5 @@
   color: #fff !important;
 }
 #total{
-  background-color:#ddd;
   font-weight: bold;
 }

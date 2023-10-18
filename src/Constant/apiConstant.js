@@ -101,6 +101,14 @@ export const API_ROLEWISE = {
   DATA: `${API}/rolewiselogin`,
 }
 
+export const API_NFO = {
+  DATA: (queryParams) => `${API}/nfo?${queryParams}`,
+}
+
+export const API_NFO_UPLOAD = {
+  DATA: (queryParams) => `${API}/nfo_upload?${queryParams}`,
+}
+
 
 export const API_ALL_ETF_SALE = {
   DATA: (queryParams) => `${API}/etf_sale?${queryParams}`,

@@ -12,12 +12,12 @@ import ExportToPDF from "./ExportToPDF";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loader from "../Loading";
-import LoaderSearch from "../../Table/SubTable/LoaderSearch";
 import { ExcelToExport } from "../ExcelToExport";
 import ExportToPdf from "../ExportToPdf";
 import AumRegionReport from "./AumRegionReport";
 import AumUfcReport from "./AumUfcReport";
 import AumRmReport from "./AumRmReport";
+import LoaderSearch from "../../Table/LoaderSearch";
 
 const Search = () => {
   

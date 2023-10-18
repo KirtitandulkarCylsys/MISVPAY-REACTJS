@@ -1,8 +1,8 @@
-import React, { useState, useMemo,useEffect } from "react";
-import { useNavigate ,Link} from "react-router-dom";
+import React, { useState,useEffect } from "react";
+import { Link} from "react-router-dom";
 import "./Aum.css";
+import LoaderSearch from "../../Table/LoaderSearch";
 import { usePeriodApi } from "../RetailApi/AUM_Api";
-import LoaderSearch from "../../Table/SubTable/LoaderSearch";
 import AumRegionReport from "./AumRegionReport";
 import Loader from "../../Table/Loader";
 import { useDataContext } from "../../../Context/DataContext";
