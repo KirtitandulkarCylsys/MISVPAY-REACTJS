@@ -219,7 +219,7 @@ const Retail_Transaction = ({ headers }) => {
 
                           {/* export, pdf, model */}
                           <div className="col-md-6 mt-5 tabs ">
-                            <p className="exporttab">
+                            <p className="exporttabretail">
                               <ExcelToExport />
                               |<ExportToPdf />|
                               <img src={msg} alt="msgicon" /> |{" "}

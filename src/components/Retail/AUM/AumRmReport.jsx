@@ -1,6 +1,6 @@
 import {React,useState} from 'react'
 import { RMApi } from '../RetailApi/AUM_Api';
-import LoaderSearch from '../../Table/SubTable/LoaderSearch';
+import LoaderSearch from '../../Table/LoaderSearch';
 
 const AumRmReport =  ({
 

@@ -3,11 +3,11 @@ import { useAllRM } from '../../RetailApi/AUM_Api';
 import Navbar from '../../../Shared/Navbar';
 import SideBar from '../../../Shared/SideBar/SideBar';
 import { useParams } from 'react-router-dom';
-import LoaderSearch from '../../../Table/SubTable/LoaderSearch';
 import { ExcelToExport } from '../../ExcelToExport';
 import ExportToPdf from '../../ExportToPdf';
 import { ExportToExcel } from '../ExportToExcel';
 import ExportToPDF from '../ExportToPDF';
+import LoaderSearch from '../../../Table/LoaderSearch';
 
 const AllIndiaRmWIse = () => {
     const [isLoading, setIsLoading] = useState(false);

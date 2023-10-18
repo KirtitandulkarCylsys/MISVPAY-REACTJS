@@ -158,7 +158,7 @@ const ZoneTable = () => {
               <div className="col-md-12 p-3 schrollbar ">
                 <table className="table small border" id="table1">
                   <thead>
-                    <tr className="bgcolorBlue text-white border-1 ">
+                    <tr className=" zoneTable border-1 ">
                       <th
                         rowSpan="2"
                         className="border-1  text-center"
@@ -176,7 +176,7 @@ const ZoneTable = () => {
                         NetSales
                       </th>
                     </tr>
-                    <tr className="bgcolorBlue text-white border-1 ">
+                    <tr className="zoneTable border-1 ">
                       <th className="forright ">Equity</th>
                       <th className="forright">Hybrid</th>
                       <th className="forright">Arbitrage</th>
@@ -340,7 +340,7 @@ const ZoneTable = () => {
                         </React.Fragment>
                       );
                     })}
-                    <tr className="bgcolorBlue text-white">
+                    <tr className="zoneTable">
                       <td>TOTAL</td>
                       <td className="text-end">
                         {formatNumberToIndianFormat(

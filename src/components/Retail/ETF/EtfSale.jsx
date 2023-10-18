@@ -4,11 +4,11 @@ import Navbar from '../../Shared/Navbar';
 import SideBar from '../../Shared/SideBar/SideBar';
 import { ExportToExcel } from '../AUM/ExportToExcel';
 import ExportToPDF from '../AUM/ExportToPDF';
-import LoaderSearch from '../../Table/SubTable/LoaderSearch';
 import datetime from "../../Assets/images/Vector (Stroke).png";
 import "./EtfSale.css";
 import EtfSaleTable from './EtfSaleTable';
 import ETF_Api from '../RetailApi/ETF_Api';
+import LoaderSearch from '../../Table/LoaderSearch';
 const EtfSale = ({ headers }) => {
     const [sidebarOpen, setSidebarOpen] = useState(true);
 

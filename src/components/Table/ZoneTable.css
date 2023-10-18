@@ -2,6 +2,10 @@
     color: rgb(140, 140, 142);;
 
 }
+.zoneTable{
+  background-color: #352D94;
+  color: white;
+}
 #table{
   width: 100%;
   overflow: hidden;

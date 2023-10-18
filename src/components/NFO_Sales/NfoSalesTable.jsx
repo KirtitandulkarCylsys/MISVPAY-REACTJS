@@ -116,8 +116,8 @@ const NfoSalesTable = () => {
                       <LoaderSearch />
                     </div>
                   ) : (
-                    <table className="table active " id="nfoTable">
-                      <thead className="bgcolorBlue text-white">
+                    <table className="table active  " id="nfoTable">
+                      <thead className="nfoTable">
                         <tr>
                           <th>TRNTYPE</th>
                           <th>INHOUSE NUMBER</th>
