@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../../Assets/css/Shared/Sidebar.css";
 import SubSecondBar from "./SubSecondBar";
 import SubThirdBar from "./SubThirdBar";
@@ -8,6 +8,10 @@ import Retails from "../../Assets/images/retail.svg";
 import mapping from "../../Assets/images/mapping icon.png";
 
 const SideBar = ({ isOpen }) => {
+  const navigate = useNavigate();
+  const handleARN = ()=>{
+    navigate('/arnreport')
+  }
   return (
     <>
       <div className={`sidebar ${isOpen ? "open" : ""}`}>
@@ -119,7 +123,7 @@ const SideBar = ({ isOpen }) => {
                               </span>
                             </Link>
                           </button>
-                          <button id="sub-accor">
+                          <button id="sub-accor" onClick={handleARN}>
                             <span
                               className={`sidebar ${isOpen ? "" : "closed"}`}
                             >
