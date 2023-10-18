@@ -92,4 +92,8 @@ export const API_NFO = {
   DATA: (queryParams) => `${API}/nfo?${queryParams}`,
 }
 
+export const API_NFO_UPLOAD = {
+  DATA: (queryParams) => `${API}/nfo_upload?${queryParams}`,
+}
+
 export default axiosInstance;

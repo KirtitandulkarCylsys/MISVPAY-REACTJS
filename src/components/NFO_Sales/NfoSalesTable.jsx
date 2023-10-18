@@ -5,18 +5,17 @@ import { NfoApi } from "./NfoApi";
 import "./NfoSales.css";
 import excel from "../Assets/images/excel_icon.png";
 import LoaderSearch from "../Table/LoaderSearch";
-import TablePagination from '@mui/material/TablePagination';
+import TablePagination from "@mui/material/TablePagination";
 import { ExportToExcel } from "../Retail/AUM/ExportToExcel";
 import ExportToPDF from "../Retail/AUM/ExportToPDF";
 import { read, utils } from "xlsx";
-
 
 const NfoSalesTable = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [page, setPage] = React.useState(2);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [excelData, setExcelData] = useState([]);
-  const [selectedFile, setSelectedFile]= useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -30,7 +29,7 @@ const NfoSalesTable = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-  const { nfo_details, loading,setFile, handleUpload } = NfoApi();
+  const { nfo_details, loading, setFile, handleUpload } = NfoApi();
 
   const handleExport = () => {
     ExportToExcel(nfo_details, "NFO Sales Details");
@@ -39,7 +38,7 @@ const NfoSalesTable = () => {
     setSelectedFile(event.target.files[0]);
   };
 
-  const handleExcel =  () => {
+  const handleExcel = () => {
     if (selectedFile) {
       const reader = new FileReader();
       reader.onload = async (e) => {
@@ -48,7 +47,7 @@ const NfoSalesTable = () => {
           const workbook = await read(data, { type: "array" });
           const sheetName = await workbook.SheetNames[0];
           const sheet = await workbook.Sheets[sheetName];
-          const parsedData = await utils.sheet_to_json(sheet, { header: 1 }); 
+          const parsedData = await utils.sheet_to_json(sheet, { header: 1 });
           console.log("Parsed Excel Data:", parsedData);
           setExcelData(parsedData);
           handleUpload(parsedData);
@@ -61,10 +60,8 @@ const NfoSalesTable = () => {
       console.log("No file selected.");
     }
   };
-  
-  console.log("excelData:", excelData);
 
-  
+  console.log("excelData:", excelData);
 
   return (
     <div className="home-main">
@@ -83,24 +80,32 @@ const NfoSalesTable = () => {
                   </h4>
                 </div>
               </div>
-              <div className="row mt-5">
-                <div className="col-md-12 d-flex">
-                  <div className="col-md-4"></div>
-                  <div className="col-md-4 mx-2">
-                  <input type="file" className="form-control" name="file" accept=".xlsx, .xls"onChange={handleFileChange} />
-
-                  </div>
-                  <div className="col-md-2 t">
-                    <button className="btn BgcolorOrange" onClick={handleExcel}>Upload</button>
-                  </div>
-                  <div className="col-md-2">
-                    <p className="exportmodule">
-                    <button onClick={handleExport} className="border-0">
-                    <img src={excel} alt="excelicon" />
+              <div className="row mt-3">
+                <div className="col-md-4"></div>
+                <div className="col-md-4">
+                  <input
+                    type="file"
+                    className="form-control"
+                    name="file"
+                    accept=".xlsx, .xls"
+                    onChange={handleFileChange}
+                  />
+                </div>
+                <div className="col-md-2 upload">
+                  <button
+                    className="btn BgcolorOrange "
+                    onClick={handleExcel}
+                  >
+                    Upload
                   </button>
-                      |<ExportToPDF />
-                    </p>
-                  </div>
+                </div>
+                <div className="col-md-2 tabs">
+                  <p className="exportmodule">
+                    <button onClick={handleExport} className="border-0">
+                      <img src={excel} alt="excelicon" />
+                    </button>
+                    | <ExportToPDF />
+                  </p>
                 </div>
               </div>
               <div className="row  p-3 mt-5">
@@ -150,62 +155,65 @@ const NfoSalesTable = () => {
                           <th>MOBILE NUMBER</th>
                           <th>EMAIL ID</th>
                           <th>TYPE 2</th>
-                          <th>REGION CODE</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {nfo_details.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((nfo) => (
-                          <tr>
-                            <td>{nfo.TRANTYPE}</td>
-                            <td>{nfo.INHOUSENUMBER}</td>
-                            <td>{nfo.TYPE}</td>
-                            <td>{nfo.PLAN}</td>
-                            <td>{nfo.PLANDESCRIPTION}</td>
-                            <td>{nfo.FROMSCHEME}</td>
-                            <td>{nfo.FROMPLAN}</td>
-                            <td>{nfo.FROMPLANDESC}</td>
-                            <td>{nfo.AMCCODE}</td>
-                            <td>{nfo.SCHDESC}</td>
-                            <td>{nfo.FOLIONUMBER}</td>
-                            <td>{nfo.INVESTORNAME}</td>
-                            <td>{nfo.AMOUNT}</td>
-                            <td>{nfo.AMTINCR}</td>
-                            <td>{nfo.ARNNO}</td>
-                            <td>{nfo.ARNNAME}</td>
-                            <td>{nfo.UFCCODE}</td>
-                            <td>{nfo.UFCNAME}</td>
-                            <td>{nfo.REGION}</td>
-                            <td>{nfo.ZONE}</td>
-                            <td>{nfo.CHANNELNAME}</td>
-                            <td>{nfo.MODCHANNEL}</td>
-                            <td>{nfo.SCHEMECODE}</td>
-                            <td>{nfo.BRANCHCODE}</td>
-                            <td>{nfo.PIN}</td>
-                            <td>{nfo.T30B30FLAG}</td>
-                            <td>{nfo.PLATFORM}</td>
-                            <td>{nfo.TRXNDATE}</td>
-                            <td>{nfo.SCHEMEDESCRIPTION}</td>
-                            <td>{nfo.MAPRMCODE}</td>
-                            <td>{nfo.RIACODE}</td>
-                            <td>{nfo.ARN_RIA}</td>
-                            <td>{nfo.PLATFORM2}</td>
-                            <td>{nfo.MOBILENUMBER}</td>
-                            <td>{nfo.EMAILID}</td>
-                            <td>{nfo.TYPE2}</td>
-                            <td>{nfo.REGION_CODE}</td>
-                          </tr>
-                        ))}
+                        {nfo_details
+                          .slice(
+                            page * rowsPerPage,
+                            page * rowsPerPage + rowsPerPage
+                          )
+                          .map((nfo) => (
+                            <tr>
+                              <td>{nfo.TRANTYPE}</td>
+                              <td>{nfo.INHOUSENUMBER}</td>
+                              <td>{nfo.TYPE}</td>
+                              <td>{nfo.PLAN}</td>
+                              <td>{nfo.PLANDESCRIPTION}</td>
+                              <td>{nfo.FROMSCHEME}</td>
+                              <td>{nfo.FROMPLAN}</td>
+                              <td>{nfo.FROMPLANDESC}</td>
+                              <td>{nfo.AMCCODE}</td>
+                              <td>{nfo.SCHDESC}</td>
+                              <td>{nfo.FOLIONUMBER}</td>
+                              <td>{nfo.INVESTORNAME}</td>
+                              <td>{nfo.AMOUNT}</td>
+                              <td>{nfo.AMTINCR}</td>
+                              <td>{nfo.ARNNO}</td>
+                              <td>{nfo.ARNNAME}</td>
+                              <td>{nfo.UFCCODE}</td>
+                              <td>{nfo.UFCNAME}</td>
+                              <td>{nfo.REGION}</td>
+                              <td>{nfo.ZONE}</td>
+                              <td>{nfo.CHANNELNAME}</td>
+                              <td>{nfo.MODCHANNEL}</td>
+                              <td>{nfo.SCHEMECODE}</td>
+                              <td>{nfo.BRANCHCODE}</td>
+                              <td>{nfo.PIN}</td>
+                              <td>{nfo.T30B30FLAG}</td>
+                              <td>{nfo.PLATFORM}</td>
+                              <td>{nfo.TRXNDATE}</td>
+                              <td>{nfo.SCHEMEDESCRIPTION}</td>
+                              <td>{nfo.MAPRMCODE}</td>
+                              <td>{nfo.RIACODE}</td>
+                              <td>{nfo.ARN_RIA}</td>
+                              <td>{nfo.PLATFORM2}</td>
+                              <td>{nfo.MOBILENUMBER}</td>
+                              <td>{nfo.EMAILID}</td>
+                              <td>{nfo.TYPE2}</td>
+                            </tr>
+                          ))}
                       </tbody>
                     </table>
-                  )}                 
+                  )}
                 </div>
                 <TablePagination
-                    count={nfo_details.length} 
-                    page={page}
-                    onPageChange={handleChangePage}
-                    rowsPerPage={rowsPerPage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
+                  count={nfo_details.length}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  rowsPerPage={rowsPerPage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
               </div>
             </div>
           </div>
