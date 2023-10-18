@@ -71,7 +71,17 @@ const Navbar = ({ onToggle }) => {
                     </p>
                   </div>
                   <div className="nav-div">
-                    <img src={Navi} alt="navi" /> <strong></strong>
+                    <img src={Navi} alt="navi" /> <strong>{
+                      roleWiseData
+                        ? roleWiseData[0].UFC_NAME
+                          ? roleWiseData[0].UFC_NAME
+                          : roleWiseData[0].UFC_CODE
+                            ? roleWiseData[0].UFC_CODE
+                            : roleWiseData[0].REGIONCODE
+                              ? roleWiseData[0].REGIONCODE
+                              : roleWiseData[0].ZONE
+                        : null
+                        }</strong>
                   </div>
                 </div>
               </div>

@@ -41,7 +41,7 @@ export const API_SUMMARY_TRANSACTION = {
 };
 
 export const API_SCHEME_DETAILS = {
-    DATA: `${API}/scheme_details`,
+    DATA: (queryParams) => `${API}/scheme_details?${queryParams}`,
 };
 
 export const API_REGION = {
@@ -87,5 +87,9 @@ export const API_ALL_RM_RETAIL = {
 export const API_ROLEWISE = {
   DATA: `${API}/rolewiselogin`,
 }
+
+export const API_Asset_Class = {
+  DATA: `${API}/asset_class`,
+};
 
 export default axiosInstance;

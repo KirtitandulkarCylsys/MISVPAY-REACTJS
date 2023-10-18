@@ -11,6 +11,7 @@ import AumRegionReport from './components/Retail/AUM/AumRegionReport';
 import AumUfcReport from './components/Retail/AUM/AumUfcReport';
 import RegionWiseSales from './components/Table/All-Wise-Table/RegionWiseSales';
 import TransactionReport from './components/Retail/Report_Transaction';
+import TransactionMandateReport from './components/Retail/MandateReport/TransactionMandateReport';
 function App() {
   return (
     <div className="App">
@@ -27,6 +28,7 @@ function App() {
         <Route path='/AumRegionReport' element={<AumRegionReport/>}/>
         <Route path="/AumUfcReport" element={<AumUfcReport />} />
         <Route path='TransactionReport' element={<TransactionReport/>}/>
+        <Route path='/Mandate' element={<TransactionMandateReport/>}/>
       </Routes>
     </BrowserRouter>         
     </div>
