@@ -1,44 +1,36 @@
-import React, { useMemo, useState } from "react";
-import "./AumRegionReport.css";
-import { useAUMApi, usePeriodApi } from "../RetailApi/AUM_Api";
-import AumUfcReport from "./AumUfcReport";
-import Loader from "../../Table/Loader";
+import {React, useState} from "react";
+import { useAllRegion } from "../../RetailApi/AUM_Api";
+import Loader from "../../../Table/Loader";
+import { useParams } from "react-router-dom";
+import Navbar from "../../../Shared/Navbar";
+import SideBar from "../../../Shared/SideBar/SideBar";
+import { ExcelToExport } from "../../ExcelToExport";
+import ExportToPdf from "../../ExportToPdf";
+import { ExportToExcel } from "../ExportToExcel";
+import ExportToPDF from "../ExportToPDF";
 
-const AumRegionReport = ({
-  report_period,
-  zone,
-  formatNumberToIndianFormat,aum_period
-}) => {
-  
-  const [clickedIndex, setClickedIndex] = useState(-1);
-  const [isLoading, setIsLoading] = useState(false);
-  let queryParams = new URLSearchParams({
+const AllIndiaRegionwWise = ( ) => {
+  const {report_period}= useParams();
+  const queryParams = new URLSearchParams({
     empid: "1234",
     emprole: "ADMIN",
     quarter: "202324Q2",
     period_code: report_period,
-    zone: zone,
-    region_code: "",
-    ufc_code: "nill",
-    rm_code: "nill",
-    chn_code: "",
-    common_report: 'INT_ZONEWISE'
+    zone: "",
+    region: "",
+    ufc: "",
+    rm: "nill",
+    common_report: "ALL_REGIONWISE",
   });
-
-  const { aum_regions,loading } = useAUMApi(queryParams);
-  let showdata = [];
-  if (aum_regions && aum_regions.toString().length > 0) {
-    showdata = aum_regions;
-  } else if (aum_period && aum_period.toString().length > 0) {
-    showdata = aum_period;
-  }
-  
-  
-
+var showdata
+  const { aum_AllAumRegion, loading } = useAllRegion(queryParams);
+  const [isLoading, setIsLoading] = useState(false);
+  const [clickedIndex, setClickedIndex] = useState(-1);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   function calculateTotalAum() {
     let total = 0;
-    if (showdata && Array.isArray(showdata)) {
-      showdata.forEach((item) => {
+    if (aum_AllAumRegion && Array.isArray(aum_AllAumRegion)) {
+      aum_AllAumRegion.forEach((item) => {
         total += parseFloat(item.TOTAL_AUM);
       });
     }
@@ -47,13 +39,25 @@ const AumRegionReport = ({
   
   function calculateTotal(columnName) {
     let total = 0;
-    if (showdata && Array.isArray(showdata)) {
-      showdata.forEach((item) => {
+    if (aum_AllAumRegion && Array.isArray(aum_AllAumRegion)) {
+      aum_AllAumRegion.forEach((item) => {
         total += parseFloat(item[columnName]);
       });
     }
     return total;
   }
+const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+const formatNumberToIndianFormat = (number) => {
+    if (typeof number !== "number") {
+      return number;
+    }
+
+    const parts = number.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
+  };
   
   const handleButtonClick = (index) => {
     setIsLoading(true);
@@ -66,20 +70,37 @@ const AumRegionReport = ({
       setClickedIndex(index);
     }
   };
-
   return (
-    <div>
+    <>
+     
+    <div className="container-fluid p-0 home-main">
+    <Navbar onToggle={toggleSidebar} />
+        <div className="d-flex">
+          <SideBar isOpen={sidebarOpen} />
+          <div
+            className={` ${
+              sidebarOpen ? "dashboard-closed" : "dashboard-full"
+            }`}
+          >
       <div className="container">
         <div className="row mt-2 ">
           <div className="head">
             <h4>
-              <b className="black-color"> {zone}</b>
+              <b className="black-color">All India Regionwise</b>
             </h4>
             <h5>
               <b className="gray-color">(In Lakhs)</b>
             </h5>
           </div>
-
+          <div class="col-md-6 col-12 mb-3">
+                          <div className="icon">
+                            {/* <button onClick={handleExport} className="border-0">
+                          <img src={excel} alt="excelicon" />
+                        </button> */}
+                            <ExportToExcel />
+                            | <ExportToPDF />
+                          </div>
+                        </div>
           <table
             className="table table-bordered active nested-table"
             id="table1"
@@ -110,14 +131,13 @@ const AumRegionReport = ({
               </tr>
             </thead>
             <tbody style={{ backgroundColor: "#DADADA" }}>
-              {showdata.map((item, index) => (
-                <React.Fragment>
+              {aum_AllAumRegion.map((item, index) => (
                   <tr key={item.SrNo}>
                     <td>{item.ZONE}</td>
                     <td>
                       <button
                         className="textlink"
-                        onClick={() => handleButtonClick(index)}
+                        // onClick={() => handleButtonClick(index)}
                         disabled={loading}
                       >
                         {item.REGION_CODE}
@@ -156,52 +176,38 @@ const AumRegionReport = ({
                       {formatNumberToIndianFormat(parseFloat(item.CASH_AUM))}
                     </td>
                   </tr>
-                  {clickedIndex === index && (
-                    <tr key={`subtable-${index}`}>
-                      <td colSpan="10" className="">
-                        <AumUfcReport
-                          region_code= {item.REGION_CODE}
-                          report_period={report_period}
-                          formatNumberToIndianFormat={
-                            formatNumberToIndianFormat
-                          }
-                        />
-                      </td>
-                    </tr>
-                  )}
-                </React.Fragment>
               ))}
-              <tr className="totalhead" >
+              <tr className="totalhead">
                 <td colSpan="3">Total</td>
-                <td className="totalhead" >
+                <td className="totalheaad">
                   {formatNumberToIndianFormat(calculateTotalAum().toFixed(2))}
                 </td>
-                <td className="totalhead">
+                <td className="totalheaad">
                   {formatNumberToIndianFormat(
                     calculateTotal("EQUITY_AUM").toFixed(2)
                   )}
                 </td>
-                <td className="totalhead">
+                <td className="totalheaad">
                   {formatNumberToIndianFormat(
                     calculateTotal("HYBRID_AUM").toFixed(2)
                   )}
                 </td>
-                <td className="totalhead">
+                <td className="totalheaad">
                   {formatNumberToIndianFormat(
                     calculateTotal("ARBITRAGE_AUM").toFixed(2)
                   )}
                 </td>
-                <td className="totalhead">
+                <td className="totalheaad">
                   {formatNumberToIndianFormat(
                     calculateTotal("PASSIVE_AUM").toFixed(2)
                   )}
                 </td>
-                <td className="totalhead">
+                <td className="totalheaad">
                   {formatNumberToIndianFormat(
                     calculateTotal("FIXED_INCOME_AUM").toFixed(2)
                   )}
                 </td>
-                <td className="totalhead">
+                <td className="totalheaad">
                   {formatNumberToIndianFormat(
                     calculateTotal("CASH_AUM").toFixed(2)
                   )}
@@ -212,7 +218,10 @@ const AumRegionReport = ({
         </div>
       </div>
     </div>
+    </div>
+    </div>
+    </>
   );
 };
 
-export default AumRegionReport;
+export default AllIndiaRegionwWise;

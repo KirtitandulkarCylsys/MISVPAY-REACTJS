@@ -207,16 +207,28 @@ const SideBar = ({ isOpen }) => {
                             </span>
                           </Link>
                           <button className="mt-2 p-0 pb-2 pt-2" id="sub-accor">
+                          <Link to="/EtfSale" className="text-decoration-none">
+                            {" "}
                             <span
                               className={`sidebar ${isOpen ? "" : "closed"}`}
                               style={{
-                                marginLeft: "61px",
-                                marginRight: "59px",
+                                backgroundColor: "#352d94",
+                                color: "white",
+                                paddingTop: "12px",
+                                paddingBottom: "10px",
+                                fontSize: "11px",
+                                fontWeight: "bold",
+                                borderRadius: "5px",
+                                borderColor: "white",
+                                paddingRight: "9px",
+                                paddingLeft: "8px",
                               }}
                             >
-                              Detail View Report
+                               ETF SALE Report
                             </span>{" "}
+                            </Link>
                           </button>
+                          
                           <button id="sub-accor">
                             <span
                               className={`sidebar ${isOpen ? "" : "closed"}`}
