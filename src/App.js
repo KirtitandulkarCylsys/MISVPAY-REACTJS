@@ -11,12 +11,13 @@ import AumRegionReport from './components/Retail/AUM/AumRegionReport';
 import AumUfcReport from './components/Retail/AUM/AumUfcReport';
 import RegionWiseSales from './components/Table/All-Wise-Table/RegionWiseSales';
 import TransactionReport from './components/Retail/Report_Transaction';
-import NfoSalesTable from './components/NFO_Sales/NfoSalesTable';
+import NfoSalesTable from './components/Retail/NFO_Sales/NfoSalesTable';
 import AllIndiaRegionwWise from './components/Retail/AUM/AllIndiaWise/AllIndiaRegionwWise';
 import AllIndiaUfcWise from './components/Retail/AUM/AllIndiaWise/AllIndiaUfcWise';
 import AllIndiaRmWIse from './components/Retail/AUM/AllIndiaWise/AllIndiaRmWIse';
 import EtfSale from './components/Retail/ETF/EtfSale';
 import EtfSaleTable from './components/Retail/ETF/EtfSaleTable';
+import ArnReport from './components/Retail/ARN_Report/ArnReport';
 function App() {
   return (
     <div className="App">
@@ -38,6 +39,7 @@ function App() {
         <Route path='/AllIndiaAumUfcWise/:report_period' element={<AllIndiaUfcWise/>}/>
         <Route path='/AllIndiaAumRMWise/:report_period' element={<AllIndiaRmWIse/>}/>
         <Route path="/EtfSale" element={<EtfSale />} />
+        <Route path="/arnreport" element={<ArnReport />} />
         
       </Routes>
     </BrowserRouter>         

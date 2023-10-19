@@ -3,7 +3,7 @@ import Navbar from "../../Shared/Navbar";
 import SideBar from "../../Shared/SideBar/SideBar";
 import { NfoApi } from "./NfoApi";
 import "./NfoSales.css";
-import excel from "../Assets/images/excel_icon.png";
+import excel from "../../Assets/images/excel_icon.png";
 import LoaderSearch from "../../Table/LoaderSearch";
 import TablePagination from "@mui/material/TablePagination";
 import { ExportToExcel } from "../AUM/ExportToExcel";

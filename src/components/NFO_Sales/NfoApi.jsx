@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { API_NFO, API_NFO_UPLOAD } from "../../Constant/apiConstant";
-import axiosInstance from "../../Constant/apiConstant";
-import { useDataContext } from "../../Context/DataContext";
+import { API_NFO, API_NFO_UPLOAD } from "../../../Constant/apiConstant";
+import axiosInstance from "../../../Constant/apiConstant";
+import { useDataContext } from "../../../Context/DataContext";
 
 export const NfoApi = () => {
   const [nfo_details, setNfoDetails] = useState([]);
@@ -32,24 +32,24 @@ export const NfoApi = () => {
   }, []);
 
 
-  // const handleUpload = async (excelData) => {
-  //   for (let i = 1; i < excelData.length; i++) {
-  //     try {
-  //       const response = await axiosInstance.post(
-  //         API_NFO_UPLOAD.DATA(queryParams),
-  //         excelData[i]
-  //       );
-  //       if (response.status === 200) {
-  //         console.log("File uploaded and data inserted.");
-  //       } else {
-  //         console.error("Error uploading file.");
-  //       }
-  //     } catch (error) {
-  //       console.error("Error:", error);
-  //     }
-  //   };
-  //   }
+  const handleUpload = async (excelData) => {
+    for (let i = 1; i < excelData.length; i++) {
+      // try {
+      //   const response = await axiosInstance.post(
+      //     API_NFO_UPLOAD.DATA(queryParams),
+      //     excelData[i]
+      //   );
+      //   if (response.status === 200) {
+      //     console.log("File uploaded and data inserted.");
+      //   } else {
+      //     console.error("Error uploading file.");
+      //   }
+      // } catch (error) {
+      //   console.error("Error:", error);
+      // }
+    };
+    }
    
 
-   return { nfo_details, loading};
+   return { nfo_details, loading,handleUpload};
 };
