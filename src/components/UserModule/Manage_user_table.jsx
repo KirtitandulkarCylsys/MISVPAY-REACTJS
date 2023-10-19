@@ -97,7 +97,7 @@ const Manage_user_table = ({ getData }) => {
                 <td className="p-0">{item.STATUS}</td>
                 <td className="p-0">{item.DV_FLAG}</td>
                 <td className="p-0">{item.FUNC_ROLE}</td>
-                <td><Link to={`/employeedetails/${item.EMP_ID}/${item.CHANNEL_CODE}/${item.EMP_ROLE}/${item.LOCATION}/${item.START_DATE}/${item.STATUS}`}>
+                <td><Link to={`/employeeupdate/${item.EMP_ID}/${item.CHANNEL_CODE}/${item.EMP_ROLE}/${item.LOCATION}/${item.START_DATE}/${item.STATUS}`}>
                   {item.STATUS == "Y" ? (<img src={icon} width="18px" height="18px" />) : ""}</Link></td>
               </tr>
             )}

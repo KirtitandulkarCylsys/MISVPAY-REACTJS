@@ -13,6 +13,7 @@ import RegionWiseSales from './components/Table/All-Wise-Table/RegionWiseSales';
 import TransactionReport from './components/Retail/Report_Transaction';
 import Manage_user from './components/UserModule/Manage_user';
 import Employee_details from './components/UserModule/Employee_details';
+import Employee_update from './components/UserModule/Employee_update';
 
 function App() {
   return (
@@ -32,7 +33,7 @@ function App() {
         <Route path='TransactionReport' element={<TransactionReport/>}/>
         <Route path='/manageuser' element={<Manage_user/>}/>
         <Route path='/employeedetails' element={<Employee_details/>}/>
-        <Route path='/employeedetails/:EMP_ID/:CHANNEL_CODE/:EMP_ROLE/:LOCATION/:START_DATE/:STATUS' element={<Employee_details/>}/>
+        <Route path='/employeeupdate/:EMP_ID/:CHANNEL_CODE/:EMP_ROLE/:LOCATION/:START_DATE/:STATUS' element={<Employee_update/>}/>
       </Routes>
     </BrowserRouter>         
     </div>
