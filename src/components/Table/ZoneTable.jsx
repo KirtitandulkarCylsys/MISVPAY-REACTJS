@@ -112,7 +112,7 @@ const ZoneTable = () => {
         <div>
           <div>
             <div className="row mt-4 justify-content-around">
-              <div className="col-md-2 d-flex">
+              {/* <div className="col-md-2 d-flex">
                 <label htmlFor="">
                   <b>Select Entries</b>
                 </label>
@@ -127,12 +127,12 @@ const ZoneTable = () => {
                   <option value="30">30 </option>
                   <option value="40">40</option>
                 </select>
-              </div>
+              </div> */}
               <div className="col-md-2 list-group">
                 <p className="theader">
                   <Link
                     className="btn textlink"
-                    to={`/RegionWiseSales/${rolwiseselectype}/${start_Date}/${end_Date}`}
+                    to='/RegionWiseSales'
                   >
                     <b>All India Region Wise</b>
                   </Link>
@@ -140,14 +140,14 @@ const ZoneTable = () => {
               </div>
               <div className="col-md-2">
                 <p className="theader">
-                  <Link className="btn textlink" to={`/UfcWise/${rolwiseselectype}`}>
+                  <Link className="btn textlink" to='/UfcWise'>
                     <b>All India UFC Wise </b>
                   </Link>
                 </p>
               </div>
               <div className="col-md-2">
                 <p className="theader">
-                  <Link className=" btn textlink" to={`/RmWise/${rolwiseselectype}`}>
+                  <Link className=" btn textlink" to='/RmWise'>
                     <b>All India RM Wise </b>
                   </Link>
                 </p>
@@ -464,12 +464,12 @@ const ZoneTable = () => {
                   disabledClassName={"pagination__link--disabled"}
                   activeClassName={"pagination__link--active"}
                 /> */}
-                <div>
-                  <button onClick={()=>setCounter(counter - 1)}>Previous</button>
-                  <button onClick={()=>setCounter(counter + 1)} >
+                {/* <div>
+                  <button onClick={()=>setCounter(counter - 1)} className="btn">Previous</button>
+                  <button onClick={()=>setCounter(counter + 1)} className="btn">
                     Next
                   </button>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

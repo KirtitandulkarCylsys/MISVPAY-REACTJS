@@ -95,7 +95,7 @@ const Retail_Transaction = ({ headers }) => {
           <div
             className={`${sidebarOpen ? "dashboard-closed" : "dashboard-full"}`}
           >
-            <div className="container-fluid">
+            <div className="container">
               <section className="section mt-3">
                 <div className="row">
                   <div className="col-lg-12 col-lg-offset-2">
@@ -110,7 +110,7 @@ const Retail_Transaction = ({ headers }) => {
                           aria-controls="collapseExample"
                         >
                           <h5 className="text-lg-start">
-                            <b> RETAIL TRANSACTION SUMMARY REPORT ZONE WISE</b>
+                            <b> RETAIL TRANSACTION SUMMARY REPORT</b>
                           </h5>
                         </button>
                       </div>

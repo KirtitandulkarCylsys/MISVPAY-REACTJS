@@ -2,29 +2,30 @@ import React, { useState, useMemo } from "react";
 import Navbar from "../../Shared/Navbar";
 import SideBar from "../../Shared/SideBar/SideBar";
 import ReactPaginate from "react-paginate";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Loader from "../Loader";
 import { ExportExcelRegion } from "./ExportExcel";
 import { ExportPdfRegion } from "./ExportPdfRegion";
 import { AllRegionwise } from "../../Retail/RetailApi/RegionApi";
 import "./RegionPagination.css";
-import Api from "../../Retail/RetailApi/Api";
+import { useDataContext } from "../../../Context/DataContext";
 const RegionWiseSales = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
-  const { select_type, startDate, endDate } = useParams();
 
-  const { emproles, channel, formatNumberToIndianFormat } = Api();
-  const formattedStartDate = startDate.split("-").reverse().join("/");
-  const formattedEndDate = endDate.split("-").reverse().join("/");
+  const {start_Date,end_Date,rolwiseselectype,emproles,channel, formatNumberToIndianFormat,emp_id
+  } = useDataContext();
+
+  const formattedStartDate = start_Date.split("-").reverse().join("/");
+  const formattedEndDate = end_Date.split("-").reverse().join("/");
   const queryParams = useMemo(() => {
     return new URLSearchParams({
-      employee_id: "1234",
+      employee_id: emp_id,
       emprole: emproles,
       quarter: "202324Q2",
       start_date: formattedStartDate,
       end_date: formattedEndDate,
-      select_type: select_type,
+      select_type: rolwiseselectype,
       scheme_code: "nill",
       channel: channel,
       zone: "",
@@ -33,7 +34,7 @@ const RegionWiseSales = () => {
       rm: "nill",
       common_report: "ALL_REGIONWISE",
     });
-  }, [select_type, emproles, formattedStartDate, formattedEndDate, channel]);
+  }, [emp_id,rolwiseselectype, emproles, formattedStartDate, formattedEndDate, channel]);
 
   const { regionwise, loading } = AllRegionwise(queryParams);
 

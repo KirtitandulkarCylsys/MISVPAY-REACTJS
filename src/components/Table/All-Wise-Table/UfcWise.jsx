@@ -2,46 +2,42 @@ import React, { useMemo, useState } from "react";
 import Navbar from "../../Shared/Navbar";
 import SideBar from "../../Shared/SideBar/SideBar";
 import ExportToPDF from "../../Retail/AUM/ExportToPDF";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import ReactPaginate from "react-paginate";
 import { ExportExcelUfc } from "./ExportExcel";
 import { AllUfcwise } from "../../Retail/RetailApi/RegionApi";
 import "./UfcPagination.css";
+import { useDataContext } from "../../../Context/DataContext";
 const UfcWise = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
 
-  const { select_type } = useParams();
+  const {start_Date,end_Date,rolwiseselectype,emproles,channel, formatNumberToIndianFormat,emp_id
+  } = useDataContext();
+
+  const formattedStartDate = start_Date.split("-").reverse().join("/");
+  const formattedEndDate = end_Date.split("-").reverse().join("/");
+
   const queryParams = useMemo(() => {
     return new URLSearchParams({
-      employee_id: "1234",
-      emprole: "ADMIN",
+      employee_id: emp_id,
+      emprole: emproles,
       quarter: "202324Q2",
-      start_date: "01/04/2023",
-      end_date: "30/09/2023",
-      select_type: select_type,
+      start_date: formattedStartDate,
+      end_date: formattedEndDate,
+      select_type: rolwiseselectype,
       scheme_code: "nill",
-      channel: "RTL",
+      channel: channel,
       zone: "",
       region: "",
       ufc: "",
       rm: "nill",
       common_report: "ALL_UFCWISE",
     });
-  }, [select_type]);
+  }, [emp_id,rolwiseselectype, emproles, formattedStartDate, formattedEndDate, channel]);
   const { ufcwise } = AllUfcwise(queryParams);
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
-  };
-
-  const formatNumberToIndianFormat = (number) => {
-    if (typeof number !== "number") {
-      return number;
-    }
-
-    const parts = number.toString().split(".");
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    return parts.join(".");
   };
 
   const PER_PAGE = 10;

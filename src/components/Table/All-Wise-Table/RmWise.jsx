@@ -7,6 +7,8 @@ import { ExportExcelRM } from "./ExportExcel";
 import { AllRmwise } from "../../Retail/RetailApi/RegionApi";
 import ReactPaginate from "react-paginate";
 import "./RmPagination.css";
+import Loader from "../Loader";
+import LoaderSearch from "../LoaderSearch";
 const RmWise = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
@@ -99,297 +101,314 @@ const RmWise = () => {
                   </p>
                 </div>
               </div>
-              <div className="d-flex">
-                <h4>
-                  <b>SALES</b>
-                </h4>
-                <h4>
-                  <b className="gray-color">(In Lakhs)</b>
-                </h4>
-              </div>
-              <div className="scrollbarRegion">
-                <table className="mt-3 table nested-table">
-                  <thead
-                    style={{
-                      backgroundColor: "rgb(58 94 147 / 98%)",
-                      color: "white",
-                    }}
-                  >
-                    <tr className="">
-                      <th
-                        scope="col"
-                        rowSpan="2"
-                        className="border-end border-1 text-center"
-                        style={{ lineHeight: "4" }}
-                      >
-                        RM Code
-                      </th>
-                      <th
-                        scope="col"
-                        rowSpan="2"
-                        className="border-end border-1 text-center"
-                      >
-                        EMPLOYEE NAME
-                      </th>
-                      <th colspan="7" className="border-1 text-center ">
-                        Sales
-                      </th>
-                      <th colspan="7" className="border-1 text-center ">
-                        Redemption
-                      </th>
-                      <th colspan="7" className="border-1 text-center ">
-                        NetSales
-                      </th>
-                    </tr>
-                    <tr>
-                      <th className="forright ">Equity</th>
-                      <th className="forright">Hybrid</th>
-                      <th className="forright">Arbitrage</th>
-                      <th className="forright">Passive</th>
-                      <th className="forright">Fixed Income</th>
-                      <th className="forright">Cash</th>
-                      <th className="forright border-end">Total</th>
-                      <th className="forright">Equity</th>
-                      <th className="forright">Hybrid</th>
-                      <th className="forright">Arbitrage</th>
-                      <th className="forright">Passive</th>
-                      <th className="forright">Fixed Income</th>
-                      <th className="forright">Cash</th>
-                      <th className="forright border-end">Total</th>
-                      <th className="forright">Equity</th>
-                      <th className="forright">Hybrid</th>
-                      <th className="forright">Arbitrage</th>
-                      <th className="forright">Passive</th>
-                      <th className="forright">Fixed Income</th>
-                      <th className="forright">Cash</th>
-                      <th className="forright border-end">Total</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {currentPageData.map((rm) => {
-                      return (
-                        <tr style={{ backgroundColor: "#dee2e69c" }}>
-                          <td>
-                            <button className="textlink">
-                              <b className="sharp-font">{rm.RMCODE}</b>
-                            </button>
-                          </td>
-                          <td>{rm.EMP_NAME}</td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(parseFloat(rm.SEQUITY))}
-                          </td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(parseFloat(rm.SHYBRID))}
-                          </td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(
-                              parseFloat(rm.SARBITRAGE)
-                            )}
-                          </td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(
-                              parseFloat(rm.SPASSIVE)
-                            )}
-                          </td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(
-                              parseFloat(rm.SFIXED_INCOME)
-                            )}
-                          </td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(parseFloat(rm.SCASH))}
-                          </td>
-                          <td className="text-end">
-                            <b>
-                              {formatNumberToIndianFormat(
-                                parseFloat(rm.STOTAL)
-                              )}
-                            </b>
-                          </td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(parseFloat(rm.REQUITY))}
-                          </td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(parseFloat(rm.RHYBRID))}
-                          </td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(
-                              parseFloat(rm.RARBITRAGE)
-                            )}
-                          </td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(
-                              parseFloat(rm.RPASSIVE)
-                            )}
-                          </td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(
-                              parseFloat(rm.RFIXED_INCOME)
-                            )}
-                          </td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(parseFloat(rm.RCASH))}
-                          </td>
-                          <td className="text-end">
-                            <b>
-                              {formatNumberToIndianFormat(
-                                parseFloat(rm.RTOTAL)
-                              )}
-                            </b>
-                          </td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(parseFloat(rm.NEQUITY))}
-                          </td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(parseFloat(rm.NHYBRID))}
-                          </td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(
-                              parseFloat(rm.NARBITRAGE)
-                            )}
-                          </td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(
-                              parseFloat(rm.NPASSIVE)
-                            )}
-                          </td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(
-                              parseFloat(rm.NFIXED_INCOME)
-                            )}
-                          </td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(parseFloat(rm.NCASH))}
-                          </td>
-                          <td className="text-end">
-                            <b>
-                              {formatNumberToIndianFormat(
-                                parseFloat(rm.NTOTAL)
-                              )}
-                            </b>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                    <tr
+              {loading ? (
+                <div className="text-center mt-4">
+                  <i className="fas fa-spinner fa-spin fa-2x"></i>{" "}
+                  <LoaderSearch />
+                </div>
+              ) : (
+                <div className="scrollbarRegion">
+                  <table className="mt-3 table nested-table">
+                    <thead
                       style={{
                         backgroundColor: "rgb(58 94 147 / 98%)",
                         color: "white",
                       }}
                     >
-                      <td>TOTAL</td>
-                      <td></td>
-                      <td className="text-end">
-                        {formatNumberToIndianFormat(
-                          parseFloat(calculateTotal("SEQUITY").toFixed(2))
-                        )}
-                      </td>
-                      <td className="text-end">
-                        {formatNumberToIndianFormat(
-                          parseFloat(calculateTotal("SHYBRID").toFixed(2))
-                        )}
-                      </td>
-                      <td className="text-end">
-                        {formatNumberToIndianFormat(
-                          parseFloat(calculateTotal("SARBITRAGE").toFixed(2))
-                        )}
-                      </td>
-                      <td className="text-end">
-                        {formatNumberToIndianFormat(
-                          parseFloat(calculateTotal("SPASSIVE").toFixed(2))
-                        )}
-                      </td>
-                      <td className="text-end">
-                        {formatNumberToIndianFormat(
-                          parseFloat(calculateTotal("SFIXED_INCOME").toFixed(2))
-                        )}
-                      </td>
-                      <td className="text-end">
-                        {formatNumberToIndianFormat(
-                          parseFloat(calculateTotal("SCASH").toFixed(2))
-                        )}
-                      </td>
-                      <td className="text-end">
-                        {formatNumberToIndianFormat(
-                          parseFloat(calculateTotal("STOTAL").toFixed(2))
-                        )}
-                      </td>
-                      {/* REDEMPTION TOTAL */}
-                      <td className="text-end">
-                        {formatNumberToIndianFormat(
-                          parseFloat(calculateTotal("REQUITY").toFixed(2))
-                        )}
-                      </td>
-                      <td className="text-end">
-                        {formatNumberToIndianFormat(
-                          parseFloat(calculateTotal("RHYBRID").toFixed(2))
-                        )}
-                      </td>
-                      <td className="text-end">
-                        {formatNumberToIndianFormat(
-                          parseFloat(calculateTotal("RARBITRAGE").toFixed(2))
-                        )}
-                      </td>
-                      <td className="text-end">
-                        {formatNumberToIndianFormat(
-                          parseFloat(calculateTotal("RPASSIVE").toFixed(2))
-                        )}
-                      </td>
-                      <td className="text-end">
-                        {formatNumberToIndianFormat(
-                          parseFloat(calculateTotal("RFIXED_INCOME").toFixed(2))
-                        )}
-                      </td>
-                      <td className="text-end">
-                        {formatNumberToIndianFormat(
-                          parseFloat(calculateTotal("RCASH").toFixed(2))
-                        )}
-                      </td>
-                      <td className="text-end">
-                        {formatNumberToIndianFormat(
-                          parseFloat(calculateTotal("RTOTAL").toFixed(2))
-                        )}
-                      </td>
-                      {/* NETSALES TOTAL */}
-                      <td className="text-end">
-                        {formatNumberToIndianFormat(
-                          parseFloat(calculateTotal("NEQUITY").toFixed(2))
-                        )}
-                      </td>
-                      <td className="text-end">
-                        {formatNumberToIndianFormat(
-                          parseFloat(calculateTotal("NHYBRID").toFixed(2))
-                        )}
-                      </td>
-                      <td className="text-end">
-                        {formatNumberToIndianFormat(
-                          parseFloat(calculateTotal("NARBITRAGE").toFixed(2))
-                        )}
-                      </td>
-                      <td className="text-end">
-                        {formatNumberToIndianFormat(
-                          parseFloat(calculateTotal("NPASSIVE").toFixed(2))
-                        )}
-                      </td>
-                      <td className="text-end">
-                        {formatNumberToIndianFormat(
-                          parseFloat(calculateTotal("NFIXED_INCOME").toFixed(2))
-                        )}
-                      </td>
-                      <td className="text-end">
-                        {formatNumberToIndianFormat(
-                          parseFloat(calculateTotal("NCASH").toFixed(2))
-                        )}
-                      </td>
-                      <td className="text-end">
-                        {formatNumberToIndianFormat(
-                          parseFloat(calculateTotal("NTOTAL").toFixed(2))
-                        )}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+                      <tr className="">
+                        <th
+                          scope="col"
+                          rowSpan="2"
+                          className="border-end border-1 text-center"
+                          style={{ lineHeight: "4" }}
+                        >
+                          RM Code
+                        </th>
+                        <th
+                          scope="col"
+                          rowSpan="2"
+                          className="border-end border-1 text-center"
+                        >
+                          EMPLOYEE NAME
+                        </th>
+                        <th colspan="7" className="border-1 text-center ">
+                          Sales
+                        </th>
+                        <th colspan="7" className="border-1 text-center ">
+                          Redemption
+                        </th>
+                        <th colspan="7" className="border-1 text-center ">
+                          NetSales
+                        </th>
+                      </tr>
+                      <tr>
+                        <th className="forright ">Equity</th>
+                        <th className="forright">Hybrid</th>
+                        <th className="forright">Arbitrage</th>
+                        <th className="forright">Passive</th>
+                        <th className="forright">Fixed Income</th>
+                        <th className="forright">Cash</th>
+                        <th className="forright border-end">Total</th>
+                        <th className="forright">Equity</th>
+                        <th className="forright">Hybrid</th>
+                        <th className="forright">Arbitrage</th>
+                        <th className="forright">Passive</th>
+                        <th className="forright">Fixed Income</th>
+                        <th className="forright">Cash</th>
+                        <th className="forright border-end">Total</th>
+                        <th className="forright">Equity</th>
+                        <th className="forright">Hybrid</th>
+                        <th className="forright">Arbitrage</th>
+                        <th className="forright">Passive</th>
+                        <th className="forright">Fixed Income</th>
+                        <th className="forright">Cash</th>
+                        <th className="forright border-end">Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {currentPageData.map((rm) => {
+                        return (
+                          <tr style={{ backgroundColor: "#dee2e69c" }}>
+                            <td>
+                              <button className="textlink">
+                                <b className="sharp-font">{rm.RMCODE}</b>
+                              </button>
+                            </td>
+                            <td>{rm.EMP_NAME}</td>
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(
+                                parseFloat(rm.SEQUITY)
+                              )}
+                            </td>
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(
+                                parseFloat(rm.SHYBRID)
+                              )}
+                            </td>
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(
+                                parseFloat(rm.SARBITRAGE)
+                              )}
+                            </td>
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(
+                                parseFloat(rm.SPASSIVE)
+                              )}
+                            </td>
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(
+                                parseFloat(rm.SFIXED_INCOME)
+                              )}
+                            </td>
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(parseFloat(rm.SCASH))}
+                            </td>
+                            <td className="text-end">
+                              <b>
+                                {formatNumberToIndianFormat(
+                                  parseFloat(rm.STOTAL)
+                                )}
+                              </b>
+                            </td>
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(
+                                parseFloat(rm.REQUITY)
+                              )}
+                            </td>
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(
+                                parseFloat(rm.RHYBRID)
+                              )}
+                            </td>
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(
+                                parseFloat(rm.RARBITRAGE)
+                              )}
+                            </td>
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(
+                                parseFloat(rm.RPASSIVE)
+                              )}
+                            </td>
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(
+                                parseFloat(rm.RFIXED_INCOME)
+                              )}
+                            </td>
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(parseFloat(rm.RCASH))}
+                            </td>
+                            <td className="text-end">
+                              <b>
+                                {formatNumberToIndianFormat(
+                                  parseFloat(rm.RTOTAL)
+                                )}
+                              </b>
+                            </td>
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(
+                                parseFloat(rm.NEQUITY)
+                              )}
+                            </td>
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(
+                                parseFloat(rm.NHYBRID)
+                              )}
+                            </td>
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(
+                                parseFloat(rm.NARBITRAGE)
+                              )}
+                            </td>
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(
+                                parseFloat(rm.NPASSIVE)
+                              )}
+                            </td>
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(
+                                parseFloat(rm.NFIXED_INCOME)
+                              )}
+                            </td>
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(parseFloat(rm.NCASH))}
+                            </td>
+                            <td className="text-end">
+                              <b>
+                                {formatNumberToIndianFormat(
+                                  parseFloat(rm.NTOTAL)
+                                )}
+                              </b>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                      <tr
+                        style={{
+                          backgroundColor: "rgb(58 94 147 / 98%)",
+                          color: "white",
+                        }}
+                      >
+                        <td>TOTAL</td>
+                        <td></td>
+                        <td className="text-end">
+                          {formatNumberToIndianFormat(
+                            parseFloat(calculateTotal("SEQUITY").toFixed(2))
+                          )}
+                        </td>
+                        <td className="text-end">
+                          {formatNumberToIndianFormat(
+                            parseFloat(calculateTotal("SHYBRID").toFixed(2))
+                          )}
+                        </td>
+                        <td className="text-end">
+                          {formatNumberToIndianFormat(
+                            parseFloat(calculateTotal("SARBITRAGE").toFixed(2))
+                          )}
+                        </td>
+                        <td className="text-end">
+                          {formatNumberToIndianFormat(
+                            parseFloat(calculateTotal("SPASSIVE").toFixed(2))
+                          )}
+                        </td>
+                        <td className="text-end">
+                          {formatNumberToIndianFormat(
+                            parseFloat(
+                              calculateTotal("SFIXED_INCOME").toFixed(2)
+                            )
+                          )}
+                        </td>
+                        <td className="text-end">
+                          {formatNumberToIndianFormat(
+                            parseFloat(calculateTotal("SCASH").toFixed(2))
+                          )}
+                        </td>
+                        <td className="text-end">
+                          {formatNumberToIndianFormat(
+                            parseFloat(calculateTotal("STOTAL").toFixed(2))
+                          )}
+                        </td>
+                        {/* REDEMPTION TOTAL */}
+                        <td className="text-end">
+                          {formatNumberToIndianFormat(
+                            parseFloat(calculateTotal("REQUITY").toFixed(2))
+                          )}
+                        </td>
+                        <td className="text-end">
+                          {formatNumberToIndianFormat(
+                            parseFloat(calculateTotal("RHYBRID").toFixed(2))
+                          )}
+                        </td>
+                        <td className="text-end">
+                          {formatNumberToIndianFormat(
+                            parseFloat(calculateTotal("RARBITRAGE").toFixed(2))
+                          )}
+                        </td>
+                        <td className="text-end">
+                          {formatNumberToIndianFormat(
+                            parseFloat(calculateTotal("RPASSIVE").toFixed(2))
+                          )}
+                        </td>
+                        <td className="text-end">
+                          {formatNumberToIndianFormat(
+                            parseFloat(
+                              calculateTotal("RFIXED_INCOME").toFixed(2)
+                            )
+                          )}
+                        </td>
+                        <td className="text-end">
+                          {formatNumberToIndianFormat(
+                            parseFloat(calculateTotal("RCASH").toFixed(2))
+                          )}
+                        </td>
+                        <td className="text-end">
+                          {formatNumberToIndianFormat(
+                            parseFloat(calculateTotal("RTOTAL").toFixed(2))
+                          )}
+                        </td>
+                        {/* NETSALES TOTAL */}
+                        <td className="text-end">
+                          {formatNumberToIndianFormat(
+                            parseFloat(calculateTotal("NEQUITY").toFixed(2))
+                          )}
+                        </td>
+                        <td className="text-end">
+                          {formatNumberToIndianFormat(
+                            parseFloat(calculateTotal("NHYBRID").toFixed(2))
+                          )}
+                        </td>
+                        <td className="text-end">
+                          {formatNumberToIndianFormat(
+                            parseFloat(calculateTotal("NARBITRAGE").toFixed(2))
+                          )}
+                        </td>
+                        <td className="text-end">
+                          {formatNumberToIndianFormat(
+                            parseFloat(calculateTotal("NPASSIVE").toFixed(2))
+                          )}
+                        </td>
+                        <td className="text-end">
+                          {formatNumberToIndianFormat(
+                            parseFloat(
+                              calculateTotal("NFIXED_INCOME").toFixed(2)
+                            )
+                          )}
+                        </td>
+                        <td className="text-end">
+                          {formatNumberToIndianFormat(
+                            parseFloat(calculateTotal("NCASH").toFixed(2))
+                          )}
+                        </td>
+                        <td className="text-end">
+                          {formatNumberToIndianFormat(
+                            parseFloat(calculateTotal("NTOTAL").toFixed(2))
+                          )}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              )}
               <div className="rmpagination-container">
                 <ReactPaginate
                   previousLabel={"← Previous"}
