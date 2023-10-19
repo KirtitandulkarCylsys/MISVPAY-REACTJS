@@ -1,0 +1,17 @@
+.btn1{
+    background-color: #e78a3c;
+    color: #ffffff;
+    text-align: center;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    border-radius: .20rem; 
+    text-decoration: none;
+  }
+  
+  .a1{
+    background-color: #352d94;
+    color: white;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+  }
+  

@@ -18,6 +18,7 @@ import AllIndiaRmWIse from './components/Retail/AUM/AllIndiaWise/AllIndiaRmWIse'
 import EtfSale from './components/Retail/ETF/EtfSale';
 import EtfSaleTable from './components/Retail/ETF/EtfSaleTable';
 import ArnReport from './components/Retail/ARN_Report/ArnReport';
+import Region_ufc_scheme from './components/RegionUfcScheme/Region_ufc_scheme';
 function App() {
   return (
     <div className="App">
@@ -40,7 +41,7 @@ function App() {
         <Route path='/AllIndiaAumRMWise/:report_period' element={<AllIndiaRmWIse/>}/>
         <Route path="/EtfSale" element={<EtfSale />} />
         <Route path="/arnreport" element={<ArnReport />} />
-        
+        <Route path="/Region_ufc_scheme" element={<Region_ufc_scheme/>} />
       </Routes>
     </BrowserRouter>         
     </div>
