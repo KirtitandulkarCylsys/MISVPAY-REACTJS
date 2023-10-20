@@ -19,6 +19,10 @@ import EtfSale from './components/Retail/ETF/EtfSale';
 import EtfSaleTable from './components/Retail/ETF/EtfSaleTable';
 import ArnReport from './components/Retail/ARN_Report/ArnReport';
 import Region_ufc_scheme from './components/RegionUfcScheme/Region_ufc_scheme';
+import Manage_user from './components/UserModule/Manage_user';
+import Employee_details from './components/UserModule/Employee_details';
+import Employee_update from './components/UserModule/Employee_update';
+
 function App() {
   return (
     <div className="App">
@@ -42,6 +46,9 @@ function App() {
         <Route path="/EtfSale" element={<EtfSale />} />
         <Route path="/arnreport" element={<ArnReport />} />
         <Route path="/Region_ufc_scheme" element={<Region_ufc_scheme/>} />
+        <Route path='/manageuser' element={<Manage_user/>}/>
+        <Route path='/employeedetails' element={<Employee_details/>}/>
+        <Route path='/employeeupdate/:EMP_ID/:CHANNEL_CODE/:EMP_ROLE/:LOCATION/:START_DATE/:STATUS' element={<Employee_update/>}/>
       </Routes>
     </BrowserRouter>         
     </div>
