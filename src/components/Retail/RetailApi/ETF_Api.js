@@ -19,22 +19,22 @@ const ETF_Api = () => {
   const REGIONData = roleWiseData ? roleWiseData[0].REGIONCODE : null;
   const UFCData = roleWiseData ? roleWiseData[0].UFC_CODE : null;
   const QUARTERData = roleWiseData ? roleWiseData[0].YEAR : null;
-  
+  const emp_id = roleWiseData ? roleWiseData[0].EMP_ID : null;
 
   const fetchEtfSale = async () => {
     try {
       const formattedStartDate = startDate.split("-").reverse().join("/");
       const formattedEndDate = endDate.split("-").reverse().join("/");
       const queryParams = new URLSearchParams({
-        employee_id: "1234",
+        employee_id: emp_id,
         emprole: emproles,
         start_date: formattedStartDate,
         end_date: formattedEndDate,
         zone: zoneData,
-        region: REGIONData,
-        ufc: UFCData,
+        region_code: REGIONData,
+        ufc_code: UFCData,
         // channel: channel,
-        rm_code:""
+        rm_code:emp_id
         
         
       });
@@ -91,6 +91,7 @@ const ETF_Api = () => {
     setHide,
     setLoading,
     formatNumberToIndianFormat,
+    emproles
   };
 };
 

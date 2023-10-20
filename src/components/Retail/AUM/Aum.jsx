@@ -56,7 +56,7 @@ const Aum = ({ report_period }) => {
   const [items, setItems] = useState([...Array(100).keys()].map((i) => i + 1));
   const {currentPage, setCurrentPage,entriesPerPage, setEntriesPerPage}= useDataContext();
 
-  const totalPages = Math.ceil(items.length / entriesPerPage);
+  const totalPages = Math.ceil(aum_period.length / entriesPerPage);
   const indexOfLastItem = currentPage * entriesPerPage;
   const indexOfFirstItem = indexOfLastItem - entriesPerPage;
   const currentItems = aum_period.slice(indexOfFirstItem, indexOfLastItem);
@@ -71,7 +71,12 @@ const Aum = ({ report_period }) => {
   };
 
   const handleNext = () => {
-    setCurrentPage(currentPage + 1);
+    const nextIndex = currentPage + 1;
+    const indexOfLastItemOnNextPage = nextIndex * entriesPerPage;
+  
+    if (indexOfLastItemOnNextPage <= items.length) {
+      setCurrentPage(nextIndex);
+    }
   };
 
   useEffect(() => {
@@ -134,14 +139,14 @@ const Aum = ({ report_period }) => {
           </div>
         )}
        
-       <label htmlFor="entries">Show entries: </label>
-      <select id="entries" onChange={handleEntriesChange}>
-        {[5, 10, 50].map((entry) => (
+       {/* <label htmlFor="entries">Show entries: </label> */}
+      {/* <select id="entries" onChange={handleEntriesChange}> */}
+        {/* {[10,20,50].map((entry) => (
           <option key={entry} value={entry}>
             {entry}
           </option>
-        ))}
-      </select>
+        ))} */}
+      {/* </select> */}
       
 
        
@@ -168,7 +173,7 @@ const Aum = ({ report_period }) => {
               </tr>
             </thead>
             <tbody>
-              {currentItems.map((item, index) => (
+              {aum_period.map((item, index) => (
                 <React.Fragment key={index}>
                   <tr key={item.ZONE}>
                     <td>
@@ -268,15 +273,15 @@ const Aum = ({ report_period }) => {
             </tbody>
           </table>
         )}
-         <div>
+         {/* <div>
         <button onClick={handlePrev} disabled={currentPage === 1}>
           Previous
         </button>
         <span>Page {currentPage} of {totalPages}</span>
         <button onClick={handleNext} disabled={currentPage === totalPages}>
           Next
-        </button>
-      </div>
+        </button> */}
+      {/* </div> */}
       </div>
     </>
   );
