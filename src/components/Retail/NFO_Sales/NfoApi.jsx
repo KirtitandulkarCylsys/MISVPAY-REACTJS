@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
-import { API_NFO, API_NFO_UPLOAD } from "../../../Constant/apiConstant";
+import { API_NFO, API_NFO_DELETE, API_NFO_UPLOAD } from "../../../Constant/apiConstant";
 import axiosInstance from "../../../Constant/apiConstant";
 import { useDataContext } from "../../../Context/DataContext";
 
 export const NfoApi = () => {
   const [nfo_details, setNfoDetails] = useState([]);
   const [loading, setLoading] = useState("");
+  const [nfo_delete, setNfoDelete]= useState('');
   const { emproles, emp_id, zoneData, REGIONData, UFCData } = useDataContext();
+  const [uploadProgress, setUploadProgress] = useState(0);
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -30,6 +33,30 @@ export const NfoApi = () => {
 
     fetchData();
   }, []);
+
+  const deleteData = async () => {
+    try {
+      const requestData = {
+        emp_id: emp_id,
+        emprole: emproles,
+        zone: zoneData,
+        region: REGIONData,
+        ufc: UFCData,
+        rm: emp_id,
+      };
+  
+      const response = await axiosInstance.delete(API_NFO_DELETE.DATA, {
+        data: requestData, 
+      });
+  
+      const data = response.data;
+      setNfoDelete(data);
+    } catch (error) {
+      console.error("Error fetching Nfo details for delete", error);
+    }
+  };
+  
+
 
   const handleUpload = async (excelData) => {
     const keys = [
@@ -70,6 +97,8 @@ export const NfoApi = () => {
       "email_id",
       "type2",
     ];
+    const totalRows = excelData.length - 1; // Subtract 1 for the header row
+    let uploadedRows = 0;
     const result = {};
     if (excelData) {
       try {
@@ -81,7 +110,7 @@ export const NfoApi = () => {
               result[key] = null;
             }else{
               result[key] = value;
-            }
+            }         
           }
           const queryParams = new URLSearchParams(result);
           const response = await axiosInstance.post(API_NFO_UPLOAD.DATA(queryParams));
@@ -90,7 +119,11 @@ export const NfoApi = () => {
           } else {
             console.error("Error uploading file.");
           }
+          uploadedRows++;
+          const progress = (uploadedRows / totalRows) * 100;
+          setUploadProgress(progress);
         }
+        setUploadProgress(100);
         console.log(result, "result");
       } catch (error) {
         console.error("Error:", error);
@@ -98,5 +131,22 @@ export const NfoApi = () => {
     }
   };
 
-  return { nfo_details, loading, handleUpload };
+  const handleDeleteAndUpload = async (excelData) => {
+    try {
+      await deleteData(nfo_delete);
+      console.log("Data deleted successfully");
+    } catch (error) {
+      console.error("Error deleting data", error);
+      return; 
+    }
+    try {
+      await handleUpload(excelData);
+      console.log("File uploaded and data inserted.");
+    } catch (error) {
+      console.error("Error uploading file", error);
+    }
+  };
+
+
+  return { nfo_details, loading,handleDeleteAndUpload,uploadProgress };
 };

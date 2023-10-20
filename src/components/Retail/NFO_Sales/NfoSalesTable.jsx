@@ -12,8 +12,8 @@ import { read, utils } from "xlsx";
 
 const NfoSalesTable = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [page, setPage] = React.useState(2);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [excelData, setExcelData] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
 
@@ -29,7 +29,7 @@ const NfoSalesTable = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-  const { nfo_details, loading, setFile, handleUpload } = NfoApi();
+  const { nfo_details, loading, handleDeleteAndUpload, uploadProgress } = NfoApi();
 
   const handleExport = () => {
     ExportToExcel(nfo_details, "NFO Sales Details");
@@ -50,7 +50,7 @@ const NfoSalesTable = () => {
           const parsedData = await utils.sheet_to_json(sheet, { header: 1 });
           console.log("Parsed Excel Data:", parsedData);
           setExcelData(parsedData);
-          handleUpload(parsedData);
+          handleDeleteAndUpload(parsedData);
         } catch (error) {
           console.error("Error reading the Excel file:", error);
         }
@@ -60,8 +60,6 @@ const NfoSalesTable = () => {
       console.log("No file selected.");
     }
   };
-
-  console.log("excelData:", excelData);
 
   return (
     <div className="home-main">
@@ -115,7 +113,9 @@ const NfoSalesTable = () => {
                       <i className="fas fa-spinner fa-spin fa-2x"></i>{" "}
                       <LoaderSearch />
                     </div>
-                  ) : (
+                  ) : nfo_details.length === 0 ? (
+                    <h3 className="text-center">Uploading: {uploadProgress.toFixed(2)}%</h3>
+                  ) :  (
                     <table className="table active  " id="nfoTable">
                       <thead className="nfoTable">
                         <tr>
