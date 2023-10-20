@@ -31,6 +31,8 @@ export const NfoApi = () => {
     fetchData();
   }, []);
 
+
+
   const handleUpload = async (excelData) => {
     const keys = [
       "trn_type",
@@ -70,6 +72,7 @@ export const NfoApi = () => {
       "email_id",
       "type2",
     ];
+
     const result = {};
     if (excelData) {
       try {
@@ -98,5 +101,6 @@ export const NfoApi = () => {
     }
   };
 
-  return { nfo_details, loading, handleUpload };
+
+  return { nfo_details, loading,handleUpload };
 };

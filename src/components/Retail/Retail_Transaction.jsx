@@ -21,7 +21,7 @@ import RmTable from "../Table/RmTable";
 import RegionTable from "../Table/RegionTable";
 import { useDataContext } from "../../Context/DataContext";
 
-const Retail_Transaction = ({ headers }) => {
+const Retail_Transaction = () => {
   // const { scheme_details } = Scheme();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const {

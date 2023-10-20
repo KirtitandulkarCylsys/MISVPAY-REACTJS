@@ -29,7 +29,7 @@ const NfoSalesTable = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-  const { nfo_details, loading, setFile, handleUpload } = NfoApi();
+  const { nfo_details, loading, handleUpload } = NfoApi();
 
   const handleExport = () => {
     ExportToExcel(nfo_details, "NFO Sales Details");
