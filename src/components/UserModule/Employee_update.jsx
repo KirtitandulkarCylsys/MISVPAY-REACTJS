@@ -153,7 +153,7 @@ const Employee_update = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setIsLoading(true)
+      // setIsLoading(true)
       const queryParams = new URLSearchParams({
         emp_id: EMP_ID,
         channelCode: CHANNEL_CODE,
