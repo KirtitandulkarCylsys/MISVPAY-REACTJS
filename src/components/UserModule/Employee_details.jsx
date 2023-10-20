@@ -225,8 +225,6 @@ const Employee_details = () => {
     }
   }
 
-
-
   return (
     <>
       <Navbar onToggle={toggleSidebar} />
