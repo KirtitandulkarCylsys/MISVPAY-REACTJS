@@ -17,16 +17,17 @@ const RegionTable = ({zone }) => {
     emp_id,
     rolwiseselectype,
     channel,
-    summary_report,formatNumberToIndianFormat
+    summary_report,formatNumberToIndianFormat,QUARTERData
   } = useDataContext();
 
   const formattedStartDate = start_Date?.split("-").reverse().join("/");
   const formattedEndDate = end_Date?.split("-").reverse().join("/");
+  const quarter =  QUARTERData.replace("-","").replace("-", "");
   const queryParams = useMemo(() => {
     return new URLSearchParams({
       employee_id: emp_id,
       emprole: emproles,
-      quarter: "202324Q2",
+      quarter: quarter,
       start_date: formattedStartDate,
       end_date: formattedEndDate,
       select_type: rolwiseselectype,
@@ -48,6 +49,7 @@ const RegionTable = ({zone }) => {
     zone,
     emproles,
     channel,
+    quarter
   ]);
   const { regions, loading } = RegionApi(queryParams);
 

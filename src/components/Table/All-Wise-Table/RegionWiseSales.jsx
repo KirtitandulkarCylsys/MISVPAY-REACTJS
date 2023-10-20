@@ -1,30 +1,43 @@
 import React, { useState, useMemo } from "react";
 import Navbar from "../../Shared/Navbar";
 import SideBar from "../../Shared/SideBar/SideBar";
-import ReactPaginate from "react-paginate";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Loader from "../Loader";
 import { ExportExcelRegion } from "./ExportExcel";
 import { ExportPdfRegion } from "./ExportPdfRegion";
 import { AllRegionwise } from "../../Retail/RetailApi/RegionApi";
 import "./RegionPagination.css";
-import Api from "../../Retail/RetailApi/Api";
+import { useDataContext } from "../../../Context/DataContext";
+import TablePagination from "@mui/material/TablePagination";
+
 const RegionWiseSales = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [currentPage, setCurrentPage] = useState(0);
-  const { select_type, startDate, endDate } = useParams();
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const { emproles, channel, formatNumberToIndianFormat } = Api();
-  const formattedStartDate = startDate.split("-").reverse().join("/");
-  const formattedEndDate = endDate.split("-").reverse().join("/");
+  const {
+    start_Date,
+    end_Date,
+    rolwiseselectype,
+    emproles,
+    channel,
+    formatNumberToIndianFormat,
+    emp_id,
+    QUARTERData,
+  } = useDataContext();
+
+  const formattedStartDate = start_Date.split("-").reverse().join("/");
+  const formattedEndDate = end_Date.split("-").reverse().join("/");
+  const quarter = QUARTERData.replace("-", "").replace("-", "");
+
   const queryParams = useMemo(() => {
     return new URLSearchParams({
-      employee_id: "1234",
+      employee_id: emp_id,
       emprole: emproles,
-      quarter: "202324Q2",
+      quarter: quarter,
       start_date: formattedStartDate,
       end_date: formattedEndDate,
-      select_type: select_type,
+      select_type: rolwiseselectype,
       scheme_code: "nill",
       channel: channel,
       zone: "",
@@ -33,22 +46,30 @@ const RegionWiseSales = () => {
       rm: "nill",
       common_report: "ALL_REGIONWISE",
     });
-  }, [select_type, emproles, formattedStartDate, formattedEndDate, channel]);
+  }, [
+    quarter,
+    emp_id,
+    rolwiseselectype,
+    emproles,
+    formattedStartDate,
+    formattedEndDate,
+    channel,
+  ]);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   const { regionwise, loading } = AllRegionwise(queryParams);
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
-
-  const PER_PAGE = 10;
-  const offset = currentPage * PER_PAGE;
-  const currentPageData = regionwise.slice(offset, offset + PER_PAGE);
-  const pageCount = Math.ceil(regionwise.length / PER_PAGE);
-
-  function handlePageClick({ selected: selectedPage }) {
-    setCurrentPage(selectedPage);
-  }
 
   const calculateTotal = (columnName) => {
     let total = 0;
@@ -97,7 +118,6 @@ const RegionWiseSales = () => {
                     <ExportPdfRegion />
                   </p>
                 </div>
-            
               </div>
               {loading ? (
                 <Loader />
@@ -165,118 +185,123 @@ const RegionWiseSales = () => {
                       </tr>
                     </thead>
                     <tbody style={{ backgroundColor: "#DADADA" }}>
-                      {currentPageData.map((region, index) => {
-                        return (
-                          <tr key={index}>
-                            <td>{region.REGION}</td>
-                            <td className="text-end">
-                              {formatNumberToIndianFormat(
-                                parseFloat(region.SEQUITY)
-                              )}
-                            </td>
-                            <td className="text-end">
-                              {formatNumberToIndianFormat(
-                                parseFloat(region.SHYBRID)
-                              )}
-                            </td>
-                            <td className="text-end">
-                              {formatNumberToIndianFormat(
-                                parseFloat(region.SARBITRAGE)
-                              )}
-                            </td>
-                            <td className="text-end">
-                              {formatNumberToIndianFormat(
-                                parseFloat(region.SPASSIVE)
-                              )}
-                            </td>
-                            <td className="text-end">
-                              {formatNumberToIndianFormat(
-                                parseFloat(region.SFIXED_INCOME)
-                              )}
-                            </td>
-                            <td className="text-end">
-                              {formatNumberToIndianFormat(
-                                parseFloat(region.SCASH)
-                              )}
-                            </td>
-                            <td className="text-end color-biege" id="total">
-                              {formatNumberToIndianFormat(
-                                parseFloat(region.STOTAL)
-                              )}
-                            </td>
-                            <td className="text-end">
-                              {formatNumberToIndianFormat(
-                                parseFloat(region.REQUITY)
-                              )}
-                            </td>
-                            <td className="text-end">
-                              {formatNumberToIndianFormat(
-                                parseFloat(region.RHYBRID)
-                              )}
-                            </td>
-                            <td className="text-end">
-                              {formatNumberToIndianFormat(
-                                parseFloat(region.RARBITRAGE)
-                              )}
-                            </td>
-                            <td className="text-end">
-                              {formatNumberToIndianFormat(
-                                parseFloat(region.RPASSIVE)
-                              )}
-                            </td>
-                            <td className="text-end">
-                              {formatNumberToIndianFormat(
-                                parseFloat(region.RFIXED_INCOME)
-                              )}
-                            </td>
-                            <td className="text-end">
-                              {formatNumberToIndianFormat(
-                                parseFloat(region.RCASH)
-                              )}
-                            </td>
-                            <td className="text-end" id="total">
-                              {formatNumberToIndianFormat(
-                                parseFloat(region.RTOTAL)
-                              )}
-                            </td>
-                            <td className="text-end">
-                              {formatNumberToIndianFormat(
-                                parseFloat(region.NEQUITY)
-                              )}
-                            </td>
-                            <td className="text-end">
-                              {formatNumberToIndianFormat(
-                                parseFloat(region.NHYBRID)
-                              )}
-                            </td>
-                            <td className="text-end">
-                              {formatNumberToIndianFormat(
-                                parseFloat(region.NARBITRAGE)
-                              )}
-                            </td>
-                            <td className="text-end">
-                              {formatNumberToIndianFormat(
-                                parseFloat(region.NPASSIVE)
-                              )}
-                            </td>
-                            <td className="text-end">
-                              {formatNumberToIndianFormat(
-                                parseFloat(region.NFIXED_INCOME)
-                              )}
-                            </td>
-                            <td className="text-end">
-                              {formatNumberToIndianFormat(
-                                parseFloat(region.NCASH)
-                              )}
-                            </td>
-                            <td className="text-end" id="total">
-                              {formatNumberToIndianFormat(
-                                parseFloat(region.NTOTAL)
-                              )}
-                            </td>
-                          </tr>
-                        );
-                      })}
+                      {regionwise
+                        .slice(
+                          page * rowsPerPage,
+                          page * rowsPerPage + rowsPerPage
+                        )
+                        .map((region, index) => {
+                          return (
+                            <tr key={index}>
+                              <td>{region.REGION}</td>
+                              <td className="text-end">
+                                {formatNumberToIndianFormat(
+                                  parseFloat(region.SEQUITY)
+                                )}
+                              </td>
+                              <td className="text-end">
+                                {formatNumberToIndianFormat(
+                                  parseFloat(region.SHYBRID)
+                                )}
+                              </td>
+                              <td className="text-end">
+                                {formatNumberToIndianFormat(
+                                  parseFloat(region.SARBITRAGE)
+                                )}
+                              </td>
+                              <td className="text-end">
+                                {formatNumberToIndianFormat(
+                                  parseFloat(region.SPASSIVE)
+                                )}
+                              </td>
+                              <td className="text-end">
+                                {formatNumberToIndianFormat(
+                                  parseFloat(region.SFIXED_INCOME)
+                                )}
+                              </td>
+                              <td className="text-end">
+                                {formatNumberToIndianFormat(
+                                  parseFloat(region.SCASH)
+                                )}
+                              </td>
+                              <td className="text-end color-biege" id="total">
+                                {formatNumberToIndianFormat(
+                                  parseFloat(region.STOTAL)
+                                )}
+                              </td>
+                              <td className="text-end">
+                                {formatNumberToIndianFormat(
+                                  parseFloat(region.REQUITY)
+                                )}
+                              </td>
+                              <td className="text-end">
+                                {formatNumberToIndianFormat(
+                                  parseFloat(region.RHYBRID)
+                                )}
+                              </td>
+                              <td className="text-end">
+                                {formatNumberToIndianFormat(
+                                  parseFloat(region.RARBITRAGE)
+                                )}
+                              </td>
+                              <td className="text-end">
+                                {formatNumberToIndianFormat(
+                                  parseFloat(region.RPASSIVE)
+                                )}
+                              </td>
+                              <td className="text-end">
+                                {formatNumberToIndianFormat(
+                                  parseFloat(region.RFIXED_INCOME)
+                                )}
+                              </td>
+                              <td className="text-end">
+                                {formatNumberToIndianFormat(
+                                  parseFloat(region.RCASH)
+                                )}
+                              </td>
+                              <td className="text-end" id="total">
+                                {formatNumberToIndianFormat(
+                                  parseFloat(region.RTOTAL)
+                                )}
+                              </td>
+                              <td className="text-end">
+                                {formatNumberToIndianFormat(
+                                  parseFloat(region.NEQUITY)
+                                )}
+                              </td>
+                              <td className="text-end">
+                                {formatNumberToIndianFormat(
+                                  parseFloat(region.NHYBRID)
+                                )}
+                              </td>
+                              <td className="text-end">
+                                {formatNumberToIndianFormat(
+                                  parseFloat(region.NARBITRAGE)
+                                )}
+                              </td>
+                              <td className="text-end">
+                                {formatNumberToIndianFormat(
+                                  parseFloat(region.NPASSIVE)
+                                )}
+                              </td>
+                              <td className="text-end">
+                                {formatNumberToIndianFormat(
+                                  parseFloat(region.NFIXED_INCOME)
+                                )}
+                              </td>
+                              <td className="text-end">
+                                {formatNumberToIndianFormat(
+                                  parseFloat(region.NCASH)
+                                )}
+                              </td>
+                              <td className="text-end" id="total">
+                                {formatNumberToIndianFormat(
+                                  parseFloat(region.NTOTAL)
+                                )}
+                              </td>
+                            </tr>
+                          );
+                        })}
                       <tr className="colorwhite BgcolorOrange">
                         <td>TOTAL</td>
                         <td className="text-end">
@@ -397,20 +422,14 @@ const RegionWiseSales = () => {
                   </table>
                 </div>
               )}
-              <div className="pagination-container">
-                <ReactPaginate
-                  previousLabel={"← Previous"}
-                  nextLabel={"Next →"}
-                  pageCount={pageCount}
-                  onPageChange={handlePageClick}
-                  containerClassName={"pagination"}
-                  previousLinkClassName={"pagination__link"}
-                  nextLinkClassName={"pagination__link"}
-                  disabledClassName={"pagination__link--disabled"}
-                  activeClassName={"pagination__link--active"}
-                />
-              </div>
             </div>
+            <TablePagination
+              count={regionwise.length}
+              page={page}
+              onPageChange={handleChangePage}
+              rowsPerPage={rowsPerPage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
           </div>
         </div>
       </div>

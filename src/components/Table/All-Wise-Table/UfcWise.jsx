@@ -2,56 +2,70 @@ import React, { useMemo, useState } from "react";
 import Navbar from "../../Shared/Navbar";
 import SideBar from "../../Shared/SideBar/SideBar";
 import ExportToPDF from "../../Retail/AUM/ExportToPDF";
-import { Link, useParams } from "react-router-dom";
-import ReactPaginate from "react-paginate";
+import { Link } from "react-router-dom";
 import { ExportExcelUfc } from "./ExportExcel";
 import { AllUfcwise } from "../../Retail/RetailApi/RegionApi";
 import "./UfcPagination.css";
+import { useDataContext } from "../../../Context/DataContext";
+import TablePagination from "@mui/material/TablePagination";
 const UfcWise = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [page, setPage] = useState(2);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const { select_type } = useParams();
+  const {
+    start_Date,
+    end_Date,
+    rolwiseselectype,
+    emproles,
+    channel,
+    formatNumberToIndianFormat,
+    emp_id,
+    QUARTERData,
+  } = useDataContext();
+
+  const formattedStartDate = start_Date.split("-").reverse().join("/");
+  const formattedEndDate = end_Date.split("-").reverse().join("/");
+  const quarter = QUARTERData.replace("-", "").replace("-", "");
+
   const queryParams = useMemo(() => {
     return new URLSearchParams({
-      employee_id: "1234",
-      emprole: "ADMIN",
-      quarter: "202324Q2",
-      start_date: "01/04/2023",
-      end_date: "30/09/2023",
-      select_type: select_type,
+      employee_id: emp_id,
+      emprole: emproles,
+      quarter: quarter,
+      start_date: formattedStartDate,
+      end_date: formattedEndDate,
+      select_type: rolwiseselectype,
       scheme_code: "nill",
-      channel: "RTL",
+      channel: channel,
       zone: "",
       region: "",
       ufc: "",
       rm: "nill",
       common_report: "ALL_UFCWISE",
     });
-  }, [select_type]);
+  }, [
+    emp_id,
+    rolwiseselectype,
+    emproles,
+    formattedStartDate,
+    formattedEndDate,
+    channel,
+    quarter,
+  ]);
   const { ufcwise } = AllUfcwise(queryParams);
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
-  const formatNumberToIndianFormat = (number) => {
-    if (typeof number !== "number") {
-      return number;
-    }
-
-    const parts = number.toString().split(".");
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    return parts.join(".");
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
   };
 
-  const PER_PAGE = 10;
-  const offset = currentPage * PER_PAGE;
-  const currentPageData = ufcwise.slice(offset, offset + PER_PAGE);
-  const pageCount = Math.ceil(ufcwise.length / PER_PAGE);
-
-  function handlePageClick({ selected: selectedPage }) {
-    setCurrentPage(selectedPage);
-  }
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   const calculateTotal = (columnName) => {
     let total = 0;
@@ -157,128 +171,139 @@ const UfcWise = () => {
                     </tr>
                   </thead>
                   <tbody style={{ backgroundColor: "#DADADA" }}>
-                    {currentPageData.map((ufc, index) => {
-                      return (
-                        <tr key={index}>
-                          <td>{ufc.UFC_CODE}</td>
-                          <td>{ufc.UFC_NAME}</td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(
-                              parseFloat(ufc.SEQUITY)
-                            )}
-                          </td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(
-                              parseFloat(ufc.SHYBRID)
-                            )}
-                          </td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(
-                              parseFloat(ufc.SARBITRAGE)
-                            )}
-                          </td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(
-                              parseFloat(ufc.SPASSIVE)
-                            )}
-                          </td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(
-                              parseFloat(ufc.SFIXED_INCOME)
-                            )}
-                          </td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(parseFloat(ufc.SCASH))}
-                          </td>
-                          <td
-                            className="text-end"
-                            style={{ backgroundColor: "#8080805c" }}
-                          >
-                            <b>
+                    {ufcwise
+                      .slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      )
+                      .map((ufc, index) => {
+                        return (
+                          <tr key={index}>
+                            <td>{ufc.UFC_CODE}</td>
+                            <td>{ufc.UFC_NAME}</td>
+                            <td className="text-end">
                               {formatNumberToIndianFormat(
-                                parseFloat(ufc.STOTAL)
+                                parseFloat(ufc.SEQUITY)
                               )}
-                            </b>
-                          </td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(
-                              parseFloat(ufc.REQUITY)
-                            )}
-                          </td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(
-                              parseFloat(ufc.RHYBRID)
-                            )}
-                          </td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(
-                              parseFloat(ufc.RARBITRAGE)
-                            )}
-                          </td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(
-                              parseFloat(ufc.RPASSIVE)
-                            )}
-                          </td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(
-                              parseFloat(ufc.RFIXED_INCOME)
-                            )}
-                          </td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(parseFloat(ufc.RCASH))}
-                          </td>
-                          <td
-                            className="text-end"
-                            style={{ backgroundColor: "#8080805c" }}
-                          >
-                            <b>
+                            </td>
+                            <td className="text-end">
                               {formatNumberToIndianFormat(
-                                parseFloat(ufc.RTOTAL)
+                                parseFloat(ufc.SHYBRID)
                               )}
-                            </b>
-                          </td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(
-                              parseFloat(ufc.NEQUITY)
-                            )}
-                          </td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(
-                              parseFloat(ufc.NHYBRID)
-                            )}
-                          </td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(
-                              parseFloat(ufc.NARBITRAGE)
-                            )}
-                          </td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(
-                              parseFloat(ufc.NPASSIVE)
-                            )}
-                          </td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(
-                              parseFloat(ufc.NFIXED_INCOME)
-                            )}
-                          </td>
-                          <td className="text-end">
-                            {formatNumberToIndianFormat(parseFloat(ufc.NCASH))}
-                          </td>
-                          <td
-                            className="text-end"
-                            style={{ backgroundColor: "#8080805c" }}
-                          >
-                            <b>
+                            </td>
+                            <td className="text-end">
                               {formatNumberToIndianFormat(
-                                parseFloat(ufc.NTOTAL)
+                                parseFloat(ufc.SARBITRAGE)
                               )}
-                            </b>
-                          </td>
-                        </tr>
-                      );
-                    })}
+                            </td>
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(
+                                parseFloat(ufc.SPASSIVE)
+                              )}
+                            </td>
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(
+                                parseFloat(ufc.SFIXED_INCOME)
+                              )}
+                            </td>
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(
+                                parseFloat(ufc.SCASH)
+                              )}
+                            </td>
+                            <td
+                              className="text-end"
+                              style={{ backgroundColor: "#8080805c" }}
+                            >
+                              <b>
+                                {formatNumberToIndianFormat(
+                                  parseFloat(ufc.STOTAL)
+                                )}
+                              </b>
+                            </td>
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(
+                                parseFloat(ufc.REQUITY)
+                              )}
+                            </td>
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(
+                                parseFloat(ufc.RHYBRID)
+                              )}
+                            </td>
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(
+                                parseFloat(ufc.RARBITRAGE)
+                              )}
+                            </td>
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(
+                                parseFloat(ufc.RPASSIVE)
+                              )}
+                            </td>
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(
+                                parseFloat(ufc.RFIXED_INCOME)
+                              )}
+                            </td>
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(
+                                parseFloat(ufc.RCASH)
+                              )}
+                            </td>
+                            <td
+                              className="text-end"
+                              style={{ backgroundColor: "#8080805c" }}
+                            >
+                              <b>
+                                {formatNumberToIndianFormat(
+                                  parseFloat(ufc.RTOTAL)
+                                )}
+                              </b>
+                            </td>
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(
+                                parseFloat(ufc.NEQUITY)
+                              )}
+                            </td>
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(
+                                parseFloat(ufc.NHYBRID)
+                              )}
+                            </td>
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(
+                                parseFloat(ufc.NARBITRAGE)
+                              )}
+                            </td>
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(
+                                parseFloat(ufc.NPASSIVE)
+                              )}
+                            </td>
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(
+                                parseFloat(ufc.NFIXED_INCOME)
+                              )}
+                            </td>
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(
+                                parseFloat(ufc.NCASH)
+                              )}
+                            </td>
+                            <td
+                              className="text-end"
+                              style={{ backgroundColor: "#8080805c" }}
+                            >
+                              <b>
+                                {formatNumberToIndianFormat(
+                                  parseFloat(ufc.NTOTAL)
+                                )}
+                              </b>
+                            </td>
+                          </tr>
+                        );
+                      })}
                     <tr style={{ backgroundColor: "#4C6072", color: "white" }}>
                       <td>TOTAL</td>
                       <td></td>
@@ -394,16 +419,12 @@ const UfcWise = () => {
                 </table>
               </div>
               <div className="ufcpagination-container">
-                <ReactPaginate
-                  previousLabel={"← Previous"}
-                  nextLabel={"Next →"}
-                  pageCount={pageCount}
-                  onPageChange={handlePageClick}
-                  containerClassName={"ufcpagination"}
-                  previousLinkClassName={"pagination__link"}
-                  nextLinkClassName={"pagination__link"}
-                  disabledClassName={"pagination__link--disabled"}
-                  activeClassName={"pagination__link--active"}
+                <TablePagination
+                  count={ufcwise.length}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  rowsPerPage={rowsPerPage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
                 />
               </div>
             </div>
