@@ -8,12 +8,15 @@ export const Account_Api = ({ headers }) => {
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [amount, setAmount] = useState();
-  const [transaction_type, setTransactionType] = useState([]);
+  const [transaction_type, setTransactionType] = useState();
   const [transaction_account_report, setTransactionAccountReport] = useState([]);
   const [condition, setCondition] = useState();
   const [ufc, setUfc] = useState();
   const [no_mapping, setNoMapping] = useState();
   const [loading, setLoading] = useState(false);
+  const [selectUfc, setSelectUfc]= useState('');
+  const [schemeType,setSchemeType]=useState('');
+
   const { roleWiseData } = useDataContext();
   const emp_id = roleWiseData ? roleWiseData[0].EMP_ID : null; 
   const emproles = roleWiseData ? roleWiseData[0].EMP_ROLE : null; 
@@ -50,14 +53,14 @@ export const Account_Api = ({ headers }) => {
         start_date: formattedStartDate,
         end_date: formattedEndDate,
         amount: amount,
-        transaction_type: "SALES",
+        transaction_type: transaction_type,
         condition: condition,
-        ufc: "115",
+        ufc: selectUfc,
         zone: zone,
         region_code: region_code,
         ufc_code: ufc_code,
-       
-       
+        no_mapping:no_mapping,
+        scheme_type:schemeType,
         channel_code: "RTL",
         common_report: " "
       });
@@ -73,8 +76,7 @@ export const Account_Api = ({ headers }) => {
         });
 
         const data = await response.json();
-       
-        console.log(data,"data")
+  
         setTransactionAccountReport(data);
         setLoading(false);
         setHide(true);
@@ -116,6 +118,7 @@ export const Account_Api = ({ headers }) => {
     condition,
     ufc,
     no_mapping,
+    schemeType,
     setTransactionType,
     setEndDate,
     setHide,
@@ -127,6 +130,6 @@ export const Account_Api = ({ headers }) => {
     setCondition,
     setUfc,
     setNoMapping,
-    emproles,
+    emproles,setSelectUfc,setSchemeType
   };
 };

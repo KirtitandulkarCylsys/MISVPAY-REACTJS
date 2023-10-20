@@ -10,10 +10,12 @@ import { Account_Api } from "../Retail/RetailApi/Account_Api";
 import LoaderSearch from "../Table/SubTable/LoaderSearch";
 import AccPdfDownload from "./AccPdfDownload";
 import { AccExcelDownload } from "./AccExcelDownload";
+import SIPMaturity from "./Transaction_Type/SIPMaturity.jsx";
 
 const TransactionReport = ({ headers }) => {
   const { ufc_details } = Ufc_Drop();
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [searchClicked,setSearchClicked]=useState();
   const {
     hide,
     startDate,
@@ -24,6 +26,7 @@ const TransactionReport = ({ headers }) => {
     amount,
     condition,
     no_mapping,
+    schemeType,
     setTransactionType,
     setEndDate,
     setHide,
@@ -34,7 +37,7 @@ const TransactionReport = ({ headers }) => {
     setAmount,
     setCondition,
     setNoMapping,
-    emproles,
+    emproles, setSelectUfc, setSchemeType
   } = Account_Api({ headers });
   const toggleSidebar = () => { setSidebarOpen(!sidebarOpen); };
   const handleStartDateChange = (e) => {
@@ -53,6 +56,7 @@ const TransactionReport = ({ headers }) => {
       setEndDate(newEndDate);
     }
   };
+
 
   return (
     <div className="container-fluid p-0 home-main ">
@@ -114,10 +118,10 @@ const TransactionReport = ({ headers }) => {
                       <label className="form-lables" style={{ marginRight: "5px" }} >
                         <b> UFC</b>
                       </label>
-                      <select name="" id="ab" className="form-select form-control mt-2" >
+                      <select name="" id="ab" className="form-select form-control mt-2" onChange={(e) => setSelectUfc(e.target.value)} >
                         <option value="">Select</option>
                         {ufc_details.map((item) => (
-                          <option>{item.UFC_NAME}</option>
+                          <option value={item.UFC_CODE}>{item.UFC_NAME}</option>
                         ))}
                       </select>
                     </div>
@@ -126,17 +130,17 @@ const TransactionReport = ({ headers }) => {
                         <b>Amount</b>
                       </label>
                       <input type="text" className="form-control mt-2" placeholder="Enter Amount" value={amount}
-                      onChange={(e) => setAmount(e.target.value)}
+                        onChange={(e) => setAmount(e.target.value)}
                       />
                     </div>
                     <div className="form-group col-md-2">
                       <label className="form-lables">
                         <b>Condition</b>
                       </label>
-                      <select name="" id="ab" 
-                      className="form-select form-control mt-2"
-                      value={condition}
-                      onChange={(e) => setCondition(e.target.value)}
+                      <select name="" id="ab"
+                        className="form-select form-control mt-2"
+                        value={condition}
+                        onChange={(e) => setCondition(e.target.value)}
                       >
                         <option value="">Select</option>
                         <option value="LESS_THAN">LESS_THAN </option>
@@ -203,11 +207,11 @@ const TransactionReport = ({ headers }) => {
                           <label className="form-lables" style={{ marginRight: "5px" }} >
                             <b> Scheme Type </b>
                           </label>
-                          <select name="" 
-                          id="ab" 
-                          className="form-select form-control mt-2"
-                          // value={select_type}
-                          // onChange={(e) => setSelectType(e.target.value)}
+                          <select name=""
+                            id="ab"
+                            className="form-select form-control mt-2"
+                            value={schemeType}
+                            onChange={(e) => setSchemeType(e.target.value)}
                           >
                             <option value="">Select</option>
                             <option value="">ALL </option>
@@ -229,20 +233,20 @@ const TransactionReport = ({ headers }) => {
                           <label className="form-lables">
                             <b>Transaction Type</b>
                           </label>
-                          <select name="" 
-                          id="ab" 
-                          className="form-select form-control mt-2"
-                           value={transaction_type} 
-                           onChange={(e) => setTransactionType(e.target.value)}
-                            >
+                          <select name=""
+                            id="ab"
+                            className="form-select form-control mt-2"
+                            value={transaction_type}
+                            onChange={(e) => {setTransactionType(e.target.value);setSearchClicked(false)}}
+                          >
                             <option value="">Select</option>
-                            <option value="SALES">SALES</option>
+                            <option value="SALES">Sales</option>
                             <option value="GROSS">Gross Sales </option>
                             <option value="LIVE">Live-SIP/STP </option>
                             <option value="NEW">SIP/STP New Registration </option>
                             <option value="BASE">Live-SIP/STP-Base </option>
                             <option value="">Terminated SIP/STP </option>
-                            <option value="FARE">Farewell Login Contest </option>
+                            <option value="FARE ">Farewell Login Contest </option>
                             <option value="MATURE">SIP Maturity </option>
                           </select>
                         </div>
@@ -256,10 +260,10 @@ const TransactionReport = ({ headers }) => {
                           <label className="form-lables">
                             <b>No Mapping</b>
                           </label>
-                          <select name="" 
-                          id="ab" 
-                          className="form-select form-control mt-2"
-                          value={no_mapping}
+                          <select name=""
+                            id="ab"
+                            className="form-select form-control mt-2"
+                            value={no_mapping}
                             onChange={(e) => setNoMapping(e.target.value)}
                           >
                             <option value="">Select</option>
@@ -284,8 +288,8 @@ const TransactionReport = ({ headers }) => {
                             </p>
                           </div>
                           <div className="col-md-2 ">
-                            <button className="btn Button">
-                              <b className="colorwhite" onClick={togglehide}>
+                            <button className="btn Button" style={{ backgroundColor: " #EE8B3A", color:"white" }}>
+                            <b className="colorwhite" onClick={()=>{togglehide(); setSearchClicked(true)}}>
                                 Search
                               </b>
                             </button>
@@ -300,15 +304,25 @@ const TransactionReport = ({ headers }) => {
                             <i className="fas fa-spinner fa-spin fa-2x"></i>{" "}
                             <LoaderSearch />
                           </div>
+                        ) : searchClicked ? (
+                          <>
+                            {transaction_type === "SALES" || transaction_type === "GROSS" ? (
+                              <>
+                                <SalesTransaction
+                                  transaction_account_report={transaction_account_report}
+                                  formatNumberToIndianFormat={formatNumberToIndianFormat}
+                                />
+                              </>
+                            ) : transaction_type === "LIVE" || transaction_type === "NEW" || transaction_type === "BASE" || transaction_type === "FARE" || transaction_type === "MATURE" || transaction_type === "" ? (
+                              <>
+                                <SIPMaturity transaction_account_report={transaction_account_report}
+                                  formatNumberToIndianFormat={formatNumberToIndianFormat}></SIPMaturity>
+                              </>
+
+                            ) : null}
+                          </>
                         ) : (
-                          hide && (
-                            <div>
-                              <SalesTransaction
-                                transaction_account_report={transaction_account_report}
-                                formatNumberToIndianFormat={formatNumberToIndianFormat}
-                              />
-                            </div>
-                          )
+                          <></>
                         )}
                       </div>
                     </>

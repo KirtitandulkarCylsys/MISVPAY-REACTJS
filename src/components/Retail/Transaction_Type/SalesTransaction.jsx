@@ -4,17 +4,20 @@ import "./SalesTransaction.css";
 
 const SalesTransaction = ({ transaction_account_report }) => {
   const itemsPerPage = 10;
-  const [currentPage, setCurrentPage] = useState(1);
-  const startIndex = (currentPage) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  // const displayedItems = transaction_account_report.slice(startIndex, endIndex);
+  const [currentPage, setCurrentPage] = useState(0);
 
-  const handlePageChange = ({ selected }) => {
-    setCurrentPage(selected);
+  const pageCount = Math.ceil(transaction_account_report.length / itemsPerPage);
+
+  const startIndex = currentPage * itemsPerPage;
+  const endIndex = Math.min(startIndex + itemsPerPage, transaction_account_report.length);
+
+  const displayedItems = transaction_account_report.slice(startIndex, endIndex);
+
+  const handlePageClick = (selected) => {
+    setCurrentPage(selected.selected);
   };
-console.log(transaction_account_report, "data")
 
-
+ 
   return (
     <div className="new-component">
       <div className="bg-white card m-4">
@@ -25,7 +28,7 @@ console.log(transaction_account_report, "data")
             type="button"
           >
             <h5 className="headline">
-              <b>SALES TRANSACTION</b>
+              <b>TRANSACTION TABLE 1</b>
             </h5>
           </button>
           <div className="bg-white m-4" style={{ borderRadius: "10px" }}>
@@ -33,92 +36,87 @@ console.log(transaction_account_report, "data")
               <div className="row mt-2 bg-white"></div>
               <div className="table-responsive custom-scroll">
                 <table className="mt-3 table table-bordered" id="table1" style={{ backgroundColor: "white", }} >
-                  <thead>
-                    <tr className="colorwhite BgcolorOrange">
-                      <th scope="col" className="d-none d-sm-table-cell">
+                  <thead className="colorwhite BgcolorOrange">
+                    <tr >
+                      <th scope="col" className="d-none d-sm-table-cell" style={{ backgroundColor: " #EE8B3A", color:"white" }}>
                         Sr.No
                       </th>
-                      <th scope="col" className="text-end">
+                      <th scope="col" className="text-end" style={{ backgroundColor: " #EE8B3A", color:"white" }}>
                         RM Code
                       </th>
-                      <th scope="col" className="text-end">
+                      <th scope="col" className="text-end" style={{ backgroundColor: " #EE8B3A", color:"white" }}>
                         Batch Closed Date
                       </th>
-                      <th scope="col" className="text-end">
+                      <th scope="col" className="text-end" style={{ backgroundColor: " #EE8B3A", color:"white" }}>
                         ARN
                       </th>
-                      <th scope="col" className="text-end">
+                      <th scope="col" className="text-end" style={{ backgroundColor: " #EE8B3A", color:"white" }}>
                         TRDT
                       </th>
-                      <th scope="col" className="text-end">
+                      <th scope="col" className="text-end" style={{ backgroundColor: " #EE8B3A", color:"white" }}>
                         SubBroker
                       </th>
-                      <th scope="col" className="text-end">
+                      <th scope="col" className="text-end" style={{ backgroundColor: " #EE8B3A", color:"white" }}>
                         UFC
                       </th>
-                      <th scope="col" className="text-end">
+                      <th scope="col" className="text-end" style={{ backgroundColor: " #EE8B3A", color:"white" }}>
                         Region
                       </th>
-                      <th scope="col" className="text-end">
+                      <th scope="col" className="text-end" style={{ backgroundColor: " #EE8B3A", color:"white" }}>
                         Shared Channel
                       </th>
-                      <th scope="col" className="text-end">
+                      <th scope="col" className="text-end" style={{ backgroundColor: " #EE8B3A", color:"white" }}>
                         Scheme
                       </th>
-                      <th scope="col" className="text-end">
+                      <th scope="col" className="text-end" style={{ backgroundColor: " #EE8B3A", color:"white" }}>
                         A/C NO
                       </th>
-                      <th scope="col" className="text-end">
+                      <th scope="col" className="text-end" style={{ backgroundColor: " #EE8B3A", color:"white" }}>
                         Investor
                       </th>
-                      <th scope="col" className="text-end">
+                      <th scope="col" className="text-end" style={{ backgroundColor: " #EE8B3A", color:"white" }}>
                         PIN Code
                       </th>
-                      <th scope="col" className="text-end">
+                      <th scope="col" className="text-end" style={{ backgroundColor: " #EE8B3A", color:"white" }}>
                         Switch Flag
                       </th>
-                      <th scope="col" className="text-end">
+                      <th scope="col" className="text-end" style={{ backgroundColor: " #EE8B3A", color:"white" }}>
                         Sale/Div Amount
                       </th>
-                      <th scope="col" className="text-end">
+                      <th scope="col" className="text-end" style={{ backgroundColor: " #EE8B3A", color:"white" }}>
                         Sale Channel Share
                       </th>
-                      <th scope="col" className="text-end">
-                        SIP Gross Sales
-                      </th>
-                      <th scope="col" className="text-end">
+                      <th scope="col" className="text-end" style={{ backgroundColor: " #EE8B3A", color:"white" }}>
                         Redemption Amount
                       </th>
-                      <th scope="col" className="text-end">
+                      <th scope="col" className="text-end" style={{ backgroundColor: " #EE8B3A", color:"white" }}>
                         Redemption Channel Share
                       </th>
-                      <th scope="col" className="text-end">
+                      <th scope="col" className="text-end" style={{ backgroundColor: " #EE8B3A", color:"white" }}>
                         Trans RM
                       </th>
-                      <th scope="col" className="text-end">
+                      <th scope="col" className="text-end" style={{ backgroundColor: " #EE8B3A", color:"white" }}>
                         Transaction Type
                       </th>
-                      <th scope="col" className="text-end">
-                        Scheme Plan
-                      </th>
-                      <th scope="col" className="text-end">
+                      
+                      <th scope="col" className="text-end" style={{ backgroundColor: " #EE8B3A", color:"white" }}>
                         KARVY point of Acceptance
                       </th>
-                      <th scope="col" className="text-end">
+                      <th scope="col" className="text-end" style={{ backgroundColor: " #EE8B3A", color:"white" }}>
                         RIA Code
                       </th>
-                      <th scope="col" className="text-end">
+                      <th scope="col" className="text-end" style={{ backgroundColor: " #EE8B3A", color:"white" }}>
                         EUIN Code
                       </th>
-                      <th scope="col" className="text-end">
+                      <th scope="col" className="text-end" style={{ backgroundColor: " #EE8B3A", color:"white" }}>
                         Reference No
                       </th>
-                    </tr>
+                    </tr>     
                   </thead>
-                  <tbody>
-                    {transaction_account_report.map((AccountApi, index) => (
-                      <tr key={index}>
-                        <td className="d-none d-sm-table-cell">{startIndex + index + 1}</td>
+                  <tbody style={{backgroundColor:"lightgray"}}>
+                  {displayedItems.map((AccountApi, index) => (
+              <tr key={index}>
+                <td>{startIndex + index + 1}</td>
                         <td className="text-end">{AccountApi.RMCODE}</td>
                         <td className="text-end">{AccountApi.BATCHCLOSEDT}</td>
                         <td className="text-end">{AccountApi.ARN}</td>
@@ -134,12 +132,10 @@ console.log(transaction_account_report, "data")
                         <td className="text-end">{AccountApi.SWITCH_FLAG}</td>
                         <td className="text-end">{AccountApi.SALEAMT}</td>
                         <td className="text-end">{AccountApi.SCHANNELSHARE}</td>
-                        <td className="text-end">{AccountApi.sipGrossSales}</td>
                         <td className="text-end">{AccountApi.REPURAMT}</td>
                         <td className="text-end"> {AccountApi.RNEWAMT} </td>
                         <td className="text-end">{AccountApi.TRMCODE}</td>
                         <td className="text-end">{AccountApi.TRTYPE}</td>
-                        <td className="text-end">{AccountApi.schemePlan}</td>
                         <td className="text-end"> {AccountApi.KARVY_LOC} </td>
                         <td className="text-end">{AccountApi.RIACODE}</td>
                         <td className="text-end">{AccountApi.EUIN}</td>
@@ -148,25 +144,23 @@ console.log(transaction_account_report, "data")
                     ))}
                   </tbody>
                 </table>
+                <ReactPaginate
+        previousLabel={"Previous"}
+        nextLabel={"Next"}
+        breakLabel={"..."}
+        breakClassName={"break-me"}
+        pageCount={pageCount}
+        marginPagesDisplayed={2}
+        pageRangeDisplayed={5}
+        onPageChange={handlePageClick}
+        containerClassName={"pagination"}
+        subContainerClassName={"pages pagination"}
+        activeClassName={"active"}
+      />
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="pagination-container">
-        <ReactPaginate
-          previousLabel={"Previous"}
-          nextLabel={"Next"}
-          breakLabel={"..."}
-          pageCount={Math.ceil(
-            transaction_account_report.length / itemsPerPage
-          )}
-          marginPagesDisplayed={2}
-          pageRangeDisplayed={5}
-          onPageChange={handlePageChange}
-          containerClassName={"pagination"}
-          activeClassName={"active"}
-        />
       </div>
     </div>
   );
