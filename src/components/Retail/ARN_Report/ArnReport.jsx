@@ -11,6 +11,7 @@ import { ExcelToExport } from "../ExcelToExport";
 import ExportToPdf from "../ExportToPdf";
 import LoaderSearch from "../../Table/LoaderSearch";
 import ScheduleModal from "../../Shared/Modal/ScheduleModal";
+import "./Arn.css"
 const ArnReport = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
@@ -24,7 +25,7 @@ const ArnReport = () => {
     loading,
   } = useDataContext();
 
-  const togglehide =  () => {
+  const togglehide = () => {
     try {
       setHide(true);
     } catch (error) {
@@ -36,12 +37,9 @@ const ArnReport = () => {
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
-  
-  const {
-    handleStartDateChange,
-    handleEndDateChange,
-    handleSelectType,
-  } = Retail_Transaction();
+
+  const { handleStartDateChange, handleEndDateChange, handleSelectType } =
+  Retail_Transaction();
 
   const commonReport = emproles;
   return (
@@ -84,8 +82,8 @@ const ArnReport = () => {
                           </h5>
                         </button>
                       </div>
-                      <div className="row d-flex justify-content-around">
-                        {/* start datw */}
+                      <div className="row mt-3 d-flex justify-content-around">
+                        {/* start date */}
                         <div className="form-group col-md-2">
                           <label for="">
                             <b> Start Date </b>
@@ -115,22 +113,17 @@ const ArnReport = () => {
                             onChange={handleEndDateChange}
                           />
                         </div>
-                        {/* asset class */}
+
+                        {/* arncode */}
                         <div class="form-group col-md-2">
                           <label for="">
-                            <b>Asset Class</b>
+                            <b> Enter ARN </b>
                           </label>
-                          <select
-                            name=""
-                            id="ab"
-                            class="form-select form-control"
-                          >
-                            <option value="">All </option>
-                            <option value="">Arbitrage </option>
-                            <option value="">Cash </option>
-                            <option value="">Equity </option>
-                            <option value="">Fixed Income</option>
-                          </select>
+                          <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Enter ARN Code"
+                          />
                         </div>
                         {/* select type */}
                         <div class="form-group col-md-2">
@@ -149,38 +142,50 @@ const ArnReport = () => {
                             <option value="GROSSSALES">GROSS SALES </option>
                           </select>
                         </div>
-                        {/* scheme details */}
                       </div>
 
-                      <div className="row d-flex justify-content-around">
-                        {/* <div class="col-md-1"></div> */}
-                        <div className="col-md-4">
-                          <div className="form-group col-md-3  mt-4">
-                            <label className="form-lables">
-                              {/* <b> Scheme</b> */}
+                      <div className="row mt-4 d-flex justify-content-around">
+                        
+                          {/* asset class */}
+                          <div class="form-group col-md-2">
+                            <label for="">
+                              <b>Asset Class</b>
                             </label>
-                            {/* <Multiselect
-                          options={options}
-                          selectedValues={selectedSchemes}
-                          onSelect={functionToHandleSelect}
-                          onRemove={functionToHandleRemove}
-                          displayValue="name"
-                          /> */}
+                            <select
+                              name=""
+                              id="ab"
+                              class="form-select form-control"
+                            >
+                              <option value="">All </option>
+                              <option value="">Arbitrage </option>
+                              <option value="">Cash </option>
+                              <option value="">Equity </option>
+                              <option value="">Fixed Income</option>
+                            </select>
                           </div>
-                        </div>
-                        {/* coloumn and filter
-                      <div className=" col-md-2 media">
-                        <Filter />
-                      </div>
-                      <div className="col-md-2">
-                        <DropDown />
-                      </div> */}
-                        {/* search button */}
-                        <div className="col-md-4"></div>
-                        <div className="col-md-4 d-flex">
-                          <div className="col-md-6 mt-5 search ">
+                          {/* scheme details */}
+
+                          <div className="form-group col-md-3">
+                            <label className="form-lables">
+                              <b> Scheme</b>
+                            </label>
+                            <select
+                              name=""
+                              id="ab"
+                              class="form-select form-control"
+                            >
+                              <option value="">t </option>
+                              <option value="">h </option>
+                              <option value="">Cash </option>
+                            </select>
+                          </div>
+
+                          
+                          {/* search button */}
+
+                          <div className="col-md-2 search mt-3 ">
                             <button
-                              className="btn  BgcolorOrange float-end mx-2 "
+                              className="btn  BgcolorOrange float-end"
                               onClick={togglehide}
                             >
                               <b className="colorwhite"> Search</b>
@@ -188,8 +193,8 @@ const ArnReport = () => {
                           </div>
 
                           {/* export, pdf, model */}
-                          <div className="col-md-6 mt-5 tabs ">
-                            <p className="exporttabretail">
+                          <div className="col-md-2 arnexport mt-3 ">
+                            <p>
                               <ExcelToExport />
                               |<ExportToPdf />|
                               <img src={msg} alt="msgicon" /> |{" "}
@@ -202,7 +207,7 @@ const ArnReport = () => {
                               />
                             </p>
                           </div>
-                        </div>
+                        
                       </div>
                       <ScheduleModal />
                       <>

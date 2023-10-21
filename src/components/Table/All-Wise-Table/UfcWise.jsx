@@ -5,7 +5,6 @@ import ExportToPDF from "../../Retail/AUM/ExportToPDF";
 import { Link } from "react-router-dom";
 import { ExportExcelUfc } from "./ExportExcel";
 import { AllUfcwise } from "../../Retail/RetailApi/RegionApi";
-import "./UfcPagination.css";
 import { useDataContext } from "../../../Context/DataContext";
 import TablePagination from "@mui/material/TablePagination";
 const UfcWise = () => {

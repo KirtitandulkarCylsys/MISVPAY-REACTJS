@@ -97,10 +97,12 @@ export const NfoApi = () => {
           } else {
             console.error("Error uploading file.");
           }
+          
+        }
+        
           uploadedRows++;
           const progress = (uploadedRows / totalRows) * 100;
           setUploadProgress(progress);
-        }
         setUploadProgress(100);
         console.log(result, "result");
       } catch (error) {

@@ -6,7 +6,6 @@ import Loader from "../Loader";
 import { ExportExcelRegion } from "./ExportExcel";
 import { ExportPdfRegion } from "./ExportPdfRegion";
 import { AllRegionwise } from "../../Retail/RetailApi/RegionApi";
-import "./RegionPagination.css";
 import { useDataContext } from "../../../Context/DataContext";
 import TablePagination from "@mui/material/TablePagination";
 

@@ -29,7 +29,7 @@ const NfoSalesTable = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-  const { nfo_details, loading, handleDeleteAndUpload, uploadProgress } = NfoApi();
+  const { nfo_details, loading, handleUpload, uploadProgress } = NfoApi();
 
   const handleExport = () => {
     ExportToExcel(nfo_details, "NFO Sales Details");
@@ -50,7 +50,7 @@ const NfoSalesTable = () => {
           const parsedData = await utils.sheet_to_json(sheet, { header: 1 });
           console.log("Parsed Excel Data:", parsedData);
           setExcelData(parsedData);
-          handleDeleteAndUpload(parsedData);
+          handleUpload(parsedData);
         } catch (error) {
           console.error("Error reading the Excel file:", error);
         }

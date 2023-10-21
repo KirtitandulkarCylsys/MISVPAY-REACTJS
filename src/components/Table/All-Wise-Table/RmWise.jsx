@@ -6,7 +6,6 @@ import { ExportPdfRegion } from "./ExportPdfRegion";
 import { ExportExcelRM } from "./ExportExcel";
 import { AllRmwise } from "../../Retail/RetailApi/RegionApi";
 import TablePagination from "@mui/material/TablePagination";
-import "./RmPagination.css";
 import LoaderSearch from "../LoaderSearch";
 import { useDataContext } from "../../../Context/DataContext";
 const RmWise = () => {
