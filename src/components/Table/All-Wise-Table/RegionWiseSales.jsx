@@ -7,7 +7,7 @@ import { ExportExcelRegion } from "./ExportExcel";
 import { ExportPdfRegion } from "./ExportPdfRegion";
 import { AllRegionwise } from "../../Retail/RetailApi/RegionApi";
 import { useDataContext } from "../../../Context/DataContext";
-import TablePagination from "@mui/material/TablePagination";
+import {TablePagination} from "@mui/material";
 
 const RegionWiseSales = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);

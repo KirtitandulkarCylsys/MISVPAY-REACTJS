@@ -5,7 +5,7 @@ import { NfoApi } from "./NfoApi";
 import "./NfoSales.css";
 import excel from "../../Assets/images/excel_icon.png";
 import LoaderSearch from "../../Table/LoaderSearch";
-import TablePagination from "@mui/material/TablePagination";
+import {TablePagination} from "@mui/material";
 import { ExportToExcel } from "../AUM/ExportToExcel";
 import ExportToPDF from "../AUM/ExportToPDF";
 import { read, utils } from "xlsx";
