@@ -28,9 +28,9 @@ function App() {
         <Route path='/Transaction' element={<Retail_Transaction/>}/>
         <Route path='/Table' element={<Table/>}/>
         <Route path='/Aum' element={<Search/>}/>
-        <Route path='/RegionWiseSales/:select_type/:startDate/:endDate' element={<RegionWiseSales/>}/>
-        <Route path='/UfcWise/:select_type' element={<UfcWise/>}/>
-        <Route path='/RmWise/:select_type' element={<RmWise/>}/>
+        <Route path='/RegionWiseSales' element={<RegionWiseSales/>}/>
+        <Route path='/UfcWise' element={<UfcWise/>}/>
+        <Route path='/RmWise' element={<RmWise/>}/>
         <Route path='/AumRegionReport' element={<AumRegionReport/>}/>
         <Route path="/AumUfcReport" element={<AumUfcReport />} />
         <Route path='TransactionReport' element={<TransactionReport/>}/>

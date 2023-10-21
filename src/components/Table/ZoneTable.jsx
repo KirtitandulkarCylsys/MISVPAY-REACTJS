@@ -1,151 +1,182 @@
-import React, { useMemo, useState } from "react";
-import Navbar from "../../Shared/Navbar";
-import SideBar from "../../Shared/SideBar/SideBar";
-import ExportToPDF from "../../Retail/AUM/ExportToPDF";
+import React, { useContext, useEffect, useState } from "react";
+import Loader from "./Loader";
 import { Link } from "react-router-dom";
-import { ExportExcelUfc } from "./ExportExcel";
-import { AllUfcwise } from "../../Retail/RetailApi/RegionApi";
-import { useDataContext } from "../../../Context/DataContext";
-import {TablePagination} from "@mui/material";
-const UfcWise = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [page, setPage] = useState(2);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-
+import RegionTable from "./RegionTable";
+import "./ZoneTable.css";
+import Api from "../Retail/RetailApi/Api";
+import ReactPaginate from "react-paginate";
+import { useDataContext } from "../../Context/DataContext";
+const ZoneTable = () => {
+  const [clickedIndex, setClickedIndex] = useState(-1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [totalPages, setTotalPages] = useState("");
+  const[ currentPage, setCurrentPage] =useState(1);
+  const [counter, setCounter] = useState(1);
   const {
-    start_Date,
-    end_Date,
-    rolwiseselectype,
-    emproles,
-    channel,
-    formatNumberToIndianFormat,
-    emp_id,
-    QUARTERData,
+    zonetablecurrentPage,
+    zontablepageSize,
+    setZonetablepageSize,
+    setZonetablecurrentPage,
+    fetchTransactionSummary,
+    summary_report,formatNumberToIndianFormat,start_Date,end_Date,rolwiseselectype
   } = useDataContext();
 
-  const formattedStartDate = start_Date.split("-").reverse().join("/");
-  const formattedEndDate = end_Date.split("-").reverse().join("/");
-  const quarter = QUARTERData.replace("-", "").replace("-", "");
+  useEffect(()=>{
+    console.log(counter,'zonetablecurrentPage');
+    console.log(zontablepageSize, 'zontablepageSize');
+    if(counter > 1){
+      fetchTransactionSummary(zontablepageSize, counter.toString());
+    }
+  },[counter]);
 
-  const queryParams = useMemo(() => {
-    return new URLSearchParams({
-      employee_id: emp_id,
-      emprole: emproles,
-      quarter: quarter,
-      start_date: formattedStartDate,
-      end_date: formattedEndDate,
-      select_type: rolwiseselectype,
-      scheme_code: "nill",
-      channel: channel,
-      zone: "",
-      region: "",
-      ufc: "",
-      rm: "nill",
-      common_report: "ALL_UFCWISE",
-    });
-  }, [
-    emp_id,
-    rolwiseselectype,
-    emproles,
-    formattedStartDate,
-    formattedEndDate,
-    channel,
-    quarter,
-  ]);
-  const { ufcwise } = AllUfcwise(queryParams);
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
+  const handleButtonClick = (index) => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+    if (index === clickedIndex) {
+      setClickedIndex(-1);
+    } else {
+      setClickedIndex(index);
+    }
   };
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
+  const itemsperPage =
+    zontablepageSize === ""
+      ? summary_report.length
+      : parseInt(zontablepageSize);
+  useEffect(() => {
+    setZonetablecurrentPage("");
+    setTotalPages(Math.ceil(summary_report.length / itemsperPage));
+  }, [zontablepageSize]);
+  useEffect(()=>{
+    currentPage=== 0 ? setZonetablecurrentPage(""):
+    setZonetablecurrentPage(currentPage.toString());
+    console.log(currentPage,'currentPage')
+  },[currentPage])
 
   const calculateTotal = (columnName) => {
     let total = 0;
-    if (ufcwise && Array.isArray(ufcwise)) {
-      ufcwise.forEach((item) => {
+    if (summary_report && Array.isArray(summary_report)) {
+      summary_report.forEach((item) => {
         total += parseFloat(item[columnName]);
       });
     }
     return total;
   };
 
+  const handlePageClick = (selectedPage) => {
+    setCurrentPage(selectedPage.selected)
+    setZonetablecurrentPage(currentPage.toString());
+    console.log(selectedPage.selected,'selectedPage.selected');
+  };
+
+  const handlePageSizeChange = (e) => {
+    console.log(e.target.value, "pagesize");
+    setZonetablecurrentPage(zonetablecurrentPage.toString())
+    setZonetablepageSize(e.target.value);
+    fetchTransactionSummary(e.target.value,counter.toString());
+  };
+ 
+  // const handlePageSizeChange = (e) => {
+  //   const newSize = e.target.value;
+  //   setZonetablepageSize(newSize);
+  //   setZonetablecurrentPage("1"); 
+  //   fetchTransactionSummary();
+  // };
+  // const handlePrevious = () => {
+  //   // Decrease the page number by 1
+  //   const newPage = parseInt(zonetablecurrentPage) - 1;
+  //   if (newPage >= 1) {
+  //     setZonetablecurrentPage(newPage.toString());
+  //     fetchTransactionSummary();
+  //   }
+  // };
+  // const handleNext = () => {
+  //   const newPage = parseInt(zonetablecurrentPage) + 1;
+  //   setZonetablecurrentPage(newPage.toString());
+  //   fetchTransactionSummary();
+  // };
+ 
+  // const startIndex = currentPage * itemsperPage;
+  // const endIndex = startIndex + itemsperPage;
+  // const subset = summary_report.slice(startIndex, endIndex);
+  // console.log(startIndex,'startIndex', subset,'subset', summary_report,'summary_report');
+  // console.log(endIndex,'endIndex');
+
+  //  const totalPages = Math.ceil(summary_report.length / zontablepageSize);
+  // const isNextButtonDisabled = parseInt(zonetablecurrentPage) >= totalPages;
   return (
-    <div className="new-component container-fluid">
-      <Navbar onToggle={toggleSidebar} />
-      <div className="d-flex">
-        <SideBar isOpen={sidebarOpen} />
-        <div
-          className={` ${sidebarOpen ? "dashboard-closed" : "dashboard-full"}`}
-        >
-          <div className="bg-white card m-4" style={{ borderRadius: "10px" }}>
-            <div className="col-md-12">
-              <div className="row mt-2 bg-white">
-                <div className="head">
-                  <h4>
-                    <b className="black-color">All India UFC Wise</b>
-                  </h4>
-                  <h5>
-                    <b className="gray-color">(In Lakhs)</b>
-                  </h5>
-                </div>
-                <div
-                  className="col-md-12 d-flex justify-content-between"
-                  style={{ marginTop: "30px" }}
+    <>
+      <div className="">
+        <div>
+          <div>
+            <div className="row mt-4 justify-content-around">
+              {/* <div className="col-md-2 d-flex">
+                <label htmlFor="">
+                  <b>Select Entries</b>
+                </label>
+                <select
+                  className="form-select form-control w-50"
+                  value={zontablepageSize} // Controlled component
+                  onChange={handlePageSizeChange}
                 >
+                  <option value="5">5 </option>
+                  <option value="10">10 </option>
+                  <option value="20">20 </option>
+                  <option value="30">30 </option>
+                  <option value="40">40</option>
+                </select>
+              </div> */}
+              <div className="col-md-2 list-group">
+                <p className="theader">
                   <Link
-                    to="/Transaction"
-                    className="btn"
-                    style={{
-                      backgroundColor: "#4C6072",
-                      color: "white",
-                      height: "fit-content",
-                    }}
+                    className="btn textlink"
+                    to='/RegionWiseSales'
                   >
-                    back
+                    <b>All India Region Wise</b>
                   </Link>
-                  <p className="icon">
-                    <ExportExcelUfc />
-                    |
-                    <ExportToPDF />
-                  </p>
-                </div>
+                </p>
               </div>
-              <div className="scrollbarRegion">
-                <table className="mt-3 table " id="ufc1">
-                  <thead style={{ backgroundColor: "#4C6072", color: "white" }}>
-                    <tr className="">
+              <div className="col-md-2">
+                <p className="theader">
+                  <Link className="btn textlink" to='/UfcWise'>
+                    <b>All India UFC Wise </b>
+                  </Link>
+                </p>
+              </div>
+              <div className="col-md-2">
+                <p className="theader">
+                  <Link className=" btn textlink" to='/RmWise'>
+                    <b>All India RM Wise </b>
+                  </Link>
+                </p>
+              </div>
+            </div>
+            <div className="row mt-4 mr-4 justify-content-center ">
+              <div className="col-md-3" />
+              <div className="col-md-12 p-3 schrollbar ">
+                <table className="table small border" id="table1">
+                  <thead>
+                    <tr className=" zoneTable border-1 ">
                       <th
                         rowSpan="2"
-                        className="border-end border-1"
+                        className="border-1  text-center"
                         style={{ lineHeight: "4" }}
                       >
-                        UFC code
-                      </th>
-                      <th
-                        rowSpan="2"
-                        className="border-end border-1"
-                        style={{ lineHeight: "4" }}
-                      >
-                        UFC
+                        Zone
                       </th>
                       <th colspan="7" className="border-1 text-center ">
                         Sales
                       </th>
-                      <th colspan="7" className="border-1 text-center ">
+                      <th colspan="7" className="border-1 text-center">
                         Redemption
                       </th>
-                      <th colspan="7" className="border-1 text-center ">
+                      <th colspan="7" className="text-center">
                         NetSales
                       </th>
                     </tr>
-                    <tr>
+                    <tr className="zoneTable border-1 ">
                       <th className="forright ">Equity</th>
                       <th className="forright">Hybrid</th>
                       <th className="forright">Arbitrage</th>
@@ -169,143 +200,148 @@ const UfcWise = () => {
                       <th className="forright border-end">Total</th>
                     </tr>
                   </thead>
-                  <tbody style={{ backgroundColor: "#DADADA" }}>
-                    {ufcwise
-                      .slice(
-                        page * rowsPerPage,
-                        page * rowsPerPage + rowsPerPage
-                      )
-                      .map((ufc, index) => {
-                        return (
-                          <tr key={index}>
-                            <td>{ufc.UFC_CODE}</td>
-                            <td>{ufc.UFC_NAME}</td>
-                            <td className="text-end">
-                              {formatNumberToIndianFormat(
-                                parseFloat(ufc.SEQUITY)
+                  <tbody>
+                    {summary_report?.map((summary, index) => {
+                      return (
+                        <React.Fragment key={index}>
+                          <tr>
+                            <td>
+                              <button
+                                className="textlink"
+                                onClick={() => handleButtonClick(index)}
+                                disabled={isLoading}
+                              >
+                                <b className="sharp-font"> {summary.ZONE}</b>
+                              </button>
+                              {isLoading && (
+                                <div className="text-center mt-4">
+                                  <i className="fas fa-spinner fa-spin fa-2x loder"></i>{" "}
+                                  <Loader className="loder" />
+                                </div>
                               )}
                             </td>
                             <td className="text-end">
                               {formatNumberToIndianFormat(
-                                parseFloat(ufc.SHYBRID)
+                                parseFloat(summary.SEQUITY)
                               )}
                             </td>
                             <td className="text-end">
                               {formatNumberToIndianFormat(
-                                parseFloat(ufc.SARBITRAGE)
+                                parseFloat(summary.SHYBRID)
                               )}
                             </td>
                             <td className="text-end">
                               {formatNumberToIndianFormat(
-                                parseFloat(ufc.SPASSIVE)
+                                parseFloat(summary.SARBITRAGE)
                               )}
                             </td>
                             <td className="text-end">
                               {formatNumberToIndianFormat(
-                                parseFloat(ufc.SFIXED_INCOME)
+                                parseFloat(summary.SPASSIVE)
                               )}
                             </td>
                             <td className="text-end">
                               {formatNumberToIndianFormat(
-                                parseFloat(ufc.SCASH)
-                              )}
-                            </td>
-                            <td
-                              className="text-end"
-                              style={{ backgroundColor: "#8080805c" }}
-                            >
-                              <b>
-                                {formatNumberToIndianFormat(
-                                  parseFloat(ufc.STOTAL)
-                                )}
-                              </b>
-                            </td>
-                            <td className="text-end">
-                              {formatNumberToIndianFormat(
-                                parseFloat(ufc.REQUITY)
+                                parseFloat(summary.SFIXED_INCOME)
                               )}
                             </td>
                             <td className="text-end">
                               {formatNumberToIndianFormat(
-                                parseFloat(ufc.RHYBRID)
+                                parseFloat(summary.SCASH)
+                              )}
+                            </td>
+                            <td className="text-end color-biege" id="total">
+                              {formatNumberToIndianFormat(
+                                parseFloat(summary.STOTAL)
+                              )}
+                            </td>
+
+                            {/* redemption data */}
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(
+                                parseFloat(summary.REQUITY).toFixed(2)
                               )}
                             </td>
                             <td className="text-end">
                               {formatNumberToIndianFormat(
-                                parseFloat(ufc.RARBITRAGE)
+                                parseFloat(summary.RHYBRID).toFixed(2)
                               )}
                             </td>
                             <td className="text-end">
                               {formatNumberToIndianFormat(
-                                parseFloat(ufc.RPASSIVE)
+                                parseFloat(summary.RARBITRAGE).toFixed(2)
                               )}
                             </td>
                             <td className="text-end">
                               {formatNumberToIndianFormat(
-                                parseFloat(ufc.RFIXED_INCOME)
+                                parseFloat(summary.RPASSIVE).toFixed(2)
                               )}
                             </td>
                             <td className="text-end">
                               {formatNumberToIndianFormat(
-                                parseFloat(ufc.RCASH)
-                              )}
-                            </td>
-                            <td
-                              className="text-end"
-                              style={{ backgroundColor: "#8080805c" }}
-                            >
-                              <b>
-                                {formatNumberToIndianFormat(
-                                  parseFloat(ufc.RTOTAL)
-                                )}
-                              </b>
-                            </td>
-                            <td className="text-end">
-                              {formatNumberToIndianFormat(
-                                parseFloat(ufc.NEQUITY)
+                                parseFloat(summary.RFIXED_INCOME).toFixed(2)
                               )}
                             </td>
                             <td className="text-end">
                               {formatNumberToIndianFormat(
-                                parseFloat(ufc.NHYBRID)
+                                parseFloat(summary.RCASH).toFixed(2)
+                              )}
+                            </td>
+                            <td className="text-end" id="total">
+                              {formatNumberToIndianFormat(
+                                parseFloat(summary.RTOTAL).toFixed(2)
+                              )}
+                            </td>
+
+                            {/* netsales data */}
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(
+                                parseFloat(summary.NEQUITY)
                               )}
                             </td>
                             <td className="text-end">
                               {formatNumberToIndianFormat(
-                                parseFloat(ufc.NARBITRAGE)
+                                parseFloat(summary.NHYBRID)
                               )}
                             </td>
                             <td className="text-end">
                               {formatNumberToIndianFormat(
-                                parseFloat(ufc.NPASSIVE)
+                                parseFloat(summary.NARBITRAGE)
                               )}
                             </td>
                             <td className="text-end">
                               {formatNumberToIndianFormat(
-                                parseFloat(ufc.NFIXED_INCOME)
+                                parseFloat(summary.NPASSIVE)
                               )}
                             </td>
                             <td className="text-end">
                               {formatNumberToIndianFormat(
-                                parseFloat(ufc.NCASH)
+                                parseFloat(summary.NFIXED_INCOME)
                               )}
                             </td>
-                            <td
-                              className="text-end"
-                              style={{ backgroundColor: "#8080805c" }}
-                            >
-                              <b>
-                                {formatNumberToIndianFormat(
-                                  parseFloat(ufc.NTOTAL)
-                                )}
-                              </b>
+                            <td className="text-end">
+                              {formatNumberToIndianFormat(
+                                parseFloat(summary.NCASH)
+                              )}
+                            </td>
+                            <td className="text-end" id="total">
+                              {formatNumberToIndianFormat(
+                                parseFloat(summary.NTOTAL)
+                              )}
                             </td>
                           </tr>
-                        );
-                      })}
-                    <tr style={{ backgroundColor: "#4C6072", color: "white" }}>
+                          {clickedIndex === index && (
+                            <tr key={`subtable-${index}`}>
+                              <td colSpan="22" className="p-0">
+                                <RegionTable zone={summary.ZONE}/>
+                              </td>
+                            </tr>
+                          )}
+                        </React.Fragment>
+                      );
+                    })}
+                    <tr className="zoneTable">
                       <td>TOTAL</td>
-                      <td></td>
                       <td className="text-end">
                         {formatNumberToIndianFormat(
                           parseFloat(calculateTotal("SEQUITY").toFixed(2))
@@ -416,22 +452,31 @@ const UfcWise = () => {
                     </tr>
                   </tbody>
                 </table>
-              </div>
-              <div className="ufcpagination-container">
-                <TablePagination
-                  count={ufcwise.length}
-                  page={page}
-                  onPageChange={handleChangePage}
-                  rowsPerPage={rowsPerPage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                />
+                {/* <ReactPaginate
+                  previousLabel={"← Previous"}
+                  nextLabel={"Next →"}
+                  pageCount={totalPages}
+                  forcePage={zonetablecurrentPage}
+                  onPageChange={handlePageClick}
+                  containerClassName={"rmpagination"}
+                  previousLinkClassName={"pagination__link"}
+                  nextLinkClassName={"pagination__link"}
+                  disabledClassName={"pagination__link--disabled"}
+                  activeClassName={"pagination__link--active"}
+                /> */}
+                {/* <div>
+                  <button onClick={()=>setCounter(counter - 1)} className="btn">Previous</button>
+                  <button onClick={()=>setCounter(counter + 1)} className="btn">
+                    Next
+                  </button>
+                </div> */}
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
-export default UfcWise;
+export default ZoneTable;

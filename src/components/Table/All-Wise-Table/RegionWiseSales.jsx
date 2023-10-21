@@ -1,17 +1,19 @@
-import React, { useMemo, useState } from "react";
+import React, { useState, useMemo } from "react";
 import Navbar from "../../Shared/Navbar";
 import SideBar from "../../Shared/SideBar/SideBar";
 import { Link } from "react-router-dom";
+import Loader from "../Loader";
+import { ExportExcelRegion } from "./ExportExcel";
 import { ExportPdfRegion } from "./ExportPdfRegion";
-import { ExportExcelRM } from "./ExportExcel";
-import { AllRmwise } from "../../Retail/RetailApi/RegionApi";
-import {TablePagination} from "@mui/material";
-import LoaderSearch from "../LoaderSearch";
+import { AllRegionwise } from "../../Retail/RetailApi/RegionApi";
 import { useDataContext } from "../../../Context/DataContext";
-const RmWise = () => {
+import {TablePagination} from "@mui/material";
+
+const RegionWiseSales = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+
   const {
     start_Date,
     end_Date,
@@ -23,9 +25,10 @@ const RmWise = () => {
     QUARTERData,
   } = useDataContext();
 
-  const formattedStartDate = start_Date?.split("-").reverse().join("/");
-  const formattedEndDate = end_Date?.split("-").reverse().join("/");
+  const formattedStartDate = start_Date.split("-").reverse().join("/");
+  const formattedEndDate = end_Date.split("-").reverse().join("/");
   const quarter = QUARTERData.replace("-", "").replace("-", "");
+
   const queryParams = useMemo(() => {
     return new URLSearchParams({
       employee_id: emp_id,
@@ -40,21 +43,17 @@ const RmWise = () => {
       region: "",
       ufc: "",
       rm: "nill",
-      common_report: "ALL_RMWISE",
+      common_report: "ALL_REGIONWISE",
     });
   }, [
+    quarter,
     emp_id,
     rolwiseselectype,
     emproles,
     formattedStartDate,
     formattedEndDate,
     channel,
-    quarter,
   ]);
-  const { rmwise, loading } = AllRmwise(queryParams);
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -64,15 +63,23 @@ const RmWise = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+  const { regionwise, loading } = AllRegionwise(queryParams);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
   const calculateTotal = (columnName) => {
     let total = 0;
-    if (rmwise && Array.isArray(rmwise)) {
-      rmwise.forEach((item) => {
+    if (regionwise && Array.isArray(regionwise)) {
+      regionwise.forEach((item) => {
         total += parseFloat(item[columnName]);
       });
     }
     return total;
   };
+
   return (
     <div className="new-component container-fluid">
       <Navbar onToggle={toggleSidebar} />
@@ -86,75 +93,73 @@ const RmWise = () => {
               <div className="row mt-2 bg-white">
                 <div className="head">
                   <h4>
-                    <b className="black-color">All India RM Wise</b>
+                    <b className="black-color">All India Region Wise</b>
                   </h4>
                   <h5>
                     <b className="gray-color">(In Lakhs)</b>
                   </h5>
                 </div>
                 <div
-                  className="col-md-12 d-flex justify-content-between "
+                  className="col-md-12 d-flex justify-content-lg-between "
                   style={{ marginTop: "30px" }}
                 >
                   <Link
                     to="/Transaction"
-                    className="btn"
-                    style={{
-                      backgroundColor: "rgb(58 94 147 / 98%)",
-                      color: "white",
-                      height: "fit-content",
-                    }}
+                    className=" btn colorwhite BgcolorOrange"
+                    style={{ height: "fit-content" }}
                   >
                     back
                   </Link>
+
                   <p className="icon">
-                    <ExportExcelRM />
+                    <ExportExcelRegion />
                     |
                     <ExportPdfRegion />
                   </p>
                 </div>
               </div>
               {loading ? (
-                <div className="text-center mt-4">
-                  <i className="fas fa-spinner fa-spin fa-2x"></i>{" "}
-                  <LoaderSearch />
-                </div>
+                <Loader />
+              ) : regionwise.length === 0 ? (
+                <p>No data available.</p>
               ) : (
                 <div className="scrollbarRegion">
-                  <table className="mt-3 table nested-table">
-                    <thead
-                      style={{
-                        backgroundColor: "rgb(58 94 147 / 98%)",
-                        color: "white",
-                      }}
-                    >
-                      <tr className="">
+                  <table
+                    className="mt-3 table active "
+                    style={{
+                      backgroundColor: "white",
+                      border: "2px solid",
+                      borderColor: "#EE8B3A",
+                      borderBottomColor: "white",
+                    }}
+                    id="region1"
+                  >
+                    <thead>
+                      <tr className="colorwhite BgcolorOrange">
                         <th
-                          scope="col"
                           rowSpan="2"
-                          className="border-end border-1 text-center"
+                          className="border-1 border-end text-center"
                           style={{ lineHeight: "4" }}
                         >
-                          RM Code
+                          Region
                         </th>
                         <th
-                          scope="col"
-                          rowSpan="2"
-                          className="border-end border-1 text-center"
+                          colspan="7"
+                          className="border-1 border-end text-center "
                         >
-                          EMPLOYEE NAME
-                        </th>
-                        <th colspan="7" className="border-1 text-center ">
                           Sales
                         </th>
-                        <th colspan="7" className="border-1 text-center ">
+                        <th
+                          colspan="7"
+                          className="border-1 border-end text-center "
+                        >
                           Redemption
                         </th>
-                        <th colspan="7" className="border-1 text-center ">
+                        <th colspan="7" className="text-center">
                           NetSales
                         </th>
                       </tr>
-                      <tr>
+                      <tr className="colorwhite BgcolorOrange">
                         <th className="forright ">Equity</th>
                         <th className="forright">Hybrid</th>
                         <th className="forright">Arbitrage</th>
@@ -178,143 +183,126 @@ const RmWise = () => {
                         <th className="forright border-end">Total</th>
                       </tr>
                     </thead>
-                    <tbody>
-                      {rmwise
+                    <tbody style={{ backgroundColor: "#DADADA" }}>
+                      {regionwise
                         .slice(
                           page * rowsPerPage,
                           page * rowsPerPage + rowsPerPage
                         )
-                        .map((rm) => {
+                        .map((region, index) => {
                           return (
-                            <tr style={{ backgroundColor: "#dee2e69c" }}>
-                              <td>
-                                <button className="textlink">
-                                  <b className="sharp-font">{rm.RMCODE}</b>
-                                </button>
-                              </td>
-                              <td>{rm.EMP_NAME}</td>
+                            <tr key={index}>
+                              <td>{region.REGION}</td>
                               <td className="text-end">
                                 {formatNumberToIndianFormat(
-                                  parseFloat(rm.SEQUITY)
+                                  parseFloat(region.SEQUITY)
                                 )}
                               </td>
                               <td className="text-end">
                                 {formatNumberToIndianFormat(
-                                  parseFloat(rm.SHYBRID)
+                                  parseFloat(region.SHYBRID)
                                 )}
                               </td>
                               <td className="text-end">
                                 {formatNumberToIndianFormat(
-                                  parseFloat(rm.SARBITRAGE)
+                                  parseFloat(region.SARBITRAGE)
                                 )}
                               </td>
                               <td className="text-end">
                                 {formatNumberToIndianFormat(
-                                  parseFloat(rm.SPASSIVE)
+                                  parseFloat(region.SPASSIVE)
                                 )}
                               </td>
                               <td className="text-end">
                                 {formatNumberToIndianFormat(
-                                  parseFloat(rm.SFIXED_INCOME)
+                                  parseFloat(region.SFIXED_INCOME)
                                 )}
                               </td>
                               <td className="text-end">
                                 {formatNumberToIndianFormat(
-                                  parseFloat(rm.SCASH)
+                                  parseFloat(region.SCASH)
                                 )}
                               </td>
-                              <td className="text-end">
-                                <b>
-                                  {formatNumberToIndianFormat(
-                                    parseFloat(rm.STOTAL)
-                                  )}
-                                </b>
-                              </td>
-                              <td className="text-end">
+                              <td className="text-end color-biege" id="total">
                                 {formatNumberToIndianFormat(
-                                  parseFloat(rm.REQUITY)
+                                  parseFloat(region.STOTAL)
                                 )}
                               </td>
                               <td className="text-end">
                                 {formatNumberToIndianFormat(
-                                  parseFloat(rm.RHYBRID)
+                                  parseFloat(region.REQUITY)
                                 )}
                               </td>
                               <td className="text-end">
                                 {formatNumberToIndianFormat(
-                                  parseFloat(rm.RARBITRAGE)
+                                  parseFloat(region.RHYBRID)
                                 )}
                               </td>
                               <td className="text-end">
                                 {formatNumberToIndianFormat(
-                                  parseFloat(rm.RPASSIVE)
+                                  parseFloat(region.RARBITRAGE)
                                 )}
                               </td>
                               <td className="text-end">
                                 {formatNumberToIndianFormat(
-                                  parseFloat(rm.RFIXED_INCOME)
+                                  parseFloat(region.RPASSIVE)
                                 )}
                               </td>
                               <td className="text-end">
                                 {formatNumberToIndianFormat(
-                                  parseFloat(rm.RCASH)
-                                )}
-                              </td>
-                              <td className="text-end">
-                                <b>
-                                  {formatNumberToIndianFormat(
-                                    parseFloat(rm.RTOTAL)
-                                  )}
-                                </b>
-                              </td>
-                              <td className="text-end">
-                                {formatNumberToIndianFormat(
-                                  parseFloat(rm.NEQUITY)
+                                  parseFloat(region.RFIXED_INCOME)
                                 )}
                               </td>
                               <td className="text-end">
                                 {formatNumberToIndianFormat(
-                                  parseFloat(rm.NHYBRID)
+                                  parseFloat(region.RCASH)
+                                )}
+                              </td>
+                              <td className="text-end" id="total">
+                                {formatNumberToIndianFormat(
+                                  parseFloat(region.RTOTAL)
                                 )}
                               </td>
                               <td className="text-end">
                                 {formatNumberToIndianFormat(
-                                  parseFloat(rm.NARBITRAGE)
+                                  parseFloat(region.NEQUITY)
                                 )}
                               </td>
                               <td className="text-end">
                                 {formatNumberToIndianFormat(
-                                  parseFloat(rm.NPASSIVE)
+                                  parseFloat(region.NHYBRID)
                                 )}
                               </td>
                               <td className="text-end">
                                 {formatNumberToIndianFormat(
-                                  parseFloat(rm.NFIXED_INCOME)
+                                  parseFloat(region.NARBITRAGE)
                                 )}
                               </td>
                               <td className="text-end">
                                 {formatNumberToIndianFormat(
-                                  parseFloat(rm.NCASH)
+                                  parseFloat(region.NPASSIVE)
                                 )}
                               </td>
                               <td className="text-end">
-                                <b>
-                                  {formatNumberToIndianFormat(
-                                    parseFloat(rm.NTOTAL)
-                                  )}
-                                </b>
+                                {formatNumberToIndianFormat(
+                                  parseFloat(region.NFIXED_INCOME)
+                                )}
+                              </td>
+                              <td className="text-end">
+                                {formatNumberToIndianFormat(
+                                  parseFloat(region.NCASH)
+                                )}
+                              </td>
+                              <td className="text-end" id="total">
+                                {formatNumberToIndianFormat(
+                                  parseFloat(region.NTOTAL)
+                                )}
                               </td>
                             </tr>
                           );
                         })}
-                      <tr
-                        style={{
-                          backgroundColor: "rgb(58 94 147 / 98%)",
-                          color: "white",
-                        }}
-                      >
+                      <tr className="colorwhite BgcolorOrange">
                         <td>TOTAL</td>
-                        <td></td>
                         <td className="text-end">
                           {formatNumberToIndianFormat(
                             parseFloat(calculateTotal("SEQUITY").toFixed(2))
@@ -433,16 +421,14 @@ const RmWise = () => {
                   </table>
                 </div>
               )}
-              <div className="rmpagination-container">
-                <TablePagination
-                  count={rmwise.length}
-                  page={page}
-                  onPageChange={handleChangePage}
-                  rowsPerPage={rowsPerPage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-              </div>
             </div>
+            <TablePagination
+              count={regionwise.length}
+              page={page}
+              onPageChange={handleChangePage}
+              rowsPerPage={rowsPerPage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
           </div>
         </div>
       </div>
@@ -450,4 +436,4 @@ const RmWise = () => {
   );
 };
 
-export default RmWise;
+export default RegionWiseSales;

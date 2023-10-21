@@ -26,6 +26,8 @@ export const DataContextProvider = ({ children }) => {
   const UFCData = roleWiseData ? roleWiseData[0].UFC_CODE : null;
   const QUARTERData = roleWiseData ? roleWiseData[0].YEAR : null;
   const emp_id = roleWiseData ? roleWiseData[0].EMP_ID : null;
+
+
   let commonReportValue = "";
   switch (emproles) {
     case "ZH":
@@ -47,10 +49,11 @@ export const DataContextProvider = ({ children }) => {
     try {
       const formattedStartDate = start_Date?.split("-").reverse().join("/");
       const formattedEndDate = end_Date?.split("-").reverse().join("/");
+      const quarter =  QUARTERData.replace("-","").replace("-", "");;
       const queryParams = new URLSearchParams({
         employee_id: emp_id,
         emprole: emproles,
-        quarter: "202324Q2",
+        quarter: quarter,
         start_date: formattedStartDate,
         end_date: formattedEndDate,
         select_type: rolwiseselectype,
@@ -64,7 +67,7 @@ export const DataContextProvider = ({ children }) => {
         page_number:currentPage ,
         page_size: pagesize,
       });
-
+      console.log(quarter,"quarter");
       if (start_Date > end_Date) {
         toast.error("End Date must be Greater Than Start Date");
         setLoading(false);
@@ -79,6 +82,7 @@ export const DataContextProvider = ({ children }) => {
         setLoading(false);
         setHide(true);
         console.log(summary_report);
+
       }
     } catch (error) {
       console.error("error fetching transaction summary data", error);
@@ -106,7 +110,7 @@ export const DataContextProvider = ({ children }) => {
         setZonetablecurrentPage,
         setStart_Date,
         setEnd_Date,summary_report, fetchTransactionSummary,setRolwiseselectype, hide, setHide,
-        start_Date,end_Date,emproles,emp_id,rolwiseselectype,channel,zoneData,REGIONData,UFCData,loading,formatNumberToIndianFormat
+        start_Date,end_Date,emproles,emp_id,rolwiseselectype,channel,zoneData,REGIONData,UFCData,loading,formatNumberToIndianFormat,QUARTERData
       }}
     >
       {children}
