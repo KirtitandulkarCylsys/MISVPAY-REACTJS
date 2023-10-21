@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../../Assets/css/Shared/Sidebar.css";
 import SubSecondBar from "./SubSecondBar";
 import SubThirdBar from "./SubThirdBar";
@@ -8,6 +8,10 @@ import Retails from "../../Assets/images/retail.svg";
 import mapping from "../../Assets/images/mapping icon.png";
 
 const SideBar = ({ isOpen }) => {
+  const navigate = useNavigate();
+  const handleARN = ()=>{
+    navigate('/arnreport')
+  }
   return (
     <>
       <div className={`sidebar ${isOpen ? "open" : ""}`}>
@@ -119,12 +123,25 @@ const SideBar = ({ isOpen }) => {
                               </span>
                             </Link>
                           </button>
-                          <button id="sub-accor">
+                          <button id="sub-accor" onClick={handleARN}>
                             <span
                               className={`sidebar ${isOpen ? "" : "closed"}`}
                             >
                               ARN Transaction Reports
                             </span>
+                          </button>
+                          <button className=" p-0 pb-2 pt-2" id="sub-accor-active" >
+                            <Link to="/nfosales" style={{ textDecoration: "none",color:"white" }} >
+                              <span
+                                className={`sidebar ${isOpen ? "" : "closed"}`}
+                                style={{
+                                  marginLeft: "21px",
+                                  marginRight: "11px",
+                                }}
+                              >
+                                NFO Sales Details
+                              </span>
+                            </Link>
                           </button>
                         </div>
                       </div>
@@ -194,16 +211,28 @@ const SideBar = ({ isOpen }) => {
                             </span>
                           </Link>
                           <button className="mt-2 p-0 pb-2 pt-2" id="sub-accor">
+                          <Link to="/EtfSale" className="text-decoration-none">
+                            {" "}
                             <span
                               className={`sidebar ${isOpen ? "" : "closed"}`}
                               style={{
-                                marginLeft: "61px",
-                                marginRight: "59px",
+                                backgroundColor: "#352d94",
+                                color: "white",
+                                paddingTop: "12px",
+                                paddingBottom: "10px",
+                                fontSize: "11px",
+                                fontWeight: "bold",
+                                borderRadius: "5px",
+                                borderColor: "white",
+                                paddingRight: "9px",
+                                paddingLeft: "8px",
                               }}
                             >
-                              Detail View Report
+                               ETF SALE Report
                             </span>{" "}
+                            </Link>
                           </button>
+                          
                           <button id="sub-accor">
                             <span
                               className={`sidebar ${isOpen ? "" : "closed"}`}

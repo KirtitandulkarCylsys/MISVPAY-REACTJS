@@ -65,11 +65,24 @@ export const API_AUM_period = {
 };
 
 export const API_AUM_Region = {
-    DATA: (queryParams) => `${API}/aum_regions?${queryParams}`,
+    DATA: (queryParams) => `${API}/aum?${queryParams}`,
 };
 
 export const API_AUM_UFC = {
-    DATA: (queryParams) => `${API}/aum_ufc?${queryParams}`,
+    DATA: (queryParams) => `${API}/aum?${queryParams}`,
+};
+export const API_AUM_RM = {
+  DATA: (queryParams) => `${API}/aum?${queryParams}`,
+};
+export const API_ALL_REGION_AUM = {
+    DATA: (queryParams) => `${API}/aum?${queryParams}`,
+};
+export const API_ALL_UFC_AUM = {
+    DATA: (queryParams) => `${API}/aum?${queryParams}`,
+};
+
+export const API_ALL_RM_AUM = {
+    DATA: (queryParams) => `${API}/aum?${queryParams}`,
 };
 
 export const API_ALL_REGION_RETAIL = {
@@ -98,3 +111,18 @@ export const API_ACCOUNT_SUMMARY = {
 
 
 export default axiosInstance;
+export const API_NFO = {
+  DATA: (queryParams) => `${API}/nfo?${queryParams}`,
+}
+
+export const API_NFO_UPLOAD = {
+  DATA: (queryParams) => `${API}/nfo_upload?${queryParams}`,
+}
+
+
+export const API_ALL_ETF_SALE = {
+  DATA: (queryParams) => `${API}/etf_sale?${queryParams}`,
+};
+
+
+

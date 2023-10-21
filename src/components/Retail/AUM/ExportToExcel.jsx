@@ -1,14 +1,41 @@
-import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
+import excel from "../../../components/Assets/images/excel_icon.png";
 
-export const ExportToExcel = (apiData, fileName) => {
-    const fileType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
-    const fileExtension = ".xlsx"; 
-    const ws = XLSX.utils.json_to_sheet(apiData);
-    const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
-    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-    const data = new Blob([excelBuffer], { type: fileType });
-    FileSaver.saveAs(data, fileName + fileExtension);
+export const ExportToExcel = () => {
+    const exportToExcel = () => {
+      const mainTable1 = document.getElementById('table1');
+     
+      const wb = XLSX.utils.book_new();
+  
+      const processTable = (table, sheetName) => {
+        
+        const tableCopy = table.cloneNode(true);
+        const nestedTables = tableCopy.querySelectorAll('.nested-table');
+        nestedTables.forEach((nestedTable) => {
+          nestedTable.remove();
+        });
+  
+        const sheet = XLSX.utils.table_to_sheet(tableCopy);
+        XLSX.utils.book_append_sheet(wb, sheet, sheetName);
+  
+        nestedTables.forEach((nestedTable, index) => {
+          const nestedSheetName = `${sheetName}-Nested${index + 1}`;
+          processTable(nestedTable, nestedSheetName);
+        });
+      };
+  
+      processTable(mainTable1, 'Sales Table');
+     
+      XLSX.writeFile(wb, 'AUM_report.xlsx');
+    };
+    const mainTable1 = document.getElementById('table1');
+    return (
+      
+      <button onClick={exportToExcel} className="border-0">
+        <img src={excel} alt="excelicon" />
+      </button>
+      
+    );
 }
 
  

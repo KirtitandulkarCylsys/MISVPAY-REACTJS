@@ -4,72 +4,74 @@ import msg from "../Assets/images/msg_icon.png";
 import calender from "../Assets/images/date-time_icon.png";
 import SideBar from "../Shared/SideBar/SideBar";
 import Navbar from "../Shared/Navbar";
-import SalesTable from "../Table/SalesTable";
 import datetime from "../Assets/images/Vector (Stroke).png";
 import ScheduleModal from "../Shared/Modal/ScheduleModal";
-import LoaderSearch from "../Table/SubTable/LoaderSearch";
-import Api from "./RetailApi/Api";
+import LoaderSearch from "../Table/LoaderSearch";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // import { Scheme } from "../Retail/RetailApi/AUM_Api";
-import NetSalesTable from "../Table/NetSalesTable";
 import { ExcelToExport } from "./ExcelToExport";
 import ExportToPdf from "./ExportToPdf";
 // import Filter from "./Filter";
 // import DropDown from "./DropDown";
 import Multiselect from "multiselect-react-dropdown";
-import RegionSalesTable from "../Table/SubTable/RegionSalesTable";
-import RegionRedemptionTable from "../Table/SubTable/RegionRedemptionTable";
-import RegionNetSalesTable from "../Table/SubTable/RegionNetSalesTable";
-import RedemptionTable from "../Table/RedemptionTable";
-import UfcSalesTable from "../Table/SubTable/UFC/UfcSalesTable";
-import UfcRedemptionTable from "../Table/SubTable/UFC/UfcRedemptionTable";
-import UfcNetSalesTable from "../Table/SubTable/UFC/UfcNetSalesTable";
-import RmSalesTable from "../Table/SubTable/RMWISE/RmSalesTable";
-import RmRedemptionTable from "../Table/SubTable/RMWISE/RmRedemptionTable";
-import RmNetSalesTable from "../Table/SubTable/RMWISE/RmNetSalesTable";
+import ZoneTable from "../Table/ZoneTable";
+import UfcTable from "../Table/UfcTable";
+import RmTable from "../Table/RmTable";
+import RegionTable from "../Table/RegionTable";
+import { useDataContext } from "../../Context/DataContext";
+
 const Retail_Transaction = ({ headers }) => {
   // const { scheme_details } = Scheme();
-
-
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const {
+    setStart_Date,
+    setEnd_Date,
+    setRolwiseselectype,
     hide,
-    startDate,
-    endDate,
-    setStartDate,
-    setEndDate,
-    transaction_summary_report,
+    fetchTransactionSummary,
+    setHide,
+    emproles,
+    start_Date,
+    end_Date,
+    rolwiseselectype,
     loading,
-    togglehide,
-    select_type,
-    setSelectType,
-    formatNumberToIndianFormat,emproles
-  } = Api({ headers });
-  
-  const  commonReport= emproles  ;
+  } = useDataContext();
+  const commonReport = emproles;
 
-  
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
+  const togglehide = async () => {
+    try {
+      await fetchTransactionSummary("");
+      setHide(true);
+    } catch (error) {
+      setHide(false);
+      toast.error("Please fill all the fields");
+    }
+  };
+
   const handleStartDateChange = (e) => {
     const newStartDate = e.target.value;
-    if (newStartDate > endDate) {
+    if (newStartDate > end_Date) {
       toast.error("Start date should be less than end date");
     } else {
-      setStartDate(newStartDate);
+      setStart_Date(newStartDate);
     }
   };
 
   const handleEndDateChange = (e) => {
     const newEndDate = e.target.value;
-    if (newEndDate < startDate) {
+    if (newEndDate < start_Date) {
       toast.error("End date should be greater than start date");
     } else {
-      setEndDate(newEndDate);
+      setEnd_Date(newEndDate);
     }
+  };
+  const handleSelectType = (value) => {
+    setRolwiseselectype(value);
   };
 
   return (
@@ -124,7 +126,7 @@ const Retail_Transaction = ({ headers }) => {
                             class="form-control"
                             id=""
                             placeholder="Project Start Date"
-                            value={startDate}
+                            value={start_Date}
                             onChange={handleStartDateChange}
                           />
                         </div>
@@ -139,7 +141,7 @@ const Retail_Transaction = ({ headers }) => {
                             class="form-control"
                             id=""
                             placeholder="Project End Date"
-                            value={endDate}
+                            value={end_Date}
                             onChange={handleEndDateChange}
                           />
                         </div>
@@ -169,8 +171,8 @@ const Retail_Transaction = ({ headers }) => {
                             name=""
                             id="ab"
                             class="form-select form-control"
-                            value={select_type}
-                            onChange={(e) => setSelectType(e.target.value)}
+                            value={rolwiseselectype}
+                            onChange={(e) => handleSelectType(e.target.value)}
                           >
                             <option value=""> choose type</option>
                             <option value="NETSALES">NET SALES </option>
@@ -217,7 +219,7 @@ const Retail_Transaction = ({ headers }) => {
 
                           {/* export, pdf, model */}
                           <div className="col-md-6 mt-5 tabs ">
-                            <p className="exporttab">
+                            <p className="exporttabretail">
                               <ExcelToExport />
                               |<ExportToPdf />|
                               <img src={msg} alt="msgicon" /> |{" "}
@@ -242,150 +244,15 @@ const Retail_Transaction = ({ headers }) => {
                             </div>
                           ) : hide ? (
                             <>
-                              {commonReport === 'ZH' || 'ADMIN'? (
-                                <>
-                                  <SalesTable
-                                    transaction_summary_report={
-                                      transaction_summary_report
-                                    }
-                                    formatNumberToIndianFormat={
-                                      formatNumberToIndianFormat
-                                    }
-                                    startDate={startDate}
-                                    endDate={endDate}
-                                    select_type={select_type}
-                                  />
-                                  <RedemptionTable
-                                    transaction_summary_report={
-                                      transaction_summary_report
-                                    }
-                                    formatNumberToIndianFormat={
-                                      formatNumberToIndianFormat
-                                    }
-                                    startDate={startDate}
-                                    endDate={endDate}
-                                    select_type={select_type}
-                                  />
-                                  <NetSalesTable
-                                    transaction_summary_report={
-                                      transaction_summary_report
-                                    }
-                                    formatNumberToIndianFormat={
-                                      formatNumberToIndianFormat
-                                    }
-                                    startDate={startDate}
-                                    endDate={endDate}
-                                    select_type={select_type}
-                                  />
-                                </>
-                              ) : commonReport === 'RH' ? (
-                                <>
-                                  <RegionSalesTable
-                                    startDate={startDate}
-                                    endDate={endDate}
-                                    select_type={select_type}
-                                    formatNumberToIndianFormat={
-                                      formatNumberToIndianFormat
-                                    }
-                                    transaction_summary_report={
-                                      transaction_summary_report
-                                    }
-                                  />
-                                  <RegionRedemptionTable
-                                    startDate={startDate}
-                                    endDate={endDate}
-                                    select_type={select_type}
-                                    formatNumberToIndianFormat={
-                                      formatNumberToIndianFormat
-                                    }
-                                    transaction_summary_report={
-                                      transaction_summary_report
-                                    }
-                                  />
-                                  <RegionNetSalesTable
-                                    startDate={startDate}
-                                    endDate={endDate}
-                                    select_type={select_type}
-                                    formatNumberToIndianFormat={
-                                      formatNumberToIndianFormat
-                                    }
-                                    transaction_summary_report={
-                                      transaction_summary_report
-                                    }
-                                  />
-                                </>
-                              ) : commonReport === 'CM' ? (
-                                <>
-                                  <UfcSalesTable
-                                    startDate={startDate}
-                                    endDate={endDate}
-                                    select_type={select_type}
-                                    formatNumberToIndianFormat={
-                                      formatNumberToIndianFormat
-                                    }
-                                    transaction_summary_report={
-                                      transaction_summary_report
-                                    }
-                                  />
-                                  <UfcRedemptionTable
-                                    startDate={startDate}
-                                    endDate={endDate}
-                                    select_type={select_type}
-                                    formatNumberToIndianFormat={
-                                      formatNumberToIndianFormat
-                                    }
-                                    transaction_summary_report={
-                                      transaction_summary_report
-                                    }
-                                  />
-                                  <UfcNetSalesTable
-                                    startDate={startDate}
-                                    endDate={endDate}
-                                    select_type={select_type}
-                                    formatNumberToIndianFormat={
-                                      formatNumberToIndianFormat
-                                    }
-                                    transaction_summary_report={
-                                      transaction_summary_report
-                                    }
-                                  />
-                                </>
-                              ) : commonReport === 'RM' ? (
-                                <>
-                                  <RmSalesTable
-                                    startDate={startDate}
-                                    endDate={endDate}
-                                    select_type={select_type}
-                                    formatNumberToIndianFormat={
-                                      formatNumberToIndianFormat
-                                    }
-                                    transaction_summary_report={
-                                      transaction_summary_report
-                                    }
-                                  />
-                                  <RmRedemptionTable
-                                    startDate={startDate}
-                                    endDate={endDate}
-                                    select_type={select_type}
-                                    formatNumberToIndianFormat={
-                                      formatNumberToIndianFormat
-                                    }
-                                    transaction_summary_report={
-                                      transaction_summary_report
-                                    }
-                                  />
-                                  <RmNetSalesTable
-                                    startDate={startDate}
-                                    endDate={endDate}
-                                    select_type={select_type}
-                                    formatNumberToIndianFormat={
-                                      formatNumberToIndianFormat
-                                    }
-                                    transaction_summary_report={
-                                      transaction_summary_report
-                                    }
-                                  />
-                                </>
+                              {commonReport === "ZH" ||
+                              commonReport === "ADMIN" ? (
+                                <ZoneTable />
+                              ) : commonReport === "RH" ? (
+                                <RegionTable />
+                              ) : commonReport === "CM" ? (
+                                <UfcTable />
+                              ) : commonReport === "RM" ? (
+                                <RmTable />
                               ) : null}
                             </>
                           ) : (
