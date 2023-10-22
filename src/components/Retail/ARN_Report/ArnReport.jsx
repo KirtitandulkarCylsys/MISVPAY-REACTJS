@@ -12,6 +12,7 @@ import ExportToPdf from "../ExportToPdf";
 import LoaderSearch from "../../Table/LoaderSearch";
 import ScheduleModal from "../../Shared/Modal/ScheduleModal";
 import "./Arn.css"
+import ArnTable from "./ArnTable";
 const ArnReport = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
@@ -39,7 +40,7 @@ const ArnReport = () => {
   };
 
   const { handleStartDateChange, handleEndDateChange, handleSelectType } =
-  Retail_Transaction();
+    Retail_Transaction();
 
   const commonReport = emproles;
   return (
@@ -142,99 +143,129 @@ const ArnReport = () => {
                             <option value="GROSSSALES">GROSS SALES </option>
                           </select>
                         </div>
+
+                        {/* asset class */}
+                        <div class="form-group col-md-2">
+                          <label for="">
+                            <b>Asset Class</b>
+                          </label>
+                          <select
+                            name=""
+                            id="ab"
+                            class="form-select form-control"
+                          >
+                            <option value="">All </option>
+                            <option value="">Arbitrage </option>
+                            <option value="">Cash </option>
+                            <option value="">Equity </option>
+                            <option value="">Fixed Income</option>
+                          </select>
+                        </div>
                       </div>
 
                       <div className="row mt-4 d-flex justify-content-around">
-                        
-                          {/* asset class */}
-                          <div class="form-group col-md-2">
-                            <label for="">
-                              <b>Asset Class</b>
-                            </label>
-                            <select
-                              name=""
-                              id="ab"
-                              class="form-select form-control"
-                            >
-                              <option value="">All </option>
-                              <option value="">Arbitrage </option>
-                              <option value="">Cash </option>
-                              <option value="">Equity </option>
-                              <option value="">Fixed Income</option>
-                            </select>
-                          </div>
-                          {/* scheme details */}
 
-                          <div className="form-group col-md-3">
-                            <label className="form-lables">
-                              <b> Scheme</b>
-                            </label>
-                            <select
-                              name=""
-                              id="ab"
-                              class="form-select form-control"
-                            >
-                              <option value="">t </option>
-                              <option value="">h </option>
-                              <option value="">Cash </option>
-                            </select>
-                          </div>
 
-                          
-                          {/* search button */}
+                        {/* scheme details */}
 
-                          <div className="col-md-2 search mt-3 ">
-                            <button
-                              className="btn  BgcolorOrange float-end"
-                              onClick={togglehide}
-                            >
-                              <b className="colorwhite"> Search</b>
-                            </button>
-                          </div>
+                        <div className="form-group col-md-2">
+                          <label className="form-lables">
+                            <b> Scheme</b>
+                          </label>
+                          <select
+                            name=""
+                            id="ab"
+                            class="form-select form-control"
+                          >
+                            <option value="">t </option>
+                            <option value="">h </option>
+                            <option value="">Cash </option>
+                          </select>
+                        </div>
 
-                          {/* export, pdf, model */}
-                          <div className="col-md-2 arnexport mt-3 ">
-                            <p>
-                              <ExcelToExport />
-                              |<ExportToPdf />|
-                              <img src={msg} alt="msgicon" /> |{" "}
-                              <img
-                                id="myImg"
-                                src={calender}
-                                alt="calendericon"
-                                data-bs-toggle="modal"
-                                data-bs-target="#scheduleModal"
-                              />
-                            </p>
-                          </div>
-                        
+                        {/* channel */}
+                        <div className="form-group col-md-2">
+                          <label className="form-lables">
+                            <b>Channel</b>
+                          </label>
+                          <select
+                            name=""
+                            id="ab"
+                            class="form-select form-control"
+                            disabled
+                          >
+                            <option value="">RTL </option>
+                            <option value="">BND </option>
+                            <option value="">INST </option>
+                            <option value="">PSUC </option>
+
+                          </select>
+                        </div>
+
+                        {/* checkbox */}
+                        <div className="form-group col-md-2 mt-3 text-center">
+                          <input type="checkbox" />
+                          <label className="form-lables">
+                            <b>Multicity</b>
+                          </label>
+                        </div>
+
+
+                        {/* search button */}
+
+                        <div className="col-md-2 search mt-3 text-end ">
+                          <button
+                            className="btn  BgcolorOrange "
+                            onClick={togglehide}
+                          >
+                            <b className="colorwhite"> Search</b>
+                          </button>
+                        </div>
+
+                        {/* export, pdf, model */}
+                        <div className="col-md-2 arnexport mt-3 ">
+                          <p>
+                            <ExcelToExport />
+                            |<ExportToPdf />|
+                            <img src={msg} alt="msgicon" /> |{" "}
+                            <img
+                              id="myImg"
+                              src={calender}
+                              alt="calendericon"
+                              data-bs-toggle="modal"
+                              data-bs-target="#scheduleModal"
+                            />
+                          </p>
+                        </div>
+
                       </div>
                       <ScheduleModal />
-                      <>
-                        <div className="Table">
-                          {loading ? (
-                            <div className="text-center mt-4">
-                              <i className="fas fa-spinner fa-spin fa-2x"></i>{" "}
-                              <LoaderSearch />
-                            </div>
-                          ) : hide ? (
-                            <>
-                              {commonReport === "ZH" ||
+
+                    </div>
+                    <div className="card-body bg-white ">
+                      <div className="Table">
+                        {loading ? (
+                          <div className="text-center mt-4">
+                            <i className="fas fa-spinner fa-spin fa-2x"></i>{" "}
+                            <LoaderSearch />
+                          </div>
+                        ) : hide ? (
+                          <>
+                            {commonReport === "ZH" ||
                               commonReport === "ADMIN" ? (
-                                <></>
-                              ) : commonReport === "RH" ? (
-                                <></>
-                              ) : commonReport === "CM" ? (
-                                <></>
-                              ) : commonReport === "RM" ? (
-                                <></>
-                              ) : null}
-                            </>
-                          ) : (
-                            <></>
-                          )}
-                        </div>
-                      </>
+                              <ArnTable/>
+                            ) : commonReport === "RH" ? (
+                              <></>
+                            ) : commonReport === "CM" ? (
+                              <></>
+                            ) : commonReport === "RM" ? (
+                              <></>
+                            ) : null}
+                          </>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>

@@ -106,7 +106,7 @@ export const API_NFO = {
 }
 
 export const API_NFO_UPLOAD = {
-  DATA: (queryParams) => `${API}/nfo_upload?${queryParams}`,
+  DATA:  `${API}/nfo_upload`,
 }
 
 export const API_NFO_DELETE = {

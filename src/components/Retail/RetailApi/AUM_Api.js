@@ -29,6 +29,7 @@ export const AumDropdownApi = () => {
   return {aum_dropdown, loading}
 }
 
+
 export const usePeriodApi = () => {
   const [aum_period, setAumperiod] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -76,8 +77,8 @@ export const usePeriodApi = () => {
         rm_code: emp_id,
         chn_code: channel,
         common_report: commonReportValue,
-        page_number:currentPage,
-        page_size : entriesPerPage
+        page_number:"",
+        page_size : ""
       });
 
       try {
@@ -180,13 +181,6 @@ export const RMApi = (queryParams) => {
 
   return { aumRM, loading };
 };
-
-
-
-
-
-
-
 
 export const useAllRegion = (queryParams) => {
   const [aum_AllAumRegion, setAumAllAumRegion] = useState([]);

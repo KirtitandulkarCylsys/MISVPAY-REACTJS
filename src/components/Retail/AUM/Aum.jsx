@@ -53,32 +53,32 @@ const Aum = ({ report_period }) => {
     }
   };
 
-  const [items, setItems] = useState([...Array(100).keys()].map((i) => i + 1));
-  const {currentPage, setCurrentPage,entriesPerPage, setEntriesPerPage}= useDataContext();
+  // const [items, setItems] = useState([...Array(100).keys()].map((i) => i + 1));
+  // const {currentPage, setCurrentPage,entriesPerPage, setEntriesPerPage}= useDataContext();
 
-  const totalPages = Math.ceil(items.length / entriesPerPage);
-  const indexOfLastItem = currentPage * entriesPerPage;
-  const indexOfFirstItem = indexOfLastItem - entriesPerPage;
-  const currentItems = aum_period.slice(indexOfFirstItem, indexOfLastItem);
+  // const totalPages = Math.ceil(items.length / entriesPerPage);
+  // const indexOfLastItem = currentPage * entriesPerPage;
+  // const indexOfFirstItem = indexOfLastItem - entriesPerPage;
+  // const currentItems = aum_period.slice(indexOfFirstItem, indexOfLastItem);
 
-  const handleEntriesChange = (e) => {
-    setEntriesPerPage(parseInt(e.target.value));
-    setCurrentPage(1);
-  };
+  // const handleEntriesChange = (e) => {
+  //   setEntriesPerPage(parseInt(e.target.value));
+  //   setCurrentPage(1);
+  // };
 
-  const handlePrev = () => {
-    setCurrentPage(currentPage - 1);
-  };
+  // const handlePrev = () => {
+  //   setCurrentPage(currentPage - 1);
+  // };
 
-  const handleNext = () => {
-    setCurrentPage(currentPage + 1);
-  };
+  // const handleNext = () => {
+  //   setCurrentPage(currentPage + 1);
+  // };
 
-  useEffect(() => {
-    if (currentPage > totalPages) {
-      setCurrentPage(totalPages);
-    }
-  }, [currentPage, totalPages]);
+  // useEffect(() => {
+  //   if (currentPage > totalPages) {
+  //     setCurrentPage(totalPages);
+  //   }
+  // }, [currentPage, totalPages]);
 
   return (
     <>
@@ -133,7 +133,7 @@ const Aum = ({ report_period }) => {
 
           </div>
         )}
-       
+{/*        
        <label htmlFor="entries">Show entries: </label>
       <select id="entries" onChange={handleEntriesChange}>
         {[5, 10, 50].map((entry) => (
@@ -142,7 +142,7 @@ const Aum = ({ report_period }) => {
           </option>
         ))}
       </select>
-      
+       */}
 
        
        
@@ -168,7 +168,7 @@ const Aum = ({ report_period }) => {
               </tr>
             </thead>
             <tbody>
-              {currentItems.map((item, index) => (
+              {aum_period.map((item, index) => (
                 <React.Fragment key={index}>
                   <tr key={item.ZONE}>
                     <td>
@@ -268,7 +268,7 @@ const Aum = ({ report_period }) => {
             </tbody>
           </table>
         )}
-         <div>
+         {/* <div>
         <button onClick={handlePrev} disabled={currentPage === 1}>
           Previous
         </button>
@@ -276,7 +276,7 @@ const Aum = ({ report_period }) => {
         <button onClick={handleNext} disabled={currentPage === totalPages}>
           Next
         </button>
-      </div>
+      </div> */}
       </div>
     </>
   );
