@@ -19,6 +19,7 @@ export const DataContextProvider = ({ children }) => {
   const [rolwiseselectype, setRolwiseselectype] = useState("");
   const [loading, setLoading] = useState(false);
   const [hide, setHide] = useState(false);
+  const [select_asset, setSelectAsset]= useState('ALL');
   const emproles = roleWiseData ? roleWiseData[0].EMP_ROLE : null;
   const channel = roleWiseData ? roleWiseData[0].CHANNEL_CODE : null;
   const zoneData = roleWiseData ? roleWiseData[0].ZONE : null;
@@ -110,7 +111,7 @@ export const DataContextProvider = ({ children }) => {
         setZonetablecurrentPage,
         setStart_Date,
         setEnd_Date,summary_report, fetchTransactionSummary,setRolwiseselectype, hide, setHide,
-        start_Date,end_Date,emproles,emp_id,rolwiseselectype,channel,zoneData,REGIONData,UFCData,loading,formatNumberToIndianFormat,QUARTERData
+        start_Date,end_Date,emproles,emp_id,rolwiseselectype,channel,zoneData,REGIONData,UFCData,loading,formatNumberToIndianFormat,QUARTERData,select_asset, setSelectAsset
       }}
     >
       {children}

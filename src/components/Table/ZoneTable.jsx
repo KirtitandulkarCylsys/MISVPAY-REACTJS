@@ -3,7 +3,6 @@ import Loader from "./Loader";
 import { Link } from "react-router-dom";
 import RegionTable from "./RegionTable";
 import "./ZoneTable.css";
-import Api from "../Retail/RetailApi/Api";
 import ReactPaginate from "react-paginate";
 import { useDataContext } from "../../Context/DataContext";
 const ZoneTable = () => {

@@ -13,6 +13,7 @@ import LoaderSearch from "../../Table/LoaderSearch";
 import ScheduleModal from "../../Shared/Modal/ScheduleModal";
 import "./Arn.css"
 import ArnTable from "./ArnTable";
+import { AssetClass, Scheme } from "../RetailApi/SchemeApi";
 const ArnReport = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
@@ -23,7 +24,7 @@ const ArnReport = () => {
     start_Date,
     end_Date,
     rolwiseselectype,
-    loading,
+    loading, setSelectAsset
   } = useDataContext();
 
   const togglehide = () => {
@@ -41,6 +42,11 @@ const ArnReport = () => {
 
   const { handleStartDateChange, handleEndDateChange, handleSelectType } =
     Retail_Transaction();
+
+  const { asset } = AssetClass();
+
+  const { scheme_details } = Scheme();
+
 
   const commonReport = emproles;
   return (
@@ -153,12 +159,14 @@ const ArnReport = () => {
                             name=""
                             id="ab"
                             class="form-select form-control"
+                            onChange={(e)=>setSelectAsset(e.target.value)}
                           >
-                            <option value="">All </option>
-                            <option value="">Arbitrage </option>
-                            <option value="">Cash </option>
-                            <option value="">Equity </option>
-                            <option value="">Fixed Income</option>
+                            <option value="ALL">ALL</option>
+                            {asset.map((item) => (
+                              <option key={item.SM_NATURE} value={item.SM_NATURE}>
+                                {item.SM_NATURE}
+                              </option>
+                            ))}
                           </select>
                         </div>
                       </div>
@@ -177,9 +185,12 @@ const ArnReport = () => {
                             id="ab"
                             class="form-select form-control"
                           >
-                            <option value="">t </option>
-                            <option value="">h </option>
-                            <option value="">Cash </option>
+                            <option  className="form-label select-label" value="">Select Scheme</option>
+                            {scheme_details.map((item) => (
+                              <option key={item.SCHEME} value={item.SCHEME}>
+                                {item.SCHEME}
+                              </option>
+                            ))}
                           </select>
                         </div>
 
@@ -253,7 +264,7 @@ const ArnReport = () => {
                           <>
                             {commonReport === "ZH" ||
                               commonReport === "ADMIN" ? (
-                              <ArnTable/>
+                              <ArnTable />
                             ) : commonReport === "RH" ? (
                               <></>
                             ) : commonReport === "CM" ? (
