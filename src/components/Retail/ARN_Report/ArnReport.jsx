@@ -1,35 +1,22 @@
 import React, { useState } from "react";
-import "./Retail.css";
-import msg from "../Assets/images/msg_icon.png";
-import calender from "../Assets/images/date-time_icon.png";
-import SideBar from "../Shared/SideBar/SideBar";
-import Navbar from "../Shared/Navbar";
-import datetime from "../Assets/images/Vector (Stroke).png";
-import ScheduleModal from "../Shared/Modal/ScheduleModal";
-import LoaderSearch from "../Table/LoaderSearch";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-// import { Scheme } from "../Retail/RetailApi/AUM_Api";
-import { ExcelToExport } from "./ExcelToExport";
-import ExportToPdf from "./ExportToPdf";
-// import Filter from "./Filter";
-// import DropDown from "./DropDown";
-import Multiselect from "multiselect-react-dropdown";
-import ZoneTable from "../Table/ZoneTable";
-import UfcTable from "../Table/UfcTable";
-import RmTable from "../Table/RmTable";
-import RegionTable from "../Table/RegionTable";
-import { useDataContext } from "../../Context/DataContext";
-
-const Retail_Transaction = () => {
-  // const { scheme_details } = Scheme();
+import Navbar from "../../Shared/Navbar";
+import SideBar from "../../Shared/SideBar/SideBar";
+import { useDataContext } from "../../../Context/DataContext";
+import Retail_Transaction from "../Retail_Transaction";
+import msg from "../../Assets/images/msg_icon.png";
+import calender from "../../Assets/images/date-time_icon.png";
+import datetime from "../../Assets/images/Vector (Stroke).png";
+import { ExcelToExport } from "../ExcelToExport";
+import ExportToPdf from "../ExportToPdf";
+import LoaderSearch from "../../Table/LoaderSearch";
+import ScheduleModal from "../../Shared/Modal/ScheduleModal";
+import "./Arn.css"
+const ArnReport = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+
   const {
-    setStart_Date,
-    setEnd_Date,
-    setRolwiseselectype,
     hide,
-    fetchTransactionSummary,
     setHide,
     emproles,
     start_Date,
@@ -37,15 +24,9 @@ const Retail_Transaction = () => {
     rolwiseselectype,
     loading,
   } = useDataContext();
-  const commonReport = emproles;
 
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
-
-  const togglehide = async () => {
+  const togglehide = () => {
     try {
-      await fetchTransactionSummary("");
       setHide(true);
     } catch (error) {
       setHide(false);
@@ -53,27 +34,14 @@ const Retail_Transaction = () => {
     }
   };
 
-  const handleStartDateChange = (e) => {
-    const newStartDate = e.target.value;
-    if (newStartDate > end_Date) {
-      toast.error("Start date should be less than end date");
-    } else {
-      setStart_Date(newStartDate);
-    }
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
   };
 
-  const handleEndDateChange = (e) => {
-    const newEndDate = e.target.value;
-    if (newEndDate < start_Date) {
-      toast.error("End date should be greater than start date");
-    } else {
-      setEnd_Date(newEndDate);
-    }
-  };
-  const handleSelectType = (value) => {
-    setRolwiseselectype(value);
-  };
+  const { handleStartDateChange, handleEndDateChange, handleSelectType } =
+  Retail_Transaction();
 
+  const commonReport = emproles;
   return (
     <>
       <ToastContainer
@@ -95,7 +63,7 @@ const Retail_Transaction = () => {
           <div
             className={`${sidebarOpen ? "dashboard-closed" : "dashboard-full"}`}
           >
-            <div className="container">
+            <div className="container-fluid">
               <section className="section mt-3">
                 <div className="row">
                   <div className="col-lg-12 col-lg-offset-2">
@@ -110,12 +78,12 @@ const Retail_Transaction = () => {
                           aria-controls="collapseExample"
                         >
                           <h5 className="text-lg-start">
-                            <b> RETAIL TRANSACTION SUMMARY REPORT</b>
+                            <b> ARN TRANSACTION SUMMARY REPORT</b>
                           </h5>
                         </button>
                       </div>
-                      <div className="row d-flex justify-content-around">
-                        {/* start datw */}
+                      <div className="row mt-3 d-flex justify-content-around">
+                        {/* start date */}
                         <div className="form-group col-md-2">
                           <label for="">
                             <b> Start Date </b>
@@ -145,22 +113,17 @@ const Retail_Transaction = () => {
                             onChange={handleEndDateChange}
                           />
                         </div>
-                        {/* asset class */}
+
+                        {/* arncode */}
                         <div class="form-group col-md-2">
                           <label for="">
-                            <b>Asset Class</b>
+                            <b> Enter ARN </b>
                           </label>
-                          <select
-                            name=""
-                            id="ab"
-                            class="form-select form-control"
-                          >
-                            <option value="">All </option>
-                            <option value="">Arbitrage </option>
-                            <option value="">Cash </option>
-                            <option value="">Equity </option>
-                            <option value="">Fixed Income</option>
-                          </select>
+                          <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Enter ARN Code"
+                          />
                         </div>
                         {/* select type */}
                         <div class="form-group col-md-2">
@@ -179,38 +142,50 @@ const Retail_Transaction = () => {
                             <option value="GROSSSALES">GROSS SALES </option>
                           </select>
                         </div>
-                        {/* scheme details */}
                       </div>
 
-                      <div className="row d-flex justify-content-around">
-                        {/* <div class="col-md-1"></div> */}
-                        <div className="col-md-4">
-                          <div className="form-group col-md-3  mt-4">
-                            <label className="form-lables">
-                              {/* <b> Scheme</b> */}
+                      <div className="row mt-4 d-flex justify-content-around">
+                        
+                          {/* asset class */}
+                          <div class="form-group col-md-2">
+                            <label for="">
+                              <b>Asset Class</b>
                             </label>
-                            {/* <Multiselect
-                            options={options}
-                            selectedValues={selectedSchemes}
-                            onSelect={functionToHandleSelect}
-                            onRemove={functionToHandleRemove}
-                            displayValue="name"
-                            /> */}
+                            <select
+                              name=""
+                              id="ab"
+                              class="form-select form-control"
+                            >
+                              <option value="">All </option>
+                              <option value="">Arbitrage </option>
+                              <option value="">Cash </option>
+                              <option value="">Equity </option>
+                              <option value="">Fixed Income</option>
+                            </select>
                           </div>
-                        </div>
-                        {/* coloumn and filter
-                        <div className=" col-md-2 media">
-                          <Filter />
-                        </div>
-                        <div className="col-md-2">
-                          <DropDown />
-                        </div> */}
-                        {/* search button */}
-                        <div className="col-md-4"></div>
-                        <div className="col-md-4 d-flex">
-                          <div className="col-md-6 mt-5 search ">
+                          {/* scheme details */}
+
+                          <div className="form-group col-md-3">
+                            <label className="form-lables">
+                              <b> Scheme</b>
+                            </label>
+                            <select
+                              name=""
+                              id="ab"
+                              class="form-select form-control"
+                            >
+                              <option value="">t </option>
+                              <option value="">h </option>
+                              <option value="">Cash </option>
+                            </select>
+                          </div>
+
+                          
+                          {/* search button */}
+
+                          <div className="col-md-2 search mt-3 ">
                             <button
-                              className="btn  BgcolorOrange float-end mx-2 "
+                              className="btn  BgcolorOrange float-end"
                               onClick={togglehide}
                             >
                               <b className="colorwhite"> Search</b>
@@ -218,8 +193,8 @@ const Retail_Transaction = () => {
                           </div>
 
                           {/* export, pdf, model */}
-                          <div className="col-md-6 mt-5 tabs ">
-                            <p className="exporttabretail">
+                          <div className="col-md-2 arnexport mt-3 ">
+                            <p>
                               <ExcelToExport />
                               |<ExportToPdf />|
                               <img src={msg} alt="msgicon" /> |{" "}
@@ -232,7 +207,7 @@ const Retail_Transaction = () => {
                               />
                             </p>
                           </div>
-                        </div>
+                        
                       </div>
                       <ScheduleModal />
                       <>
@@ -246,13 +221,13 @@ const Retail_Transaction = () => {
                             <>
                               {commonReport === "ZH" ||
                               commonReport === "ADMIN" ? (
-                                <ZoneTable />
+                                <></>
                               ) : commonReport === "RH" ? (
-                                <RegionTable />
+                                <></>
                               ) : commonReport === "CM" ? (
-                                <UfcTable />
+                                <></>
                               ) : commonReport === "RM" ? (
-                                <RmTable />
+                                <></>
                               ) : null}
                             </>
                           ) : (
@@ -271,4 +246,5 @@ const Retail_Transaction = () => {
     </>
   );
 };
-export default Retail_Transaction;
+
+export default ArnReport;
