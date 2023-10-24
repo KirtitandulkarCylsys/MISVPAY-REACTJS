@@ -233,7 +233,8 @@ const TransactionReport = ({ headers }) => {
                           <label className="form-lables">
                             <b>Transaction Type</b>
                           </label>
-                          <select name=""
+                          <select 
+                            name=""
                             id="ab"
                             className="form-select form-control mt-2"
                             value={transaction_type}
