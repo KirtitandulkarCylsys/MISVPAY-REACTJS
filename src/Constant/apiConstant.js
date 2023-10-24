@@ -101,16 +101,6 @@ export const API_ROLEWISE = {
   DATA: `${API}/rolewiselogin`,
 }
 
-export const API_ACCOUNT_DROPDOWN = {
-  DATA: `${API}/account_dropdown`,
-};
-
-export const API_ACCOUNT_SUMMARY = {
-  DATA: (queryParams) => `${API}/account_summary?${queryParams}`,
-};
-
-
-export default axiosInstance;
 export const API_NFO = {
   DATA: (queryParams) => `${API}/nfo?${queryParams}`,
 }
@@ -128,5 +118,5 @@ export const API_ALL_ETF_SALE = {
   DATA: (queryParams) => `${API}/etf_sale?${queryParams}`,
 };
 
-
+export default axiosInstance;
 
