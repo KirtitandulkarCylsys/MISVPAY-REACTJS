@@ -1,71 +1,22 @@
 import React, { useState } from "react";
 import "./Report_Transaction.css";
-import SalesTransaction from "./Transaction_Type/SalesTransaction";
 import datetime from "../Assets/images/Vector (Stroke).png";
 import SideBar from "../Shared/SideBar/SideBar";
 import Navbar from "../Shared/Navbar";
-import { ToastContainer, toast } from "react-toastify";
-import { Ufc_Drop } from "../Retail/RetailApi/Account_Trans_api";
-import { Account_Api } from "../Retail/RetailApi/Account_Api";
-import LoaderSearch from "../Table/SubTable/LoaderSearch";
-import AccPdfDownload from "./AccPdfDownload";
-import { AccExcelDownload } from "./AccExcelDownload";
-import SIPMaturity from "./Transaction_Type/SIPMaturity.jsx";
 
-const TransactionReport = ({ headers }) => {
-  const { ufc_details } = Ufc_Drop();
+const TransactionReport = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [searchClicked,setSearchClicked]=useState();
-  const {
-    hide,
-    startDate,
-    endDate,
-    transaction_account_report,
-    loading,
-    transaction_type,
-    amount,
-    condition,
-    no_mapping,
-    schemeType,
-    setTransactionType,
-    setEndDate,
-    setHide,
-    setStartDate,
-    setLoading,
-    formatNumberToIndianFormat,
-    togglehide,
-    setAmount,
-    setCondition,
-    setNoMapping,
-    emproles, setSelectUfc, setSchemeType
-  } = Account_Api({ headers });
-  const toggleSidebar = () => { setSidebarOpen(!sidebarOpen); };
-  const handleStartDateChange = (e) => {
-    const newStartDate = e.target.value;
-    if (newStartDate > endDate) {
-      toast.error("Start date should be less than end date");
-    } else {
-      setStartDate(newStartDate);
-    }
-  };
-  const handleEndDateChange = (e) => {
-    const newEndDate = e.target.value;
-    if (newEndDate < startDate) {
-      toast.error("End date should be greater than start date");
-    } else {
-      setEndDate(newEndDate);
-    }
-  };
 
-
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
   return (
     <div className="container-fluid p-0 home-main ">
       <Navbar onToggle={toggleSidebar} />
       <div className="d-flex">
         <SideBar isOpen={sidebarOpen} />
         <div
-          className={` ${sidebarOpen ? "dashboard-closed" : "dashboard-full"
-            }`}
+          className={` ${sidebarOpen ? "dashboard-closed" : "dashboard-full"}`}
         >
           <div className="bg-white card m-4">
             <div className="col-l-12  ">
@@ -81,78 +32,84 @@ const TransactionReport = ({ headers }) => {
               <div>
                 <div className="col-lg-12 d-flex justify-content-around mt-5 ">
                   <div className="form-group col-md-2">
-                    <label className="form-lables" style={{ marginRight: "5px" }} >
+                    <label
+                      className="form-lables"
+                      style={{ marginRight: "5px" }}
+                    >
                       <b> A/C No </b>
                     </label>
-                    <input type="text" className="form-control mt-2" placeholder="Enter A/C No" />
+                    <input type="text" className="form-control mt-2" placeholder="Enter A/C No"/>
                   </div>
                   <div className="form-group col-md-2">
-                    <label className="form-lables" style={{ marginRight: "5px" }} >
+                    <label
+                      className="form-lables"
+                      style={{ marginRight: "5px" }}
+                    >
                       <b>PAN No</b>
                     </label>
-                    <input type="text" className="form-control mt-2" placeholder="Enter PAN No" />
+                    <input type="text" className="form-control mt-2" placeholder="Enter PAN No"/>
                   </div>
                   <div className="form-group col-md-2">
                     <label className="form-lables">
                       <b>PIN Code</b>
                     </label>
-                    <input type="text" className="form-control mt-2" placeholder="Enter PIN Code" />
+                    <input type="text" className="form-control mt-2" placeholder="Enter PIN Code"/>
                   </div>
                   <div className="form-group col-md-2">
                     <label className="form-lables">
                       <b>ARN No</b>
                     </label>
-                    <input type="text" className="form-control mt-2" placeholder="Enter ARN No" />
+                    <input type="text" className="form-control mt-2" placeholder="Enter ARN No"/>
                   </div>
                   <div className="form-group col-md-2 m-md-0 mt-3">
                     <label className="form-lables">
                       <b>SubARN No</b>
                     </label>
-                    <input type="text" className="form-control mt-2" placeholder="Enter SubARN No" />
+                    <input type="text" className="form-control mt-2" placeholder="Enter SubARN No"/>
                   </div>
                   <div />
                 </div>
                 <div>
                   <div className="col-lg-12 d-flex justify-content-around mt-5 ">
                     <div className="form-group col-md-2">
-                      <label className="form-lables" style={{ marginRight: "5px" }} >
+                      <label
+                        className="form-lables"
+                        style={{ marginRight: "5px" }}
+                      >
                         <b> UFC</b>
                       </label>
-                      <select name="" id="ab" className="form-select form-control mt-2" onChange={(e) => setSelectUfc(e.target.value)} >
+                      <select
+                        name=""
+                        id="ab"
+                        className="form-select form-control mt-2"
+                      >
                         <option value="">Select</option>
-                        {ufc_details.map((item) => (
-                          <option value={item.UFC_CODE}>{item.UFC_NAME}</option>
-                        ))}
+                        <option value="">Arbitrage </option>
                       </select>
                     </div>
                     <div className="form-group col-md-2">
-                      <label className="form-lables" style={{ marginRight: "5px" }} >
+                      <label
+                        className="form-lables"
+                        style={{ marginRight: "5px" }}
+                      >
                         <b>Amount</b>
                       </label>
-                      <input type="text" className="form-control mt-2" placeholder="Enter Amount" value={amount}
-                        onChange={(e) => setAmount(e.target.value)}
-                      />
+                      <input type="text" className="form-control mt-2" placeholder="Enter Amount"/>
                     </div>
                     <div className="form-group col-md-2">
                       <label className="form-lables">
                         <b>Condition</b>
                       </label>
-                      <select name="" id="ab"
-                        className="form-select form-control mt-2"
-                        value={condition}
-                        onChange={(e) => setCondition(e.target.value)}
-                      >
+                      <select name="" id="ab" className="form-select form-control mt-2" >
                         <option value="">Select</option>
-                        <option value="LESS_THAN">LESS_THAN </option>
-                        <option value="GREATER_THAN">GREATER_THAN </option>
-                        <option value="EQUAL_TO">EQUAL_TO </option>
+                        <option value="">Arbitrage </option>
                       </select>
                     </div>
                     <div className="form-group col-md-2">
                       <label className="form-lables">
                         <b>KARVY Location</b>
                       </label>
-                      <input type="text" className="form-control mt-2" placeholder="Enter KARVY Location" />
+                      <input type="text" className="form-control mt-2" placeholder="Enter KARVY Location"/>
                     </div>
                     <div className="form-group col-md-2">
                       <label
@@ -162,97 +119,96 @@ const TransactionReport = ({ headers }) => {
                         <b> Start Date </b>
                       </label>
                       <img src={datetime} alt="datetime" />
-                      <input type="date" className="form-control mt-2" value={startDate} onChange={handleStartDateChange} />
+                      <input type="date" className="form-control mt-2" />
                     </div>
                     <div />
                   </div>
                   <div>
                     <div className="col-lg-12 d-flex justify-content-around mt-5 ">
                       <div className="form-group col-md-2">
-                        <label className="form-lables" style={{ marginRight: "5px" }} >
+                        <label
+                          className="form-lables"
+                          style={{ marginRight: "5px" }}
+                        >
                           <b> End Date </b>
                         </label>
                         <img src={datetime} alt="datetime" />
-                        <input type="date" className="form-control mt-2" value={endDate} onChange={handleEndDateChange} />
+                        <input type="date" className="form-control mt-2" />
                       </div>
                       <div className="form-group col-md-2">
-                        <label className="form-lables" style={{ marginRight: "5px" }} >
+                        <label
+                          className="form-lables"
+                          style={{ marginRight: "5px" }}
+                        >
                           <b>Scheme Code</b>
                         </label>
-                        <input type="text" className="form-control mt-2" placeholder="Enter Scheme Code" />
+                        <input type="text" className="form-control mt-2" placeholder="Enter Scheme Code"/>
                       </div>
                       <div className="form-group col-md-2">
                         <label className="form-lables">
                           <b>RIA Code</b>
                         </label>
-                        <input type="text" className="form-control mt-2" placeholder="Enter RIA Code" />
+                        <input type="text" className="form-control mt-2" placeholder="Enter RIA Code"/>
                       </div>
                       <div className="form-group col-md-2">
                         <label className="form-lables">
                           <b>Trans RM Code</b>
                         </label>
-                        <input type="text" className="form-control mt-2" placeholder="Enter Trans RM Code" />
+                        <input type="text" className="form-control mt-2" placeholder="Enter Trans RM Code"/>
                       </div>
                       <div className="form-group col-md-2 m-md-0 mt-3">
                         <label className="form-lables">
                           <b>IHNO</b>
                         </label>
-                        <input type="text" className="form-control mt-2" placeholder="Enter IHNO" />
+                        <input type="text" className="form-control mt-2" placeholder="Enter IHNO"/>
                       </div>
                       <div />
                     </div>
                     <div>
                       <div className="col-lg-12 d-flex justify-content-around mt-5 ">
                         <div className="form-group col-md-2">
-                          <label className="form-lables" style={{ marginRight: "5px" }} >
+                          <label
+                            className="form-lables"
+                            style={{ marginRight: "5px" }}
+                          >
                             <b> Scheme Type </b>
                           </label>
-                          <select name=""
+                          <select
+                            name=""
                             id="ab"
                             className="form-select form-control mt-2"
-                            value={schemeType}
-                            onChange={(e) => setSchemeType(e.target.value)}
                           >
                             <option value="">Select</option>
-                            <option value="">ALL </option>
-                            <option value="">ARBITRAGE </option>
-                            <option value="">CASH </option>
-                            <option value="">EQUITY </option>
-                            <option value="">FIXED INCOME </option>
-                            <option value="">HYBRID </option>
-                            <option value="">PASSIVE (EX DEBIT) </option>
+                            <option value="">Arbitrage </option>
                           </select>
                         </div>
                         <div className="form-group col-md-2">
-                          <label className="form-lables" style={{ marginRight: "5px" }} >
+                          <label
+                            className="form-lables"
+                            style={{ marginRight: "5px" }}
+                          >
                             <b>EUIN</b>
                           </label>
-                          <input type="text" className="form-control mt-2" placeholder="Enter EUIN" />
+                          <input type="text" className="form-control mt-2" placeholder="Enter EUIN"/>
                         </div>
                         <div className="form-group col-md-2">
                           <label className="form-lables">
                             <b>Transaction Type</b>
                           </label>
-                          <select 
+                          <select
                             name=""
                             id="ab"
                             className="form-select form-control mt-2"
-                            value={transaction_type}
-                            onChange={(e) => {setTransactionType(e.target.value);setSearchClicked(false)}}
                           >
                             <option value="">Select</option>
-                            <option value="SALES">Sales</option>
-                            <option value="GROSS">Gross Sales </option>
-                            <option value="LIVE">Live-SIP/STP </option>
-                            <option value="NEW">SIP/STP New Registration </option>
-                            <option value="BASE">Live-SIP/STP-Base </option>
-                            <option value="">Terminated SIP/STP </option>
-                            <option value="FARE ">Farewell Login Contest </option>
-                            <option value="MATURE">SIP Maturity </option>
+                            <option value="">Arbitrage </option>
                           </select>
                         </div>
                         <div className="form-group col-md-2">
-                          <input type="checkbox" className="form-check-input mt-2" />
+                          <input
+                            type="checkbox"
+                            className="form-check-input mt-2"
+                          />
                           <label className="form-label">
                             <b className="Check">BSF</b>
                           </label>
@@ -261,18 +217,13 @@ const TransactionReport = ({ headers }) => {
                           <label className="form-lables">
                             <b>No Mapping</b>
                           </label>
-                          <select name=""
+                          <select
+                            name=""
                             id="ab"
                             className="form-select form-control mt-2"
-                            value={no_mapping}
-                            onChange={(e) => setNoMapping(e.target.value)}
                           >
                             <option value="">Select</option>
-                            <option value="All">All </option>
-                            <option value="ZONEWISE">ZONEWISE </option>
-                            <option value="REGIONWISE">REGIONWISE </option>
-                            <option value="UFCWISE">UFCWISE </option>
-                            <option value="RMWISE">RMWISE </option>
+                            <option value="">Arbitrage </option>
                           </select>
                         </div>
                         <div />
@@ -283,50 +234,18 @@ const TransactionReport = ({ headers }) => {
                         <div className="col-md-4 d-flex justify-content-around mt-5">
                           <div className="col-md-2 "></div>
                           <div className="col-md-2 ">
-                            <p className="icon">
-                              <AccExcelDownload />
-                              |<AccPdfDownload />
-                            </p>
+                            <button className="btn BgcolorOrange">
+                              <b className="colorwhite">Search</b>
+                            </button>
                           </div>
-                          <div className="col-md-2 ">
-                            <button className="btn Button" style={{ backgroundColor: " #EE8B3A", color:"white" }}>
-                            <b className="colorwhite" onClick={()=>{togglehide(); setSearchClicked(true)}}>
-                                Search
-                              </b>
+                          <div className="col-md-2">
+                            <button className="btn BgcolorOrange">
+                              <b className="colorwhite">Export</b>
                             </button>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <>
-                      <div className="Table">
-                        {loading ? (
-                          <div className="text-center mt-4">
-                            <i className="fas fa-spinner fa-spin fa-2x"></i>{" "}
-                            <LoaderSearch />
-                          </div>
-                        ) : searchClicked ? (
-                          <>
-                            {transaction_type === "SALES" || transaction_type === "GROSS" ? (
-                              <>
-                                <SalesTransaction
-                                  transaction_account_report={transaction_account_report}
-                                  formatNumberToIndianFormat={formatNumberToIndianFormat}
-                                />
-                              </>
-                            ) : transaction_type === "LIVE" || transaction_type === "NEW" || transaction_type === "BASE" || transaction_type === "FARE" || transaction_type === "MATURE" || transaction_type === "" ? (
-                              <>
-                                <SIPMaturity transaction_account_report={transaction_account_report}
-                                  formatNumberToIndianFormat={formatNumberToIndianFormat}></SIPMaturity>
-                              </>
-
-                            ) : null}
-                          </>
-                        ) : (
-                          <></>
-                        )}
-                      </div>
-                    </>
                   </div>
                 </div>
               </div>

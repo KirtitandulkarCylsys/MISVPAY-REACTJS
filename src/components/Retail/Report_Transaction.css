@@ -3,6 +3,9 @@
     margin-left: 10px;
 }
 
-.Button{
-    background-color: rgb(53, 45, 148);
+@media (min-width: 768px){
+.media{
+    flex: 0 0 auto;
+    width: 31.666667%;
+}
 }
