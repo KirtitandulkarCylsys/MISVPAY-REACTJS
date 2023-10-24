@@ -119,6 +119,10 @@ export const API_NFO_UPLOAD = {
   DATA: (queryParams) => `${API}/nfo_upload?${queryParams}`,
 }
 
+export const API_NFO_DELETE = {
+  DATA: (queryParams) => `${API}/nfo_delete?${queryParams}`,
+}
+
 
 export const API_ALL_ETF_SALE = {
   DATA: (queryParams) => `${API}/etf_sale?${queryParams}`,
