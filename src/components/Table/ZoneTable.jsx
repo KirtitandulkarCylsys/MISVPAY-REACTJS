@@ -11,13 +11,14 @@ const ZoneTable = () => {
   const [totalPages, setTotalPages] = useState("");
   const[ currentPage, setCurrentPage] =useState(1);
   const [counter, setCounter] = useState(1);
+ 
   const {
     zonetablecurrentPage,
     zontablepageSize,
     setZonetablepageSize,
     setZonetablecurrentPage,
     fetchTransactionSummary,
-    summary_report,formatNumberToIndianFormat,start_Date,end_Date,rolwiseselectype
+    summary_report,formatNumberToIndianFormat
   } = useDataContext();
 
   useEffect(()=>{
