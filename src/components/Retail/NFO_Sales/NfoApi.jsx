@@ -6,7 +6,7 @@ import { useDataContext } from "../../../Context/DataContext";
 export const NfoApi = () => {
   const [nfo_details, setNfoDetails] = useState([]);
   const [loading, setLoading] = useState("");
-  const [nfo_delete, setNfoDelete]= useState('');
+  const [nfo_delete, setNfoDelete] = useState('');
   const { emproles, emp_id, zoneData, REGIONData, UFCData } = useDataContext();
   const [uploadProgress, setUploadProgress] = useState(0);
 
@@ -77,34 +77,24 @@ export const NfoApi = () => {
     ];
     const totalRows = excelData.length - 1; // Subtract 1 for the header row
     let uploadedRows = 0;
-    const result = {};
     if (excelData) {
       try {
-        for (let j = 1; j < excelData.length; j++) {
-          for (let i = 0; i < keys.length; i++) {
-            const key = keys[i];
-            const value = excelData[j][i];          
-            if(value === undefined){
-              result[key] = null;
-            }else{
-              result[key] = value;
-            }         
-          }
-          const queryParams = new URLSearchParams(result);
-          const response = await axiosInstance.post(API_NFO_UPLOAD.DATA(queryParams));
-          if (response.status === 200) {
-            console.log("File uploaded and data inserted.");
-          } else {
-            console.error("Error uploading file.");
-          }
-          
-        }
-        
-          uploadedRows++;
-          const progress = (uploadedRows / totalRows) * 100;
-          setUploadProgress(progress);
-        setUploadProgress(100);
+        const result = excelData.map(data => {
+          const obj = {};
+          keys.forEach((key, index) => {
+            if (index !== 0) {
+              obj[key] = data[index];
+            }
+
+          });
+          return obj;
+        });
         console.log(result, "result");
+
+        uploadedRows++;
+        const progress = (uploadedRows / totalRows) * 100;
+        setUploadProgress(progress);
+        setUploadProgress(100);
       } catch (error) {
         console.error("Error:", error);
       }
@@ -112,5 +102,5 @@ export const NfoApi = () => {
   };
 
 
-  return { nfo_details, loading,handleUpload,uploadProgress };
+  return { nfo_details, loading, handleUpload, uploadProgress };
 };
