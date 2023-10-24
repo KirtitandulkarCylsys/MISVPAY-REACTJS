@@ -217,15 +217,26 @@ const SideBar = ({ isOpen }) => {
                           </button>
                           
                           <button id="sub-accor">
+                          <Link to="/FolioReport" className="text-decoration-none">
+                            {" "}
                             <span
                               className={`sidebar ${isOpen ? "" : "closed"}`}
                               style={{
-                                marginLeft: "41px",
-                                marginRight: "39px",
+                                backgroundColor: "#352d94",
+                                color: "white",
+                                paddingTop: "12px",
+                                paddingBottom: "10px",
+                                fontSize: "11px",
+                                fontWeight: "bold",
+                                borderRadius: "5px",
+                                borderColor: "white",
+                                paddingRight: "9px",
+                                paddingLeft: "8px",
                               }}
                             >
-                              ARM Wise Report
-                            </span>
+                               100 Folio Report
+                            </span>{" "}
+                            </Link>
                           </button>
                           <button id="sub-accor">
                             <span

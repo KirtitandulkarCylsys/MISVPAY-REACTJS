@@ -4,8 +4,8 @@ import ReactPaginate from "react-paginate";
 import FolioSecondTable from "./FolioSecondTable";
 import Loader from "../../Table/Loader";
 
-const FolioFirstTable = () => {
-  const loading = "";
+const FolioFirstTable = ({folio_Report,loading}) => {
+
   const [clickedIndex, setClickedIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
   const sapmledata1 = [
@@ -272,20 +272,20 @@ const FolioFirstTable = () => {
                     {sapmledata.map((item, index) => (
                       <React.Fragment key={index}>
                         <tr>
-                          <td className="">{item.Rank}</td>
-                          <td className="">{item.Role}</td>
+                          <td className="">{item.RANK}</td>
+                          <td className="">{item.EMP_ROLE}</td>
 
-                          <td className="">{item.RMCode}</td>
+                          <td className="">{item.RMCODE}</td>
 
-                          <td className="">{item.EmployeeName}</td>
+                          <td className="">{item.RMNAME}</td>
 
-                          <td className="">{item.Channel}</td>
-                          <td className="">{item.Ufc}</td>
+                          <td className="">{item.SCHANNEL}</td>
+                          <td className="">{item.UFC_CODE}</td>
 
-                          <td className="">{item.UfcName}</td>
-                          <td className="">{item.Region}</td>
-                          <td className="">{item.RegionName}</td>
-                          <td className="">{item.Zone}</td>
+                          <td className="">{item.UFCNAME}</td>
+                          <td className="">{item.REGION}</td>
+                          <td className="">{item.REGIONNAME}</td>
+                          <td className="">{item.ZONE}</td>
                           <td className="">
                             <td>
                               <button
@@ -293,7 +293,7 @@ const FolioFirstTable = () => {
                                 onClick={() => handleButtonClick(index)}
                                 disabled={loading}
                               >
-                                {item.AccountNo}
+                                {item.ACNO}
                               </button>
                               {isLoading && (
                                 <div className="text-center mt-4">
@@ -303,9 +303,9 @@ const FolioFirstTable = () => {
                               )}
                             </td>
                           </td>
-                          <td className="">{item.FolioName}</td>
-                          <td className="">{item.Pan}</td>
-                          <td className="">{item.Equity}</td>
+                          <td className="">{item.NAME}</td>
+                          <td className="">{item.PANNO}</td>
+                          {/* <td className="">{item.Equity}</td>
                           <td className="">{item.Hybrid}</td>
                           <td className="">{item.Solutions}</td>
                           <td className="">{item.ETFS}</td>
@@ -314,7 +314,7 @@ const FolioFirstTable = () => {
                           <td className="">{item.Liquid}</td>
                           <td className="">{item.Total}</td>
                           <td className="">{item.TotalFolio}</td>
-                          <td className="">{item.TotalPAN}</td>
+                          <td className="">{item.TotalPAN}</td> */}
                         </tr>
                         {clickedIndex === index && (
                           <tr key={`-${index}`}>
