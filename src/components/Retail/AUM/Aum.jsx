@@ -7,7 +7,7 @@ import AumRegionReport from "./AumRegionReport";
 import Loader from "../../Table/Loader";
 import { useDataContext } from "../../../Context/DataContext";
 
-const Aum = ({ report_period }) => {
+const Aum = () => {
   const [clickedIndex, setClickedIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
   // const queryParams = new URLSearchParams({
@@ -22,16 +22,9 @@ const Aum = ({ report_period }) => {
   //   chn_code: "",
   //   common_report: 'REGIONWISE'
   // });
-  const { aum_period, loading,setReportPeriod } = usePeriodApi();
-  const formatNumberToIndianFormat = (number) => {
-    if (typeof number !== "number") {
-      return number;
-    }
+  const { aum_period } = usePeriodApi();
+  const {report_period, formatNumberToIndianFormat, loading}= useDataContext();
 
-    const parts = number.toString().split(".");
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    return parts.join(".");
-  };
 
   function calculateTotal(columnName) {
     let total = 0;

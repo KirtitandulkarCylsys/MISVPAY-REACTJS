@@ -25,6 +25,7 @@ export const DataContextProvider = ({ children }) => {
   const [select_asset, setSelectAsset] = useState("ALL");
   const [arn, setArn] = useState([]);
   const [scheme, setScheme]= useState('ALL');
+  const [report_period, setReportPeriod] = useState('');
 
   const emproles = roleWiseData ? roleWiseData[0].EMP_ROLE : null;
   const channel = roleWiseData ? roleWiseData[0].CHANNEL_CODE : null;
@@ -172,7 +173,7 @@ export const DataContextProvider = ({ children }) => {
         setSelectAsset,
         arn,
         fetchArnSummary,
-        scheme, setScheme,setLoading
+        scheme, setScheme,setLoading,report_period, setReportPeriod
       }}
     >
       {children}
