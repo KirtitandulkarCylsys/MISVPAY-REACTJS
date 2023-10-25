@@ -3,25 +3,30 @@ import "./AumRegionReport.css";
 import { useAUMApi, usePeriodApi } from "../RetailApi/AUM_Api";
 import AumUfcReport from "./AumUfcReport";
 import Loader from "../../Table/Loader";
+import { useDataContext } from "../../../Context/DataContext";
 
 const AumRegionReport = ({
-  report_period,
   zone,
-  formatNumberToIndianFormat,aum_period
+  aum_period
 }) => {
   
   const [clickedIndex, setClickedIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
+  const {
+    emproles, channel, REGIONData, UFCData, QUARTERData, emp_id, report_period,formatNumberToIndianFormat
+  } = useDataContext();
+  const quarter = QUARTERData.replace("-", "").replace("-", "");
+
   let queryParams = new URLSearchParams({
-    empid: "1234",
-    emprole: "ADMIN",
-    quarter: "202324Q2",
+    empid: emp_id,
+    emprole: emproles,
+    quarter: quarter,
     period_code: report_period,
     zone: zone,
-    region_code: "",
-    ufc_code: "nill",
-    rm_code: "nill",
-    chn_code: "",
+    region_code: REGIONData,
+    ufc_code: UFCData,
+    rm_code: emp_id,
+    chn_code: channel,
     common_report: 'INT_ZONEWISE'
   });
 

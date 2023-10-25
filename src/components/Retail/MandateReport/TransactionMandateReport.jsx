@@ -3,6 +3,7 @@ import SideBar from "../../Shared/SideBar/SideBar";
 import Navbar from "../../Shared/Navbar";
 import "./TransactionMandateReport.css";
 import LoaderSearch from "../../Table/LoaderSearch";
+// import SalesTable from "../Table/SalesTable";
 // import Api from "../RetailApi/Api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

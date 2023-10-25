@@ -1,8 +1,10 @@
+import { useEffect, useState } from 'react';
 import { API_SCHEME_DETAILS } from '../../../Constant/apiConstant';
 import { API_Asset_Class } from '../../../Constant/apiConstant';
 import axiosInstance from '../../../Constant/apiConstant';
 import { useState, useEffect } from 'react';
 import { useDataContext } from '../../../Context/DataContext';
+
 export const AssetClass =()=>{
 
     const [asset, setAssetClass] = useState([]);
@@ -29,7 +31,6 @@ export const AssetClass =()=>{
     const [scheme_details, setSchemeDetails] = useState([]);
     const {select_asset}= useDataContext();
 
-    
     useEffect(() => {
       const fetchData = async () => {
        
