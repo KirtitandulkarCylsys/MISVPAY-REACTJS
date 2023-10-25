@@ -1,10 +1,7 @@
 // DataContext.js
 import React, { createContext, useContext, useState } from "react";
 import { toast } from "react-toastify";
-import axiosInstance, {
-  API_ARN,
-  API_SUMMARY_TRANSACTION,
-} from "../Constant/apiConstant";
+import axiosInstance, { API_ARN, API_SUMMARY_TRANSACTION, API_MANDATE_REPORT } from "../Constant/apiConstant";
 
 const DataContext = createContext();
 
@@ -22,9 +19,14 @@ export const DataContextProvider = ({ children }) => {
   const [rolwiseselectype, setRolwiseselectype] = useState("");
   const [loading, setLoading] = useState(false);
   const [hide, setHide] = useState(false);
-  const [select_asset, setSelectAsset] = useState("ALL");
+  const [select_asset, setSelectAsset]= useState('ALL');
+
+//mandate states
+const [rolwiseStype, setRolwiseStype] = useState("");
+const [mandate_report, setMandateReport] = useState([]);
+const [status, setStatus] = useState("LIVE");
+const [scheme, setScheme] = useState("ALL"); //Optional, because it's already defined in API
   const [arn, setArn] = useState([]);
-  const [scheme, setScheme]= useState('ALL');
   const [report_period, setReportPeriod] = useState('');
 
   const emproles = roleWiseData ? roleWiseData[0].EMP_ROLE : null;
@@ -97,6 +99,53 @@ export const DataContextProvider = ({ children }) => {
       throw new Error("Error fetching transaction summary data");
     }
   };
+  
+  const fetchmandatereport = async () => {
+    try {
+    const formattedStartDate = start_Date?.split("-").reverse().join("/");
+    const formattedEndDate = end_Date?.split("-").reverse().join("/");
+    const quarter =  QUARTERData.replace("-","").replace("-", "");
+    const date1 = formattedStartDate ? formattedStartDate: "";
+    const date2 = formattedEndDate ? formattedEndDate: "";
+
+    const queryParams = new URLSearchParams({
+      emp_id: emp_id,
+      emprole: emproles,
+      year_quater: quarter,
+      start_date: date1,
+      end_date: date2,
+      stype: rolwiseStype,
+      status: status,
+      scheme_code: scheme,
+      chn_code: channel,
+      zone: zoneData,
+      region_code: REGIONData,
+      ufc_code: UFCData,
+      rmcode: emp_id,
+      common_report: commonReportValue,
+    });
+    console.log(quarter,"quarter");
+    if (start_Date > end_Date) {
+      toast.error("End Date must be Greater Than Start Date");
+      setLoading(false);
+    } else {
+      setLoading(true);
+
+      const response = await axiosInstance.get(
+        API_MANDATE_REPORT.DATA(queryParams)
+      );
+      const data = response.data;
+      setMandateReport(data);
+      setLoading(false);
+      setHide(true);
+      console.log(mandate_report);
+
+    }
+  } catch (error) {
+    console.error("error fetching transaction summary data", error);
+    throw new Error("Error fetching transaction summary data");
+  }
+};
 
   const fetchArnSummary = async () => {
     setLoading(false);
@@ -151,6 +200,14 @@ export const DataContextProvider = ({ children }) => {
         zonetablecurrentPage,
         setZonetablecurrentPage,
         setStart_Date,
+        mandate_report,
+        fetchmandatereport,
+        setRolwiseStype,
+        setStatus,
+        setScheme,
+        rolwiseStype,
+        status,
+        scheme,
         setEnd_Date,
         summary_report,
         fetchTransactionSummary,
@@ -173,7 +230,7 @@ export const DataContextProvider = ({ children }) => {
         setSelectAsset,
         arn,
         fetchArnSummary,
-        scheme, setScheme,setLoading,report_period, setReportPeriod
+        setLoading,report_period, setReportPeriod
       }}
     >
       {children}

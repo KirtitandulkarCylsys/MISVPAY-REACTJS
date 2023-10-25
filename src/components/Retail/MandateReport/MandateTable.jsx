@@ -2,69 +2,83 @@ import React, { useState } from "react";
 import "./MandateTable.css";
 import SubMandateTable from "./SubMandateTable";
 import Loader from "../../Table/Loader";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
+import { useDataContext } from "../../../Context/DataContext";
 
-const MandateTable = ({
-//   transaction_summary_report,
-//   startDate,
-//   endDate,
-//   select_type,
-//   assetClass,
-//   formatNumberToIndianFormat,
-}) => {
-//   const [clickedIndex, setClickedIndex] = useState(-1);
-//   const [sortOrder, setSortOrder] = useState({ column: null, order: "asc" });
-//   const [isLoading, setIsLoading] = useState(false);
+const MandateTable = () => {
+  const [clickedIndex, setClickedIndex] = useState(-1);
+  const [isLoading, setIsLoading] = useState(false);
+  // const [totalPages, setTotalPages] = useState("");
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const [counter, setCounter] = useState(1);
+  const {
+    // zonetablecurrentPage,
+    // zontablepageSize,
+    // setZonetablepageSize,
+    // setZonetablecurrentPage,
+    // fetchmandatereport,
+    mandate_report,
+    formatNumberToIndianFormat,
+    rolwiseStype,
+  } = useDataContext();
 
-//   const handleHeaderClick = (column) => {
-//     const order =
-//       sortOrder.column === column && sortOrder.order === "asc" ? "desc" : "asc";
-//     setSortOrder({ column, order });
-//   };
+  // useEffect(() => {
+  //   console.log(counter, "zonetablecurrentPage");
+  //   console.log(zontablepageSize, "zontablepageSize");
+  //   if (counter > 1) {
+  //     fetchmandatereport(zontablepageSize, counter.toString());
+  //   }
+  // }, [counter]);
 
-//   const sortedData = [...transaction_summary_report].sort((a, b) => {
-//     const columnA = a[sortOrder.column] || "";
-//     const columnB = b[sortOrder.column] || "";
-//     if (sortOrder.order === "asc") {
-//       if (sortOrder.column === "ZONE") {
-//         return columnA.localeCompare(columnB);
-//       } else if (
-//         sortOrder.column === "SEQUITY" ||
-//         sortOrder.column === "SHYBRID" ||
-//         sortOrder.column === "SARBITRAGE" ||
-//         sortOrder.column === "SPASSIVE" ||
-//         sortOrder.column === "SFIXED_INCOME" ||
-//         sortOrder.column === "SCASH"
-//       ) {
-//         return parseFloat(columnA) - parseFloat(columnB);
-//       }
-//     } else if (sortOrder.order === "desc") {
-//       if (sortOrder.column === "ZONE") {
-//         return columnB.localeCompare(columnA);
-//       } else if (
-//         sortOrder.column === "SEQUITY" ||
-//         sortOrder.column === "SHYBRID" ||
-//         sortOrder.column === "SARBITRAGE" ||
-//         sortOrder.column === "SPASSIVE" ||
-//         sortOrder.column === "SFIXED_INCOME" ||
-//         sortOrder.column === "SCASH"
-//       ) {
-//         return parseFloat(columnB) - parseFloat(columnA);
-//       }
-//     }
-//   });
+  const handleButtonClick = (index) => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+    if (index === clickedIndex) {
+      setClickedIndex(-1);
+    } else {
+      setClickedIndex(index);
+    }
+  };
 
-//   const handleButtonClick = (index) => {
-//     setIsLoading(true);
-//     setTimeout(() => {
-//       setIsLoading(false);
-//     }, 1500);
-//     if (index === clickedIndex) {
-//       setClickedIndex(-1);
-//     } else {
-//       setClickedIndex(index);
-//     }
-//   };
+  // const itemsperPage =
+  //   zontablepageSize === ""
+  //     ? mandate_report.length
+  //     : parseInt(zontablepageSize);
+  // useEffect(() => {
+  //   setZonetablecurrentPage("");
+  //   setTotalPages(Math.ceil(mandate_report.length / itemsperPage));
+  // }, [zontablepageSize]);
+  // useEffect(() => {
+  //   currentPage === 0
+  //     ? setZonetablecurrentPage("")
+  //     : setZonetablecurrentPage(currentPage.toString());
+  //   console.log(currentPage, "currentPage");
+  // }, [currentPage]);
+
+  const calculateTotal = (columnName) => {
+    let total = 0;
+    if (mandate_report && Array.isArray(mandate_report)) {
+      mandate_report.forEach((item) => {
+        total += parseFloat(item[columnName]);
+      });
+    }
+    return total;
+  };
+
+  // const handlePageClick = (selectedPage) => {
+  //   setCurrentPage(selectedPage.selected)
+  //   setZonetablecurrentPage(currentPage.toString());
+  //   console.log(selectedPage.selected,'selectedPage.selected');
+  // };
+
+  // const handlePageSizeChange = (e) => {
+  //   console.log(e.target.value, "pagesize");
+  //   setZonetablecurrentPage(zonetablecurrentPage.toString())
+  //   setZonetablepageSize(e.target.value);
+  //   fetchmandatereport(e.target.value,counter.toString());
+  // };
 
   return (
     <>
@@ -86,142 +100,170 @@ const MandateTable = ({
                   <table className="table table-bordered " id="table1">
                     <thead className="bgcolorBlue text-white mainhead">
                       <tr className="mid">
-                        <th rowSpan="2"
-                           className="headtable"
-                        //   onClick={() => handleHeaderClick("ZONE")}
+                        <th
+                          rowSpan="2"
+                          className="headtable"
+                          //   onClick={() => handleHeaderClick("ZONE")}
                         >
                           ZONE
                         </th>
-                        <th rowSpan="2"
-                           className="headtable"
-                        //   onClick={() => handleHeaderClick("TYPE")}
+                        <th
+                          rowSpan="2"
+                          className="headtable"
+                          //   onClick={() => handleHeaderClick("TYPE")}
                         >
                           Transaction Type
                         </th>
                         <th colSpan="8">SIP A/C</th>
-                        </tr>
-                        <tr>
+                      </tr>
+                      <tr>
                         <th
-                          
                           className="forright"
-                        //   onClick={() => handleHeaderClick("SEQUITY")}
+                          //   onClick={() => handleHeaderClick("SEQUITY")}
                         >
                           Equity
                         </th>
                         <th
-                          
                           className="forright"
-                        //   onClick={() => handleHeaderClick("SHYBRID")}
+                          //   onClick={() => handleHeaderClick("SHYBRID")}
                         >
                           Hybrid
                         </th>
                         <th
-                          
                           className="forright"
-                        //   onClick={() => handleHeaderClick("SARBITRAGE")}
+                          //   onClick={() => handleHeaderClick("SARBITRAGE")}
                         >
                           Arbitrage
                         </th>
                         <th
-                          
                           className="forright"
-                        //   onClick={() => handleHeaderClick("SPASSIVE")}
+                          //   onClick={() => handleHeaderClick("SPASSIVE")}
                         >
                           Passive(ex-Debt)
                         </th>
                         <th
-                          
                           className="forright"
-                        //   onClick={() => handleHeaderClick("SFIXED_INCOME")}
+                          //   onClick={() => handleHeaderClick("SFIXED_INCOME")}
                         >
                           Fixed Income
                         </th>
                         <th
-                          
                           className="forright"
-                        //   onClick={() => handleHeaderClick("SCASH")}
+                          //   onClick={() => handleHeaderClick("SCASH")}
                         >
                           {" "}
                           Cash{" "}
                         </th>
-                        <th  className="forright">
-                          Total
-                        </th>
+                        <th className="forright">Total</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {/* {sortedData.map((summary, index) => (
-                        <React.Fragment key={index}>
-                          <tr>
-                            <td>
-                              <button
-                                className="textlink"
-                                onClick={() => handleButtonClick(index)}
-                                disabled={isLoading}
-                              >
-                                <b className="sharp-font">{summary.ZONE}</b>
-                              </button>
-                              {isLoading && (
-                                <div className="text-center mt-4">
-                                  <i className="fas fa-spinner fa-spin fa-2x loder"></i>{" "}
-                                  <Loader className="loder" />
-                                </div>
-                              )}
-                            </td>
-                            <td className="forright">
-                              {formatNumberToIndianFormat(
-                                parseFloat(summary.SEQUITY)
-                              )}
-                            </td>
-                            <td className="forright">
-                              {formatNumberToIndianFormat(
-                                parseFloat(summary.SHYBRID)
-                              )}
-                            </td>
-                            <td className="forright">
-                              {formatNumberToIndianFormat(
-                                parseFloat(summary.SARBITRAGE)
-                              )}
-                            </td>
-                            <td className="forright">
-                              {formatNumberToIndianFormat(
-                                parseFloat(summary.SPASSIVE)
-                              )}
-                            </td>
-                            <td className="forright">
-                              {formatNumberToIndianFormat(
-                                parseFloat(summary.SFIXED_INCOME)
-                              )}
-                            </td>
-                            <td className="forright">
-                              {formatNumberToIndianFormat(
-                                parseFloat(summary.SCASH)
-                              )}
-                            </td>
-                            <td className="forright color-biege" id="total">
-                              {formatNumberToIndianFormat(
-                                parseFloat(summary.STOTAL)
-                              )}
-                            </td>
-                          </tr> */}
-                          {/* {clickedIndex === index && (
-                            <tr key={`subtable-${index}`}>
-                          <td colSpan="8" className="p-0"> */}
-                                 {/* <SubMandateTable
-                                    // {/* pzone={summary.ZONE} */}
-                                    {/* startDate={startDate} */}
-                                    {/* endDate={endDate} */}
-                                    {/* assetClass={assetClass} */}
-                                    {/* select_type={select_type} */}
-                                    {/* formatNumberToIndianFormat={ */}
-                                      {/* // formatNumberToIndianFormat */}
-                                    {/* //  } */}
-                                {/* />  */}
-                              {/* </td> */}
-                            {/* </tr> */}
-                          {/* )}  */}
-                         {/* </React.Fragment>  */}
-                      {/* ))}   */}
+                      {mandate_report?.map((mandate, index) => {
+                        return (
+                          <React.Fragment key={index}>
+                            <tr>
+                              <td>
+                                <button
+                                  className="textlink"
+                                  onClick={() => handleButtonClick(index)}
+                                  disabled={isLoading}
+                                >
+                                  <b className="sharp-font"> {mandate.ZONE}</b>
+                                </button>
+                                {isLoading && (
+                                  <div className="text-center mt-4">
+                                    <i className="fas fa-spinner fa-spin fa-2x loder"></i>{" "}
+                                    <Loader className="loder" />
+                                  </div>
+                                )}
+                              </td>
+                              <td className="text-end">{rolwiseStype}</td>
+                              <td className="text-end">
+                                {formatNumberToIndianFormat(
+                                  parseFloat(mandate.SEQUITY)
+                                )}
+                              </td>
+                              <td className="text-end">
+                                {formatNumberToIndianFormat(
+                                  parseFloat(mandate.SHYBRID)
+                                )}
+                              </td>
+                              <td className="text-end">
+                                {formatNumberToIndianFormat(
+                                  parseFloat(mandate.SARBITRAGE)
+                                )}
+                              </td>
+                              <td className="text-end">
+                                {formatNumberToIndianFormat(
+                                  parseFloat(mandate.SPASSIVE)
+                                )}
+                              </td>
+                              <td className="text-end">
+                                {formatNumberToIndianFormat(
+                                  parseFloat(mandate.SFIXED_INCOME)
+                                )}
+                              </td>
+                              <td className="text-end">
+                                {formatNumberToIndianFormat(
+                                  parseFloat(mandate.SCASH)
+                                )}
+                              </td>
+                              <td className="text-end color-biege" id="total">
+                                {formatNumberToIndianFormat(
+                                  parseFloat(mandate.STOTAL)
+                                )}
+                              </td>
+                            </tr>
+                            {clickedIndex === index && (
+                              <tr key={`subtable-${index}`}>
+                                <td colSpan="22" className="p-0">
+                                  <SubMandateTable zone={mandate.ZONE} />
+                                </td>
+                              </tr>
+                            )}
+                          </React.Fragment>
+                        );
+                      })}
+                      <tr className="zoneTable">
+                        <td>TOTAL</td>
+                        <td className="text-end">
+                          {formatNumberToIndianFormat(
+                            parseFloat(calculateTotal("SEQUITY").toFixed(2))
+                          )}
+                        </td>
+                        <td className="text-end">
+                          {formatNumberToIndianFormat(
+                            parseFloat(calculateTotal("SHYBRID").toFixed(2))
+                          )}
+                        </td>
+                        <td className="text-end">
+                          {formatNumberToIndianFormat(
+                            parseFloat(calculateTotal("SARBITRAGE").toFixed(2))
+                          )}
+                        </td>
+                        <td className="text-end">
+                          {formatNumberToIndianFormat(
+                            parseFloat(calculateTotal("SPASSIVE").toFixed(2))
+                          )}
+                        </td>
+                        <td className="text-end">
+                          {formatNumberToIndianFormat(
+                            parseFloat(
+                              calculateTotal("SFIXED_INCOME").toFixed(2)
+                            )
+                          )}
+                        </td>
+                        <td className="text-end">
+                          {formatNumberToIndianFormat(
+                            parseFloat(calculateTotal("SCASH").toFixed(2))
+                          )}
+                        </td>
+                        <td className="text-end">
+                          {formatNumberToIndianFormat(
+                            parseFloat(calculateTotal("STOTAL").toFixed(2))
+                          )}
+                        </td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
