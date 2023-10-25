@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
-import { API_NFO, API_NFO_DELETE, API_NFO_UPLOAD } from "../../../Constant/apiConstant";
+import {
+  API_NFO,
+  API_NFO_DELETE,
+  API_NFO_UPLOAD,
+} from "../../../Constant/apiConstant";
 import axiosInstance from "../../../Constant/apiConstant";
 import { useDataContext } from "../../../Context/DataContext";
 
 export const NfoApi = () => {
   const [nfo_details, setNfoDetails] = useState([]);
-  const [loading, setLoading] = useState("");
-  const [nfo_delete, setNfoDelete]= useState('');
-  const { emproles, emp_id, zoneData, REGIONData, UFCData } = useDataContext();
+  const [nfo_delete, setNfoDelete] = useState("");
+  const { emproles, emp_id, zoneData, REGIONData, UFCData,loading, setLoading} = useDataContext();
   const [uploadProgress, setUploadProgress] = useState(0);
 
   useEffect(() => {
@@ -33,8 +36,6 @@ export const NfoApi = () => {
 
     fetchData();
   }, []);
-
-
 
   const handleUpload = async (excelData) => {
     const keys = [
@@ -75,42 +76,41 @@ export const NfoApi = () => {
       "email_id",
       "type2",
     ];
-    const totalRows = excelData.length - 1; // Subtract 1 for the header row
+    const totalRows = excelData.length - 1;
     let uploadedRows = 0;
-    const result = {};
+
     if (excelData) {
+      excelData.shift();
       try {
-        for (let j = 1; j < excelData.length; j++) {
-          for (let i = 0; i < keys.length; i++) {
-            const key = keys[i];
-            const value = excelData[j][i];          
-            if(value === undefined){
-              result[key] = null;
-            }else{
-              result[key] = value;
-            }         
-          }
-          const queryParams = new URLSearchParams(result);
-          const response = await axiosInstance.post(API_NFO_UPLOAD.DATA(queryParams));
-          if (response.status === 200) {
-            console.log("File uploaded and data inserted.");
-          } else {
-            console.error("Error uploading file.");
-          }
-          
-        }
-        
-          uploadedRows++;
-          const progress = (uploadedRows / totalRows) * 100;
-          setUploadProgress(progress);
-        setUploadProgress(100);
+        setLoading(true);
+        const result = excelData.map((data) => {
+          const obj = {};
+          keys.forEach((key, index) => {
+            if (typeof data[index] === "number") {
+              obj[key] = data[index].toString();
+            } else {
+              obj[key] = data[index];
+            }
+          });
+          return obj;
+        });
+
+        const response = await axiosInstance.post(API_NFO_UPLOAD.DATA, {
+          data_hash: result,
+        });
+        const data = response.data;
         console.log(result, "result");
+        uploadedRows++;
+        const progress = (uploadedRows / totalRows) * 100;
+        setUploadProgress(progress);
+        setUploadProgress(100);
+        setLoading(false);
       } catch (error) {
         console.error("Error:", error);
+        setLoading(false);
       }
     }
   };
 
-
-  return { nfo_details, loading,handleUpload,uploadProgress };
+  return { nfo_details, loading, handleUpload, uploadProgress };
 };

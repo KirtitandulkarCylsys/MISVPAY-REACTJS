@@ -1,0 +1,18 @@
+.headline-2{
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+  
+  .form-lables-2{
+    font-size: 15px;
+    font-weight: bold;
+  }
+  
+   .rcorners-2{
+    border-radius: 8px;
+    border: 2px solid rgba(53, 45, 148, 0.30);
+    padding: 7px;
+    width: 95px;
+    height: 45px;
+  }
+  

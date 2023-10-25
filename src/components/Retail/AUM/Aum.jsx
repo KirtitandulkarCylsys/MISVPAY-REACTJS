@@ -7,7 +7,7 @@ import AumRegionReport from "./AumRegionReport";
 import Loader from "../../Table/Loader";
 import { useDataContext } from "../../../Context/DataContext";
 
-const Aum = ({ report_period }) => {
+const Aum = () => {
   const [clickedIndex, setClickedIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
   // const queryParams = new URLSearchParams({
@@ -22,16 +22,9 @@ const Aum = ({ report_period }) => {
   //   chn_code: "",
   //   common_report: 'REGIONWISE'
   // });
-  const { aum_period, loading,setReportPeriod } = usePeriodApi();
-  const formatNumberToIndianFormat = (number) => {
-    if (typeof number !== "number") {
-      return number;
-    }
+  const { aum_period } = usePeriodApi();
+  const {report_period, formatNumberToIndianFormat, loading}= useDataContext();
 
-    const parts = number.toString().split(".");
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    return parts.join(".");
-  };
 
   function calculateTotal(columnName) {
     let total = 0;
@@ -53,32 +46,32 @@ const Aum = ({ report_period }) => {
     }
   };
 
-  const [items, setItems] = useState([...Array(100).keys()].map((i) => i + 1));
-  const {currentPage, setCurrentPage,entriesPerPage, setEntriesPerPage}= useDataContext();
+  // const [items, setItems] = useState([...Array(100).keys()].map((i) => i + 1));
+  // const {currentPage, setCurrentPage,entriesPerPage, setEntriesPerPage}= useDataContext();
 
-  const totalPages = Math.ceil(items.length / entriesPerPage);
-  const indexOfLastItem = currentPage * entriesPerPage;
-  const indexOfFirstItem = indexOfLastItem - entriesPerPage;
-  const currentItems = aum_period.slice(indexOfFirstItem, indexOfLastItem);
+  // const totalPages = Math.ceil(items.length / entriesPerPage);
+  // const indexOfLastItem = currentPage * entriesPerPage;
+  // const indexOfFirstItem = indexOfLastItem - entriesPerPage;
+  // const currentItems = aum_period.slice(indexOfFirstItem, indexOfLastItem);
 
-  const handleEntriesChange = (e) => {
-    setEntriesPerPage(parseInt(e.target.value));
-    setCurrentPage(1);
-  };
+  // const handleEntriesChange = (e) => {
+  //   setEntriesPerPage(parseInt(e.target.value));
+  //   setCurrentPage(1);
+  // };
 
-  const handlePrev = () => {
-    setCurrentPage(currentPage - 1);
-  };
+  // const handlePrev = () => {
+  //   setCurrentPage(currentPage - 1);
+  // };
 
-  const handleNext = () => {
-    setCurrentPage(currentPage + 1);
-  };
+  // const handleNext = () => {
+  //   setCurrentPage(currentPage + 1);
+  // };
 
-  useEffect(() => {
-    if (currentPage > totalPages) {
-      setCurrentPage(totalPages);
-    }
-  }, [currentPage, totalPages]);
+  // useEffect(() => {
+  //   if (currentPage > totalPages) {
+  //     setCurrentPage(totalPages);
+  //   }
+  // }, [currentPage, totalPages]);
 
   return (
     <>
@@ -133,7 +126,7 @@ const Aum = ({ report_period }) => {
 
           </div>
         )}
-       
+{/*        
        <label htmlFor="entries">Show entries: </label>
       <select id="entries" onChange={handleEntriesChange}>
         {[5, 10, 50].map((entry) => (
@@ -142,7 +135,7 @@ const Aum = ({ report_period }) => {
           </option>
         ))}
       </select>
-      
+       */}
 
        
        
@@ -168,7 +161,7 @@ const Aum = ({ report_period }) => {
               </tr>
             </thead>
             <tbody>
-              {currentItems.map((item, index) => (
+              {aum_period.map((item, index) => (
                 <React.Fragment key={index}>
                   <tr key={item.ZONE}>
                     <td>
@@ -268,7 +261,7 @@ const Aum = ({ report_period }) => {
             </tbody>
           </table>
         )}
-         <div>
+         {/* <div>
         <button onClick={handlePrev} disabled={currentPage === 1}>
           Previous
         </button>
@@ -276,7 +269,7 @@ const Aum = ({ report_period }) => {
         <button onClick={handleNext} disabled={currentPage === totalPages}>
           Next
         </button>
-      </div>
+      </div> */}
       </div>
     </>
   );

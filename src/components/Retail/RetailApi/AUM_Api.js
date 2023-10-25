@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { API_ALL_RM_AUM, API_ALL_UFC_AUM, API_AUM_DROPDOWN, API_AUM_RM, API_AUM_Region, API_AUM_UFC } from '../../../Constant/apiConstant';
-import {API_AUM_period} from '../../../Constant/apiConstant';
+import { API_AUM_period } from '../../../Constant/apiConstant';
 import { API_SCHEME_DETAILS } from '../../../Constant/apiConstant';
 import axiosInstance from '../../../Constant/apiConstant';
 import { API_ALL_REGION_AUM } from '../../../Constant/apiConstant';
@@ -9,7 +9,7 @@ import { useDataContext } from '../../../Context/DataContext';
 
 export const AumDropdownApi = () => {
   const [aum_dropdown, setAumDropdown] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const { setLoading } = useDataContext();
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true)
@@ -26,22 +26,16 @@ export const AumDropdownApi = () => {
 
     fetchData();
   }, []);
-  return {aum_dropdown, loading}
+  return { aum_dropdown }
 }
+
 
 export const usePeriodApi = () => {
   const [aum_period, setAumperiod] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [report_period, setReportPeriod] = useState('');
-  const {currentPage,entriesPerPage,roleWiseData}= useDataContext();
+  const {
+    emproles, channel, zoneData, REGIONData, UFCData, QUARTERData, emp_id, setLoading, report_period
+  } = useDataContext();
 
-  const emproles = roleWiseData ? roleWiseData[0].EMP_ROLE : null; 
-  const channel = roleWiseData ? roleWiseData[0].CHANNEL_CODE : null; 
-  const zoneData = roleWiseData ? roleWiseData[0].ZONE : null;
-  const REGIONData = roleWiseData ? roleWiseData[0].REGIONCODE : null;
-  const UFCData = roleWiseData ? roleWiseData[0].UFC_CODE : null;
-  const QUARTERData = roleWiseData ? roleWiseData[0].YEAR : null;
-  const emp_id = roleWiseData ? roleWiseData[0].EMP_ID : null;
   let commonReportValue = "";
   switch (emproles) {
     case "ZH":
@@ -52,32 +46,34 @@ export const usePeriodApi = () => {
       break;
     case "CM":
       commonReportValue = "UFCWISE";
-      
+
       break;
     case "RM":
       commonReportValue = "RMWISE";
       break;
     default:
-      commonReportValue = ""; 
+      commonReportValue = "";
   }
+  const quarter = QUARTERData.replace("-", "").replace("-", "");
+
   useEffect(() => {
-   
+
 
     const fetchData = async () => {
       setLoading(true);
       const queryParams = new URLSearchParams({
         empid: emp_id,
         emprole: emproles,
-        quarter: "202324Q2",
-        period_code:  "DD58180823",
-        zone: zoneData ,
+        quarter: quarter,
+        period_code: report_period,
+        zone: zoneData,
         region_code: REGIONData,
-        ufc_code: UFCData ,
+        ufc_code: UFCData,
         rm_code: emp_id,
         chn_code: channel,
         common_report: commonReportValue,
-        page_number:currentPage,
-        page_size : entriesPerPage
+        page_number: "",
+        page_size: ""
       });
 
       try {
@@ -100,7 +96,7 @@ export const usePeriodApi = () => {
     fetchData();
   }, []);
 
-  return { aum_period, report_period, setReportPeriod, loading, emproles };
+  return { aum_period };
 };
 
 export const useAUMApi = (queryParams) => {
@@ -124,12 +120,12 @@ export const useAUMApi = (queryParams) => {
     fetchData();
   }, []);
 
-  return {aum_regions,loading,};
+  return { aum_regions, loading, };
 };
 
 
- // Replace with your axios instance
- // Replace with your API_AUM_period import
+// Replace with your axios instance
+// Replace with your API_AUM_period import
 
 export const UfcApi = (queryParams) => {
   const [aumUfc, setAumUfc] = useState([]);
@@ -181,13 +177,6 @@ export const RMApi = (queryParams) => {
   return { aumRM, loading };
 };
 
-
-
-
-
-
-
-
 export const useAllRegion = (queryParams) => {
   const [aum_AllAumRegion, setAumAllAumRegion] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -196,10 +185,10 @@ export const useAllRegion = (queryParams) => {
     const fetchData = async () => {
       setLoading(true)
       try {
-       
+
         const responseAUM = await axiosInstance.get(API_ALL_REGION_AUM.DATA(queryParams));
-        const data= responseAUM.data;
-        
+        const data = responseAUM.data;
+
         setAumAllAumRegion(data);
         setLoading(false)
       } catch (error) {
@@ -210,7 +199,7 @@ export const useAllRegion = (queryParams) => {
     fetchData();
   }, []);
 
-  return {aum_AllAumRegion,loading};
+  return { aum_AllAumRegion, loading };
 };
 
 export const useAllUfc = (queryParams) => {
@@ -221,7 +210,7 @@ export const useAllUfc = (queryParams) => {
     const fetchData = async () => {
       setLoading(true)
       try {
-        
+
 
 
         const responseAUM = await axiosInstance.get(API_ALL_UFC_AUM.DATA(queryParams));
@@ -236,7 +225,7 @@ export const useAllUfc = (queryParams) => {
     fetchData();
   }, []);
 
-  return {aum_AllAumUfc,loading};
+  return { aum_AllAumUfc, loading };
 };
 
 export const useAllRM = (queryParams) => {
@@ -247,7 +236,7 @@ export const useAllRM = (queryParams) => {
     const fetchData = async () => {
       setLoading(true)
       try {
-       
+
         const response = await axiosInstance.get(API_ALL_RM_AUM.DATA(queryParams));
         const data = response.data;
         setAumAllAumRM(data);
@@ -260,7 +249,7 @@ export const useAllRM = (queryParams) => {
     fetchData();
   }, []);
 
-  return {aum_AllAumRM,loading};
+  return { aum_AllAumRM, loading };
 };
 
 
@@ -324,29 +313,28 @@ export const useUfc = (queryParams) => {
     };
     fetchData();
   }, []);
-  return {aum_ufc,loading};
+  return { aum_ufc, loading };
 };
 
-export const Scheme =()=>{
+export const Scheme = () => {
 
   const [scheme_details, setSchemeDetails] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
-     
+
       try {
         const response = await axiosInstance.get(API_SCHEME_DETAILS.DATA);
         // const data = await response.json();
         const data = response.data;
         setSchemeDetails(data);
-        console.log(scheme_details,"aaaa")
+        console.log(scheme_details, "aaaa")
       } catch (error) {
         console.error("Error fetching AUM details", error);
       }
     };
     fetchData();
   }, []);
-  return {scheme_details};
+  return { scheme_details };
 
 }
- 
- 
+
