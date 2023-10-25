@@ -171,7 +171,6 @@ const Retail_Transaction = () => {
                             name=""
                             id="ab"
                             class="form-select form-control"
-                            value={rolwiseselectype}
                             onChange={(e) => handleSelectType(e.target.value)}
                           >
                             <option value=""> choose type</option>

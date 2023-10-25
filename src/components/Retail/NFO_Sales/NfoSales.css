@@ -46,3 +46,7 @@
   color: white;
 }
 
+.plan{
+  text-overflow: ellipsis;
+}
+

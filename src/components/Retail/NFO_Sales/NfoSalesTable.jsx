@@ -5,10 +5,11 @@ import { NfoApi } from "./NfoApi";
 import "./NfoSales.css";
 import excel from "../../Assets/images/excel_icon.png";
 import LoaderSearch from "../../Table/LoaderSearch";
-import {TablePagination} from "@mui/material";
+import { Box, LinearProgress, TablePagination } from "@mui/material";
 import { ExportToExcel } from "../AUM/ExportToExcel";
 import ExportToPDF from "../AUM/ExportToPDF";
 import { read, utils } from "xlsx";
+import { useDataContext } from "../../../Context/DataContext";
 
 const NfoSalesTable = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -16,6 +17,7 @@ const NfoSalesTable = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [excelData, setExcelData] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
+  const { emp_id } = useDataContext();
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -63,12 +65,12 @@ const NfoSalesTable = () => {
 
   return (
     <div className="home-main">
-        <Navbar onToggle={toggleSidebar} />
-        <div className="d-flex">
-          <SideBar isOpen={sidebarOpen} />
-          <div
-            className={`${sidebarOpen ? "dashboard-closed" : "dashboard-full"}`}
-          >
+      <Navbar onToggle={toggleSidebar} />
+      <div className="d-flex">
+        <SideBar isOpen={sidebarOpen} />
+        <div
+          className={`${sidebarOpen ? "dashboard-closed" : "dashboard-full"}`}
+        >
           <div className="container">
             <div className="card-body bg-white mt-2">
               <div className="row">
@@ -80,24 +82,36 @@ const NfoSalesTable = () => {
               </div>
               <div className="row mt-3">
                 <div className="col-md-4"></div>
-                <div className="col-md-4">
-                  <input
-                    type="file"
-                    className="form-control"
-                    name="file"
-                    accept=".xlsx, .xls"
-                    onChange={handleFileChange}
-                  />
-                </div>
-                <div className="col-md-2 upload">
-                  <button
-                    className="btn BgcolorOrange "
-                    onClick={handleExcel}
-                  >
-                    Upload
-                  </button>
-                </div>
-                <div className="col-md-2 tabs">
+                {emp_id === "0982" ||
+                emp_id === "1325" ||
+                emp_id === "4549" ||
+                emp_id === "4548" ? (
+                  <>
+                    <div className="col-md-4">
+                      <input
+                        type="file"
+                        className="form-control"
+                        name="file"
+                        accept=".xlsx, .xls"
+                        onChange={handleFileChange}
+                      />
+                    </div>
+                    <div className="col-md-2 upload">
+                      <button
+                        className="btn BgcolorOrange "
+                        onClick={handleExcel}
+                      >
+                        Upload
+                      </button>
+                    </div>
+                    <div className="col-md-2"></div>
+                  </>
+                ) : (
+                  <></>
+                )}
+              </div>
+              <div className="row text-end mt-5">
+                <div className="col-md-2 tabs offset-10">
                   <p className="exportmodule">
                     <button onClick={handleExport} className="border-0">
                       <img src={excel} alt="excelicon" />
@@ -106,7 +120,7 @@ const NfoSalesTable = () => {
                   </p>
                 </div>
               </div>
-              <div className="row  p-3 mt-5">
+              <div className="row  p-3">
                 <div className="col-md-12  schrollbarNfo">
                   {loading ? (
                     <div className="text-center mt-4">
@@ -114,8 +128,10 @@ const NfoSalesTable = () => {
                       <LoaderSearch />
                     </div>
                   ) : nfo_details.length === 0 ? (
-                    <h3 className="text-center">Uploading: {uploadProgress.toFixed(2)}%</h3>
-                  ) :  (
+                    <h3 className="text-center">
+                      <b>No Data found</b>
+                    </h3>
+                  ) : (
                     <table className="table active  " id="nfoTable">
                       <thead className="nfoTable">
                         <tr>
@@ -168,7 +184,7 @@ const NfoSalesTable = () => {
                               <td>{nfo.TRANTYPE}</td>
                               <td>{nfo.INHOUSENUMBER}</td>
                               <td>{nfo.TYPE}</td>
-                              <td>{nfo.PLAN}</td>
+                              <td className="plan">{nfo.PLAN}</td>
                               <td>{nfo.PLANDESCRIPTION}</td>
                               <td>{nfo.FROMSCHEME}</td>
                               <td>{nfo.FROMPLAN}</td>

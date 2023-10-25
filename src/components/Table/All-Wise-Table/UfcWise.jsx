@@ -6,10 +6,10 @@ import { Link } from "react-router-dom";
 import { ExportExcelUfc } from "./ExportExcel";
 import { AllUfcwise } from "../../Retail/RetailApi/RegionApi";
 import { useDataContext } from "../../../Context/DataContext";
-import {TablePagination} from "@mui/material";
+import { TablePagination } from "@mui/material";
 const UfcWise = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [page, setPage] = useState(2);
+  const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const {
@@ -417,7 +417,7 @@ const UfcWise = () => {
                   </tbody>
                 </table>
               </div>
-              <div className="ufcpagination-container">
+              <div>
                 <TablePagination
                   count={ufcwise.length}
                   page={page}

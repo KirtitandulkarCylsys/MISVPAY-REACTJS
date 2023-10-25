@@ -3,7 +3,6 @@ import { ToastContainer, toast } from "react-toastify";
 import Navbar from "../../Shared/Navbar";
 import SideBar from "../../Shared/SideBar/SideBar";
 import { useDataContext } from "../../../Context/DataContext";
-import Retail_Transaction from "../Retail_Transaction";
 import msg from "../../Assets/images/msg_icon.png";
 import calender from "../../Assets/images/date-time_icon.png";
 import datetime from "../../Assets/images/Vector (Stroke).png";
@@ -11,7 +10,7 @@ import { ExcelToExport } from "../ExcelToExport";
 import ExportToPdf from "../ExportToPdf";
 import LoaderSearch from "../../Table/LoaderSearch";
 import ScheduleModal from "../../Shared/Modal/ScheduleModal";
-import "./Arn.css"
+import "./Arn.css";
 import ArnTable from "./ArnTable";
 import { AssetClass, Scheme } from "../RetailApi/SchemeApi";
 const ArnReport = () => {
@@ -21,14 +20,14 @@ const ArnReport = () => {
     hide,
     setHide,
     emproles,
-    start_Date,
-    end_Date,
-    rolwiseselectype,
-    loading, setSelectAsset
+    loading,
+    setSelectAsset,
+    setScheme,fetchArnSummary,setStart_Date,setEnd_Date,start_Date,end_Date,setRolwiseselectype
   } = useDataContext();
 
-  const togglehide = () => {
+  const togglehide = async () => {
     try {
+      await fetchArnSummary("");
       setHide(true);
     } catch (error) {
       setHide(false);
@@ -40,13 +39,30 @@ const ArnReport = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
-  const { handleStartDateChange, handleEndDateChange, handleSelectType } =
-    Retail_Transaction();
+  const handleStartDateChange = (e) => {
+    const newStartDate = e.target.value;
+    if (newStartDate > end_Date) {
+      toast.error("Start date should be less than end date");
+    } else {
+      setStart_Date(newStartDate);
+    }
+  };
 
+  const handleEndDateChange = (e) => {
+    const newEndDate = e.target.value;
+    if (newEndDate < start_Date) {
+      toast.error("End date should be greater than start date");
+    } else {
+      setEnd_Date(newEndDate);
+    }
+  };
+  const handleSelectType = (value) => {
+    setRolwiseselectype(value);
+  };
+  
   const { asset } = AssetClass();
 
   const { scheme_details } = Scheme();
-
 
   const commonReport = emproles;
   return (
@@ -101,7 +117,6 @@ const ArnReport = () => {
                             class="form-control"
                             id=""
                             placeholder="Project Start Date"
-                            value={start_Date}
                             onChange={handleStartDateChange}
                           />
                         </div>
@@ -116,7 +131,6 @@ const ArnReport = () => {
                             class="form-control"
                             id=""
                             placeholder="Project End Date"
-                            value={end_Date}
                             onChange={handleEndDateChange}
                           />
                         </div>
@@ -141,7 +155,6 @@ const ArnReport = () => {
                             name=""
                             id="ab"
                             class="form-select form-control"
-                            value={rolwiseselectype}
                             onChange={(e) => handleSelectType(e.target.value)}
                           >
                             <option value=""> choose type</option>
@@ -159,11 +172,14 @@ const ArnReport = () => {
                             name=""
                             id="ab"
                             class="form-select form-control"
-                            onChange={(e)=>setSelectAsset(e.target.value)}
+                            onChange={(e) => setSelectAsset(e.target.value)}
                           >
                             <option value="ALL">ALL</option>
                             {asset.map((item) => (
-                              <option key={item.SM_NATURE} value={item.SM_NATURE}>
+                              <option
+                                key={item.SM_NATURE}
+                                value={item.SM_NATURE}
+                              >
                                 {item.SM_NATURE}
                               </option>
                             ))}
@@ -172,8 +188,6 @@ const ArnReport = () => {
                       </div>
 
                       <div className="row mt-4 d-flex justify-content-around">
-
-
                         {/* scheme details */}
 
                         <div className="form-group col-md-2">
@@ -184,8 +198,14 @@ const ArnReport = () => {
                             name=""
                             id="ab"
                             class="form-select form-control"
+                            onChange={(e) => setScheme(e.target.value)}
                           >
-                            <option  className="form-label select-label" value="">Select Scheme</option>
+                            <option
+                              className="form-label select-label"
+                              value=""
+                            >
+                              Select Scheme
+                            </option>
                             {scheme_details.map((item) => (
                               <option key={item.SCHEME} value={item.SCHEME}>
                                 {item.SCHEME}
@@ -209,7 +229,6 @@ const ArnReport = () => {
                             <option value="">BND </option>
                             <option value="">INST </option>
                             <option value="">PSUC </option>
-
                           </select>
                         </div>
 
@@ -220,7 +239,6 @@ const ArnReport = () => {
                             <b>Multicity</b>
                           </label>
                         </div>
-
 
                         {/* search button */}
 
@@ -248,10 +266,8 @@ const ArnReport = () => {
                             />
                           </p>
                         </div>
-
                       </div>
                       <ScheduleModal />
-
                     </div>
                     <div className="card-body bg-white ">
                       <div className="Table">
@@ -263,7 +279,7 @@ const ArnReport = () => {
                         ) : hide ? (
                           <>
                             {commonReport === "ZH" ||
-                              commonReport === "ADMIN" ? (
+                            commonReport === "ADMIN" ? (
                               <ArnTable />
                             ) : commonReport === "RH" ? (
                               <></>

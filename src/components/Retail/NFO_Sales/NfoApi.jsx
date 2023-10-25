@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
-import { API_NFO, API_NFO_DELETE, API_NFO_UPLOAD } from "../../../Constant/apiConstant";
+import {
+  API_NFO,
+  API_NFO_DELETE,
+  API_NFO_UPLOAD,
+} from "../../../Constant/apiConstant";
 import axiosInstance from "../../../Constant/apiConstant";
 import { useDataContext } from "../../../Context/DataContext";
 
 export const NfoApi = () => {
   const [nfo_details, setNfoDetails] = useState([]);
-  const [loading, setLoading] = useState("");
-  const [nfo_delete, setNfoDelete] = useState('');
-  const { emproles, emp_id, zoneData, REGIONData, UFCData } = useDataContext();
+  const [nfo_delete, setNfoDelete] = useState("");
+  const { emproles, emp_id, zoneData, REGIONData, UFCData,loading, setLoading} = useDataContext();
   const [uploadProgress, setUploadProgress] = useState(0);
 
   useEffect(() => {
@@ -33,8 +36,6 @@ export const NfoApi = () => {
 
     fetchData();
   }, []);
-
-
 
   const handleUpload = async (excelData) => {
     const keys = [
@@ -75,32 +76,41 @@ export const NfoApi = () => {
       "email_id",
       "type2",
     ];
-    const totalRows = excelData.length - 1; // Subtract 1 for the header row
+    const totalRows = excelData.length - 1;
     let uploadedRows = 0;
+
     if (excelData) {
+      excelData.shift();
       try {
-        const result = excelData.map(data => {
+        setLoading(true);
+        const result = excelData.map((data) => {
           const obj = {};
           keys.forEach((key, index) => {
-            if (index !== 0) {
+            if (typeof data[index] === "number") {
+              obj[key] = data[index].toString();
+            } else {
               obj[key] = data[index];
             }
-
           });
           return obj;
         });
-        console.log(result, "result");
 
+        const response = await axiosInstance.post(API_NFO_UPLOAD.DATA, {
+          data_hash: result,
+        });
+        const data = response.data;
+        console.log(result, "result");
         uploadedRows++;
         const progress = (uploadedRows / totalRows) * 100;
         setUploadProgress(progress);
         setUploadProgress(100);
+        setLoading(false);
       } catch (error) {
         console.error("Error:", error);
+        setLoading(false);
       }
     }
   };
-
 
   return { nfo_details, loading, handleUpload, uploadProgress };
 };

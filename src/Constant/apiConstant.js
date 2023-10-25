@@ -122,5 +122,9 @@ export const API_ALL_ETF_SALE = {
   DATA: (queryParams) => `${API}/etf_sale?${queryParams}`,
 };
 
+export const API_ARN = {
+  DATA: (queryParams) => `${API}/arn?${queryParams}`,
+};
+
 export default axiosInstance;
 
