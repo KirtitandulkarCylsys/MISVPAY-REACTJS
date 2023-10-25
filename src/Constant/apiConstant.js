@@ -105,6 +105,15 @@ export const API_Asset_Class = {
   DATA: `${API}/asset_class`,
 };
 
+export const API_ACCOUNT_DROPDOWN = {
+  DATA: `${API}/account_dropdown`,
+};
+
+export const API_ACCOUNT_SUMMARY = {
+  DATA: (queryParams) => `${API}/account_summary?${queryParams}`,
+};
+
+
 export const API_NFO = {
   DATA: (queryParams) => `${API}/nfo?${queryParams}`,
 }
