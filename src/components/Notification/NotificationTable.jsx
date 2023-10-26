@@ -1,36 +1,19 @@
 import React, { useState } from "react";
-import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 import SideBar from "../Shared/SideBar/SideBar";
 import Navbar from "../Shared/Navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash, faEye } from "@fortawesome/free-solid-svg-icons";
+import { useDataContext } from "../../Context/DataContext";
 
-const NotificationTable = () => {
-  // Sample data for the table
+function NotificationTable({ notifications }){
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const data = [
-    {
-      id: 1,
-      description: "Notification 1",
-      validFrom: "2023-10-17",
-      validUpto: "2023-10-31",
-      lastUpdateDate: "2023-10-17",
-      lastUpdatedBy: "User A",
-      status: "Y",
-    },
-  ];
-  const [dataa,setDataa]= useState(data)
- 
+  const { notification_desc,
+    setNotificationDesc, valid_from, setValidFrom, valid_upto, setValidUpto, last_updated_by, setLastUpdatedBy, status, setStatus } = useDataContext();
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
-
-  const handleDelete = (id) => {
-    const updatedData = dataa.filter(item => item.id !== id);
-    setDataa(updatedData);
-};
-
+  
   return (
     <div className="container-fluid p-0 home-main">
       <Navbar onToggle={toggleSidebar} />
@@ -54,7 +37,6 @@ const NotificationTable = () => {
                 <table className="table table-bordered table-striped">
                   <thead>
                     <tr>
-                      <th>ID</th>
                       <th>Notification description</th>
                       <th>Valid from</th>
                       <th>Valid Upto</th>
@@ -65,23 +47,21 @@ const NotificationTable = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {data.map((item) => (
-                      <tr key={item.id}>
-                        <td>{item.id}</td>
-                        <td>{item.description}</td>
-                        <td>{item.validFrom}</td>
-                        <td>{item.validUpto}</td>
-                        <td>{item.lastUpdateDate}</td>
-                        <td>{item.lastUpdatedBy}</td>
-                        <td>{item.status}</td>
-                        <td>
+											{notifications.map((notification, index) => (
+												<tr key={index}>
+													<td>{notification.notification_desc}</td>
+													<td>{notification.valid_from}</td>
+													<td>{notification.valid_upto}</td>
+													<td>{notification.last_updated_by}</td>
+													<td>{notification.status}</td>
+                          <td>
                           <FontAwesomeIcon icon={faEye} className="text-info mx-2" />
                           <FontAwesomeIcon icon={faEdit} className="text-primary mx-2" />
                           <FontAwesomeIcon icon={faTrash} className="text-danger mx-2" />
                         </td>
-                      </tr>
-                    ))}
-                  </tbody>
+												</tr>
+											))}
+										</tbody>
                 </table>
               </div>
             </div>
@@ -90,6 +70,6 @@ const NotificationTable = () => {
       </div>
     </div>
   );
-};
+}
 
 export default NotificationTable;

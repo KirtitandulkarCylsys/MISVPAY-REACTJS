@@ -7,7 +7,7 @@ import Navbar from "../Shared/Navbar";
 import { ToastContainer, toast } from "react-toastify";
 import { Ufc_Drop } from "../Retail/RetailApi/Account_Trans_api";
 import { Account_Api } from "../Retail/RetailApi/Account_Api";
-import LoaderSearch from "../Table/SubTable/LoaderSearch";
+import LoaderSearch from "../Table/LoaderSearch";
 import AccPdfDownload from "./AccPdfDownload";
 import { AccExcelDownload } from "./AccExcelDownload";
 import SIPMaturity from "./Transaction_Type/SIPMaturity.jsx";
