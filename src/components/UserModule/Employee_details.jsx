@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import SideBar from "../Shared/SideBar/SideBar";
 import Navbar from "../Shared/Navbar";
 import "../UserModule/Employee_details.css";
-import { Link, useParams } from "react-router-dom";
-import { API_MANAGE_USER_CHANNEL_CODE_DROPDOWN } from "../../Constant/apiConstant";
+import { Link} from "react-router-dom";
+import axiosInstance, { API_MANAGE_USER_CHANNEL_CODE_DROPDOWN } from "../../Constant/apiConstant";
 import { API_MANAGE_EMPLOYEE_ROLE_DROPDOWN } from "../../Constant/apiConstant";
 import { API_MANAGE_REGION_DROPDOWN } from "../../Constant/apiConstant";
 import { API_MANAGE_UFC_LOCATION_DROPDOWN } from "../../Constant/apiConstant";
@@ -13,6 +13,7 @@ import { Usermodulepoweruserdropdown } from "./Usermoduleapi";
 import { Usermodulfunctionalroledropdown } from "./Usermoduleapi";
 import { Usermodulecitydropdown } from "./Usermoduleapi";
 import { UsermodulQuarterdropdown } from "./Usermoduleapi";
+import {API_MANAGE_USER_SAVE_DATA} from "../../Constant/apiConstant";
 import Loader from "../Table/Loader";
 
 const Employee_details = () => {
@@ -44,8 +45,8 @@ const Employee_details = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(API_MANAGE_USER_CHANNEL_CODE_DROPDOWN.DATA);
-        const data = await response.json();
+        const response = await axiosInstance.get(API_MANAGE_USER_CHANNEL_CODE_DROPDOWN.DATA);
+        const data =  response.data;
         setChannelCode(data);
       } catch (error) {
         console.error("Error fetching channel codes", error);
@@ -64,8 +65,8 @@ const Employee_details = () => {
       });
       setLoadingDropdown(true);
       try {
-        const response = await fetch(API_MANAGE_EMPLOYEE_ROLE_DROPDOWN.DATA(queryParams));
-        const data = await response.json();
+        const response =await axiosInstance.get(API_MANAGE_EMPLOYEE_ROLE_DROPDOWN.DATA(queryParams));
+        const data = response.data;
         if (data && data.length > 0) {
           setEmployee_role(data);
           setDropdownActive(true);
@@ -92,8 +93,8 @@ const Employee_details = () => {
       })
       setLoadingDropdown(true);
       try {
-        const response = await fetch(API_MANAGE_USER_ZONE_DROPDOWN.DATA(queryParams));
-        const data = await response.json();
+        const response =await axiosInstance.get(API_MANAGE_USER_ZONE_DROPDOWN.DATA(queryParams));
+        const data = response.data;
         setZonec(data);
       } catch (error) {
         console.error("Error fetching region details", error);
@@ -115,8 +116,8 @@ const Employee_details = () => {
       })
       setLoadingDropdown(true);
       try {
-        const response = await fetch(API_MANAGE_REGION_DROPDOWN.DATA(queryParams));
-        const data = await response.json();
+        const response =await axiosInstance.get(API_MANAGE_REGION_DROPDOWN.DATA(queryParams));
+        const data = response.data;
         setRegion(data);
       } catch (error) {
         console.error("Error fetching region details", error);
@@ -140,8 +141,8 @@ const Employee_details = () => {
       })
       setLoadingDropdown(true);
       try {
-        const response = await fetch(API_MANAGE_UFC_LOCATION_DROPDOWN.DATA(queryParams));
-        const data = await response.json();
+        const response = await axiosInstance.get(API_MANAGE_UFC_LOCATION_DROPDOWN.DATA(queryParams));
+        const data =  response.data;
         setLocationUfc(data);
       } catch (error) {
         console.error("Error fetching region details", error);
@@ -152,7 +153,7 @@ const Employee_details = () => {
     fetchData();
   }, [regionCode, selectedChannel])
 
-  const [emp_id, setEmp_id] = useState("");
+  const [empl_id, setEmp_id] = useState("");
   const [emp_name, setEmp_name] = useState("");
   const [emailid, setEmailid] = useState("");
   const [emp_pass, setEmp_pass] = useState("");
@@ -183,11 +184,12 @@ const Employee_details = () => {
 
   const storeData = async (e) => {
     setIsLoading(true)
-    const response = await fetch('http://localhost:3000/api/v1/employees', {
+    const response = await fetch(API_MANAGE_USER_SAVE_DATA.DATA, {
       method: 'POST',
       body: JSON.stringify(
+
         {
-          emp_id: emp_id,
+          emp_id: empl_id,
           emp_name: emp_name,
           emailid: emailid,
           emp_pass: emp_pass,
@@ -213,17 +215,17 @@ const Employee_details = () => {
           access_from: formattedaccess_from,
           access_upto: formattedaccess_upto
         }
-      ),
-      headers: {
-        'Content-Type': 'application/json'
+        ),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      const result = await response.json();
+      {
+        setIsLoading(false)
+        window.location.reload();
       }
-    });
-    const result = await response.json();
-    {
-      setIsLoading(false)
-      window.location.reload();
     }
-  }
 
   return (
     <>
@@ -243,7 +245,7 @@ const Employee_details = () => {
               <div className="d-flex justify-content-around mt-3">
                 <div className="col-md-3">
                   <label><b>Employee ID</b></label>
-                  <input type="text" className="form-control" value={emp_id} onChange={(e) => setEmp_id(e.target.value)} />
+                  <input type="text" className="form-control" value={empl_id} onChange={(e) => setEmp_id(e.target.value)} />
                 </div>
                 <div className="col-md-3">
                   <label><b>Employee Name</b></label>

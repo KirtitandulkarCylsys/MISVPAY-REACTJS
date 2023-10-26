@@ -3,7 +3,7 @@ import SideBar from "../Shared/SideBar/SideBar";
 import Navbar from "../Shared/Navbar";
 import "../UserModule/Employee_details.css";
 import { Link, json, useParams } from "react-router-dom";
-import { API_MANAGE_USER_CHANNEL_CODE_DROPDOWN } from "../../Constant/apiConstant";
+import axiosInstance, { API_MANAGE_USER_CHANNEL_CODE_DROPDOWN, API_MANAGE_USER_UPDATE_DATA } from "../../Constant/apiConstant";
 import { API_MANAGE_USER_GET_EDIT_DATA } from "../../Constant/apiConstant";
 import { API_MANAGE_EMPLOYEE_ROLE_DROPDOWN } from "../../Constant/apiConstant";
 import { API_MANAGE_REGION_DROPDOWN } from "../../Constant/apiConstant";
@@ -74,8 +74,8 @@ const Employee_update = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(API_MANAGE_USER_CHANNEL_CODE_DROPDOWN.DATA);
-        const data = await response.json();
+        const response = await axiosInstance.get(API_MANAGE_USER_CHANNEL_CODE_DROPDOWN.DATA);
+        const data = response.data;
         setChannelCode(data);
       } catch (error) {
         console.error("Error fetching channel codes", error);
@@ -91,8 +91,8 @@ const Employee_update = () => {
         channel_code: CHANNEL_CODE,
       });
       try {
-        const response = await fetch(API_MANAGE_EMPLOYEE_ROLE_DROPDOWN.DATA(queryParams));
-        const data = await response.json();
+        const response = await axiosInstance.get(API_MANAGE_EMPLOYEE_ROLE_DROPDOWN.DATA(queryParams));
+        const data = response.data;
         setEmployee_role(data);
       } catch (error) {
         console.error("Error fetching employee roles", error);
@@ -108,8 +108,8 @@ const Employee_update = () => {
         valid_upto: '30-12-99',
       })
       try {
-        const response = await fetch(API_MANAGE_USER_ZONE_DROPDOWN.DATA(queryParams));
-        const data = await response.json();
+        const response = await axiosInstance.get(API_MANAGE_USER_ZONE_DROPDOWN.DATA(queryParams));
+        const data =  response.data;
         setZonec(data);
       } catch (error) {
         console.error("Error fetching region details", error);
@@ -125,8 +125,8 @@ const Employee_update = () => {
         valid_upto: '30-12-99',
       })
       try {
-        const response = await fetch(API_MANAGE_REGION_DROPDOWN.DATA(queryParams));
-        const data = await response.json();
+        const response = await axiosInstance.get(API_MANAGE_REGION_DROPDOWN.DATA(queryParams));
+        const data = response.data;
         setRegion(data);
       } catch (error) {
         console.error("Error fetching region details", error);
@@ -143,8 +143,8 @@ const Employee_update = () => {
         valid_upto: '30-12-99'
       })
       try {
-        const response = await fetch(API_MANAGE_UFC_LOCATION_DROPDOWN.DATA(queryParams));
-        const data = await response.json();
+        const response =await axiosInstance.get(API_MANAGE_UFC_LOCATION_DROPDOWN.DATA(queryParams));
+        const data =  response.data;
         setLocationUfc(data);
       } catch (error) {
         console.error("Error fetching region details", error);
@@ -211,7 +211,7 @@ const Employee_update = () => {
 
   const update = async () => {
     setIsLoading(true)
-    const response = await fetch('http://localhost:3000/api/v1/employees_update', {
+    const response = await fetch(API_MANAGE_USER_UPDATE_DATA.DATA, {
       method: 'PUT',
       body: JSON.stringify(
         {

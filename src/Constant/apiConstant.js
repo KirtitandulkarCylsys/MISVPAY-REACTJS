@@ -189,4 +189,12 @@ export const API_MANAGE_USER_GET_EDIT_DATA= {
 DATA: (queryParams) => `${API}/manage_user_get_edit_data?${queryParams}`
 };
 
+  export const API_MANAGE_USER_SAVE_DATA = {
+    DATA:  `${API}/employees`,
+  }
+
+  export const API_MANAGE_USER_UPDATE_DATA = {
+    DATA:  `${API}/employees_update`,
+  }
+
 export default axiosInstance;

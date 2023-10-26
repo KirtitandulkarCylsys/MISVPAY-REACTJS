@@ -3,7 +3,7 @@ import SideBar from "../Shared/SideBar/SideBar";
 import Navbar from "../Shared/Navbar";
 import "../UserModule/Manage_user.css";
 import { Link } from "react-router-dom";
-import { API_MANAGE_EMPLOYEE_ROLE_DROPDOWN } from "../../Constant/apiConstant";
+import axiosInstance, { API_MANAGE_EMPLOYEE_ROLE_DROPDOWN } from "../../Constant/apiConstant";
 import { API_MANAGE_USER_CHANNEL_CODE_DROPDOWN } from "../../Constant/apiConstant";
 import { API_MANAGE_LOCATION_DROPDOWN } from "../../Constant/apiConstant";
 import { API_SEARCH_MANAGE_USER_TABLE } from "../../Constant/apiConstant";
@@ -39,8 +39,8 @@ const Manage_user = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(API_MANAGE_USER_CHANNEL_CODE_DROPDOWN.DATA);
-        const data = await response.json();
+        const response = await axiosInstance.get(API_MANAGE_USER_CHANNEL_CODE_DROPDOWN.DATA);
+        const data = response.data;
         setChannelCode(data);
       } catch (error) {
         console.error("Error fetching channel codes", error);
@@ -60,8 +60,8 @@ const Manage_user = () => {
       });
       setLoadingLocationDropdown(true);
       try {
-        const response = await fetch(API_MANAGE_EMPLOYEE_ROLE_DROPDOWN.DATA(queryParams));
-        const data = await response.json();
+        const response = await axiosInstance.get(API_MANAGE_EMPLOYEE_ROLE_DROPDOWN.DATA(queryParams));
+        const data = response.data;
         if (data && data.length > 0) {
           setEmployeeRole(data);
           setLocationDropdownActive(true);
@@ -85,8 +85,8 @@ const Manage_user = () => {
     const fetchData = async () => {
       setLoadingLocationDropdown(true);
       try {
-        const response = await fetch(API_MANAGE_LOCATION_DROPDOWN.DATA(queryParams));
-        const data = await response.json();
+        const response = await axiosInstance.get(API_MANAGE_LOCATION_DROPDOWN.DATA(queryParams));
+        const data = response.data;
         setLocationUFC(data);
       } catch (error) {
         console.error("Error fetching locations/UFC", error);

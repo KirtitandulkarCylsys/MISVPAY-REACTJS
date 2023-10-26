@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { API_MANAGE_USER_REPORTING_ROLE_DROPDOWN } from "../../Constant/apiConstant";
+import axiosInstance, { API_MANAGE_USER_REPORTING_ROLE_DROPDOWN } from "../../Constant/apiConstant";
 import { API_MANAGE_USER_POWER_USER_DROPDOWN } from "../../Constant/apiConstant";
 import { API_MANAGE_USER_FUNCTIONAL_ROLE_DROPDOWN } from "../../Constant/apiConstant";
 import { API_MANAGE_USER_CITY_DROPDOWN } from "../../Constant/apiConstant";
@@ -10,8 +10,8 @@ export const Usermodulereportingroledropdown = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(API_MANAGE_USER_REPORTING_ROLE_DROPDOWN.DATA);
-        const data = await response.json();
+        const response = await axiosInstance.get(API_MANAGE_USER_REPORTING_ROLE_DROPDOWN.DATA);
+        const data =  response.data;
         setCrm_role(data);
       } catch (error) {
         console.error("Error fetching AUM details", error);
@@ -27,8 +27,8 @@ export const Usermodulepoweruserdropdown = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(API_MANAGE_USER_POWER_USER_DROPDOWN.DATA);
-        const data = await response.json();
+        const response = await axiosInstance.get(API_MANAGE_USER_POWER_USER_DROPDOWN.DATA);
+        const data = response.data;
         setPower_user(data);
       } catch (error) {
         console.error("Error fetching AUM details", error);
@@ -44,8 +44,8 @@ export const Usermodulfunctionalroledropdown = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(API_MANAGE_USER_FUNCTIONAL_ROLE_DROPDOWN.DATA);
-        const data = await response.json();
+        const response = await axiosInstance.get(API_MANAGE_USER_FUNCTIONAL_ROLE_DROPDOWN.DATA);
+        const data = response.data;
         setFunctional_role(data);
       } catch (error) {
         console.error("Error fetching AUM details", error);
@@ -65,8 +65,8 @@ export const Usermodulecitydropdown = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(API_MANAGE_USER_CITY_DROPDOWN.DATA(queryParams));
-        const data = await response.json();
+        const response = await axiosInstance.get(API_MANAGE_USER_CITY_DROPDOWN.DATA(queryParams));
+        const data = response.data;
         setEmployee_city(data);
       } catch (error) {
         console.error("Error fetching AUM details", error);
@@ -82,8 +82,8 @@ export const UsermodulQuarterdropdown = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(API_MANAGE_USER_QUARTER_DROPDOWN.DATA);
-        const data = await response.json();
+        const response = await axiosInstance.get(API_MANAGE_USER_QUARTER_DROPDOWN.DATA);
+        const data = response.data;
         setQuarter(data);
       } catch (error) {
         console.error("Error fetching AUM details", error);
