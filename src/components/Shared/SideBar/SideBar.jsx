@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../../Assets/css/Shared/Sidebar.css";
 import SubSecondBar from "./SubSecondBar";
@@ -120,6 +120,19 @@ const SideBar = ({ isOpen }) => {
                                 }}
                               >
                                 Transaction Amount Summary
+                              </span>
+                            </Link>
+                          </button>
+                          <button className="mt-2 p-0 pb-2 pt-2" id="sub-accor-active" >
+                            <Link to="/Mandate" style={{ textDecoration: "none",color:"white" }} >
+                              <span
+                                className={`sidebar ${isOpen ? "" : "closed"}`}
+                                style={{
+                                  marginLeft: "21px",
+                                  marginRight: "11px",
+                                }}
+                              >
+                                Transaction Mandate Report
                               </span>
                             </Link>
                           </button>

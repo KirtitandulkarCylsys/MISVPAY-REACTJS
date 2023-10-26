@@ -10,27 +10,28 @@ import { Link, useParams } from "react-router-dom";
 import Loader from "../../Table/Loader";
 import AumRmReport from "./AumRmReport";
 import LoaderSearch from "../../Table/LoaderSearch";
+import { useDataContext } from "../../../Context/DataContext";
 const AumUfcReport = ({
-  report_period,
-  region_code,
-  formatNumberToIndianFormat,
-  aum_period
-}) => {
+  region_code,aum_period}) => {
+  const {
+    emproles, channel, QUARTERData, emp_id, report_period, formatNumberToIndianFormat
+  } = useDataContext();
+  const quarter = QUARTERData.replace("-", "").replace("-", "");
   const queryParams = new URLSearchParams({
-    empid: "1234",
-    emprole: "ADMIN",
-    quarter: "202324Q2",
+    empid: emp_id,
+    emprole: emproles,
+    quarter: quarter,
     period_code: report_period,
     zone: "",
     region_code: region_code,
     ufc_code: "nill",
-    rm_code: "nill",
-    chn_code: "",
+    rm_code: emp_id,
+    chn_code: channel,
     common_report: "INT_REGIONWISE",
   });
 
-  const { aumUfc, loading } =  UfcApi(queryParams);
-  console.log(aumUfc,"data")
+  const { aumUfc, loading } = UfcApi(queryParams);
+  console.log(aumUfc, "data")
   let showdata = [];
   if (aumUfc && aumUfc.toString().length > 0) {
     showdata = aumUfc;
@@ -94,7 +95,7 @@ const AumUfcReport = ({
                 <div className=" " style={{ paddingLeft: "10px" }}>
                   <div
                     className=" d-flex"
-                    // style={{ paddingLeft: "10px", paddingBottom: "10px" }}
+                  // style={{ paddingLeft: "10px", paddingBottom: "10px" }}
                   >
                     {/* <div className="col-md-3 ">
                       <h4>
@@ -134,10 +135,10 @@ const AumUfcReport = ({
                     <tr className="mid">
                       <th rowSpan="2">Zone</th>
                       <th rowSpan="2">Region</th>
-                      
+
                       <th rowSpan="2">UFC Code</th>
                       <th rowSpan="2">UFC</th>
-                      
+
                       <th rowSpan="2">Employee Name</th>
                       <th rowSpan="2">Total AUM</th>
                       <th colSpan="6">AUM</th>
@@ -152,52 +153,52 @@ const AumUfcReport = ({
                     </tr>
                   </thead>
                   <tbody style={{ backgroundColor: "#8080805c" }}>
-                    {showdata.map((item,index) => (
-                       <React.Fragment>
-                      <tr key={item.SrNo}>
-                        <td className="">{item.ZONE}</td>
-                        <td className="">{item.REGION_NAME}</td>
-                       
-                        
-                      <button
-                        className="textlink"
-                        onClick={() => handleButtonClick(index)}
-                        disabled={loading}
-                      >
-                        {item.UFC_CODE}
-                      </button>
-                      {isLoading && (
-                        <div className="text-center mt-4">
-                          <i className="fas fa-spinner fa-spin fa-2x loder"></i>{" "}
-                          {/* <Loader className="loder" /> */}
-                        </div>
-                      )}
-                        <td className="">{item.UFC_NAME}</td>
-                       
-                        <td className="">{item.EMP_NAME}</td>
-                        <td className="">{item.TOTAL_AUM}</td>
-                        <td className="">{item.EQUITY_AUM}</td>
-                        <td className="">{item.HYBRID_AUM}</td>
-                        <td className="">{item.ARBITRAGE_AUM}</td>
-                        <td className="">{item.PASSIVE_AUM}</td>
-                        <td className="">{item.FIXED_INCOME_AUM}</td>
-                        <td className="">{item.CASH_AUM}</td>
+                    {showdata.map((item, index) => (
+                      <React.Fragment>
+                        <tr key={item.SrNo}>
+                          <td className="">{item.ZONE}</td>
+                          <td className="">{item.REGION_NAME}</td>
 
-                      </tr>  {clickedIndex === index && (
-                    <tr key={`subtable-${index}`}>
-                      <td colSpan="12" className="">
-                        <AumRmReport
-                          ufc_code= {item.UFC_CODE}
-                          report_period={report_period}
-                          formatNumberToIndianFormat={
-                            formatNumberToIndianFormat
-                          }
-                        />
-                      </td>
-                    </tr>
-                  )}
-                </React.Fragment>
-                  ))}
+
+                          <button
+                            className="textlink"
+                            onClick={() => handleButtonClick(index)}
+                            disabled={loading}
+                          >
+                            {item.UFC_CODE}
+                          </button>
+                          {isLoading && (
+                            <div className="text-center mt-4">
+                              <i className="fas fa-spinner fa-spin fa-2x loder"></i>{" "}
+                              {/* <Loader className="loder" /> */}
+                            </div>
+                          )}
+                          <td className="">{item.UFC_NAME}</td>
+
+                          <td className="">{item.EMP_NAME}</td>
+                          <td className="">{item.TOTAL_AUM}</td>
+                          <td className="">{item.EQUITY_AUM}</td>
+                          <td className="">{item.HYBRID_AUM}</td>
+                          <td className="">{item.ARBITRAGE_AUM}</td>
+                          <td className="">{item.PASSIVE_AUM}</td>
+                          <td className="">{item.FIXED_INCOME_AUM}</td>
+                          <td className="">{item.CASH_AUM}</td>
+
+                        </tr>  {clickedIndex === index && (
+                          <tr key={`subtable-${index}`}>
+                            <td colSpan="12" className="">
+                              <AumRmReport
+                                ufc_code={item.UFC_CODE}
+                                report_period={report_period}
+                                formatNumberToIndianFormat={
+                                  formatNumberToIndianFormat
+                                }
+                              />
+                            </td>
+                          </tr>
+                        )}
+                      </React.Fragment>
+                    ))}
                     <tr style={{ backgroundColor: "#4C6072", color: "white" }}>
                       <td colSpan="5">Total</td>
                       <td className="">

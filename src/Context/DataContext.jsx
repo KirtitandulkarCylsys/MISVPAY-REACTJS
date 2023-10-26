@@ -1,7 +1,7 @@
 // DataContext.js
 import React, { createContext, useContext, useState,useEffect } from "react";
 import { toast } from "react-toastify";
-import axiosInstance, { API_SUMMARY_TRANSACTION } from "../Constant/apiConstant";
+import axiosInstance, { API_ARN, API_SUMMARY_TRANSACTION, API_MANDATE_REPORT } from "../Constant/apiConstant";
 
 const DataContext = createContext();
 
@@ -19,6 +19,16 @@ export const DataContextProvider = ({ children }) => {
   const [rolwiseselectype, setRolwiseselectype] = useState("");
   const [loading, setLoading] = useState(false);
   const [hide, setHide] = useState(false);
+  const [select_asset, setSelectAsset]= useState('ALL');
+
+//mandate states
+const [rolwiseStype, setRolwiseStype] = useState("");
+const [mandate_report, setMandateReport] = useState([]);
+const [status, setStatus] = useState("LIVE");
+const [scheme, setScheme] = useState("ALL"); //Optional, because it's already defined in API
+  const [arn, setArn] = useState([]);
+  const [report_period, setReportPeriod] = useState('');
+
   const emproles = roleWiseData ? roleWiseData[0].EMP_ROLE : null;
   const channel = roleWiseData ? roleWiseData[0].CHANNEL_CODE : null;
   const zoneData = roleWiseData ? roleWiseData[0].ZONE : null;
@@ -26,6 +36,7 @@ export const DataContextProvider = ({ children }) => {
   const UFCData = roleWiseData ? roleWiseData[0].UFC_CODE : null;
   const QUARTERData = roleWiseData ? roleWiseData[0].YEAR : null;
   const emp_id = roleWiseData ? roleWiseData[0].EMP_ID : null;
+  const quarterLastDate = roleWiseData ? roleWiseData[0].END_DATE : null;
 
 
   let commonReportValue = "";
@@ -49,7 +60,7 @@ export const DataContextProvider = ({ children }) => {
     try {
       const formattedStartDate = start_Date?.split("-").reverse().join("/");
       const formattedEndDate = end_Date?.split("-").reverse().join("/");
-      const quarter =  QUARTERData.replace("-","").replace("-", "");;
+      const quarter = QUARTERData.replace("-", "").replace("-", "");
       const queryParams = new URLSearchParams({
         employee_id: emp_id,
         emprole: emproles,
@@ -64,10 +75,10 @@ export const DataContextProvider = ({ children }) => {
         ufc: UFCData,
         rm: emp_id,
         common_report: commonReportValue,
-        page_number:currentPage ,
+        page_number: currentPage,
         page_size: pagesize,
       });
-      console.log(quarter,"quarter");
+      console.log(quarter, "quarter");
       if (start_Date > end_Date) {
         toast.error("End Date must be Greater Than Start Date");
         setLoading(false);
@@ -82,10 +93,90 @@ export const DataContextProvider = ({ children }) => {
         setLoading(false);
         setHide(true);
         console.log(summary_report);
-
       }
     } catch (error) {
       console.error("error fetching transaction summary data", error);
+      throw new Error("Error fetching transaction summary data");
+    }
+  };
+  
+  const fetchmandatereport = async () => {
+    try {
+    const formattedStartDate = start_Date?.split("-").reverse().join("/");
+    const formattedEndDate = end_Date?.split("-").reverse().join("/");
+    const quarter =  QUARTERData.replace("-","").replace("-", "");
+    const date1 = formattedStartDate ? formattedStartDate: "";
+    const date2 = formattedEndDate ? formattedEndDate: "";
+
+    const queryParams = new URLSearchParams({
+      emp_id: emp_id,
+      emprole: emproles,
+      year_quater: quarter,
+      start_date: date1,
+      end_date: date2,
+      stype: rolwiseStype,
+      status: status,
+      scheme_code: scheme,
+      chn_code: channel,
+      zone: zoneData,
+      region_code: REGIONData,
+      ufc_code: UFCData,
+      rmcode: emp_id,
+      common_report: commonReportValue,
+    });
+    console.log(quarter,"quarter");
+    if (start_Date > end_Date) {
+      toast.error("End Date must be Greater Than Start Date");
+      setLoading(false);
+    } else {
+      setLoading(true);
+
+      const response = await axiosInstance.get(
+        API_MANDATE_REPORT.DATA(queryParams)
+      );
+      const data = response.data;
+      setMandateReport(data);
+      setLoading(false);
+      setHide(true);
+      console.log(mandate_report);
+
+    }
+  } catch (error) {
+    console.error("error fetching transaction summary data", error);
+    throw new Error("Error fetching transaction summary data");
+  }
+};
+
+  const fetchArnSummary = async () => {
+    setLoading(false);
+    try {
+      const formattedStartDate = start_Date?.split("-").reverse().join("/");
+      const formattedEndDate = end_Date?.split("-").reverse().join("/");
+      const quarter = QUARTERData.replace("-", "").replace("-", "");
+      const queryParams = new URLSearchParams({
+        employee_id: emp_id,
+        emprole: emproles,
+        start_date: formattedStartDate,
+        end_date: formattedEndDate,
+        quarter: quarter,
+        quarter_last_date:quarterLastDate,
+        multicity: "",
+        zone: zoneData,
+        region: REGIONData,
+        ufc: UFCData,
+        rm: emp_id,
+        select_type: rolwiseselectype,
+        channel: "RTL",
+        scheme: scheme,
+      });
+      setLoading(true);
+      const response = await axiosInstance.get(API_ARN.DATA(queryParams));
+      const data = response.data;
+      setArn(data);
+      setLoading(false);
+      setHide(true);
+    } catch (error) {
+      toast.error("error fetching transaction summary data", error);
       throw new Error("Error fetching transaction summary data");
     }
   };
@@ -109,8 +200,37 @@ export const DataContextProvider = ({ children }) => {
         zonetablecurrentPage,
         setZonetablecurrentPage,
         setStart_Date,
-        setEnd_Date,summary_report, fetchTransactionSummary,setRolwiseselectype, hide, setHide,
-        start_Date,end_Date,emproles,emp_id,rolwiseselectype,channel,zoneData,REGIONData,UFCData,loading,formatNumberToIndianFormat,QUARTERData
+        mandate_report,
+        fetchmandatereport,
+        setRolwiseStype,
+        setStatus,
+        setScheme,
+        rolwiseStype,
+        status,
+        scheme,
+        setEnd_Date,
+        summary_report,
+        fetchTransactionSummary,
+        setRolwiseselectype,
+        hide,
+        setHide,
+        start_Date,
+        end_Date,
+        emproles,
+        emp_id,
+        rolwiseselectype,
+        channel,
+        zoneData,
+        REGIONData,
+        UFCData,
+        loading,
+        formatNumberToIndianFormat,
+        QUARTERData,
+        select_asset,
+        setSelectAsset,
+        arn,
+        fetchArnSummary,
+        setLoading,report_period, setReportPeriod
       }}
     >
       {children}

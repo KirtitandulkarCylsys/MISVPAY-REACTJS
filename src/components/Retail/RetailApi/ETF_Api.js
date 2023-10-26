@@ -12,31 +12,28 @@ const ETF_Api = () => {
     []
   );
   const [loading, setLoading] = useState(false);
-  const { roleWiseData } = useDataContext(); 
-  const emproles = roleWiseData ? roleWiseData[0].EMP_ROLE : null; 
-  const channel = roleWiseData ? roleWiseData[0].CHANNEL_CODE : null; 
+  const { roleWiseData } = useDataContext();
+  const emproles = roleWiseData ? roleWiseData[0].EMP_ROLE : null;
+  const channel = roleWiseData ? roleWiseData[0].CHANNEL_CODE : null;
   const zoneData = roleWiseData ? roleWiseData[0].ZONE : null;
   const REGIONData = roleWiseData ? roleWiseData[0].REGIONCODE : null;
   const UFCData = roleWiseData ? roleWiseData[0].UFC_CODE : null;
   const QUARTERData = roleWiseData ? roleWiseData[0].YEAR : null;
-  
+  const emp_id = roleWiseData ? roleWiseData[0].EMP_ID : null;
 
   const fetchEtfSale = async () => {
     try {
       const formattedStartDate = startDate.split("-").reverse().join("/");
       const formattedEndDate = endDate.split("-").reverse().join("/");
       const queryParams = new URLSearchParams({
-        employee_id: "1234",
+        empid: emp_id,
         emprole: emproles,
         start_date: formattedStartDate,
         end_date: formattedEndDate,
         zone: zoneData,
-        region: REGIONData,
-        ufc: UFCData,
-        // channel: channel,
-        rm_code:""
-        
-        
+        region_code: REGIONData,
+        ufc_code: UFCData,
+        rm_code: emp_id
       });
 
       if (startDate > endDate) {

@@ -18,16 +18,18 @@ import AumRegionReport from "./AumRegionReport";
 import AumUfcReport from "./AumUfcReport";
 import AumRmReport from "./AumRmReport";
 import LoaderSearch from "../../Table/LoaderSearch";
+import { useDataContext } from "../../../Context/DataContext";
 
 const Search = () => {
-  
- 
+
+
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [hide, setHide] = useState(false);
   const { aum_dropdown } = AumDropdownApi();
- 
-  const { aum_period, report_period, setReportPeriod,loading,emproles } = usePeriodApi();
+
+  const { aum_period} = usePeriodApi();
+  const {setReportPeriod, emproles, hide, setHide,report_period, formatNumberToIndianFormat}= useDataContext();
+  
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
@@ -54,15 +56,6 @@ const Search = () => {
       setHide(false);
     }
   };
-  const formatNumberToIndianFormat = (number) => {
-    if (typeof number !== "number") {
-      return number;
-    }
-
-    const parts = number.toString().split(".");
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    return parts.join(".");
-  };
 
   const empid = emproles;
   console.log(empid)
@@ -86,9 +79,8 @@ const Search = () => {
         <div className="d-flex">
           <SideBar isOpen={sidebarOpen} />
           <div
-            className={` ${
-              sidebarOpen ? "dashboard-closed" : "dashboard-full"
-            }`}
+            className={` ${sidebarOpen ? "dashboard-closed" : "dashboard-full"
+              }`}
           >
             <div className="bg-white card m-4 brr">
               <div className="col-md-12">
@@ -140,11 +132,11 @@ const Search = () => {
                           <img src={excel} alt="excelicon" />
                         </button> */}
                             {hide && (
-  <>
-                            <ExportToExcel />
-                            | <ExportToPDF />
-                            </>
-)}
+                              <>
+                                <ExportToExcel />
+                                | <ExportToPDF />
+                              </>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -153,31 +145,31 @@ const Search = () => {
                 </div>
               </div>
               {hide && (
-  <>
-    {empid === "ZH" || empid=== "ADMIN" ? (
-      <Aum report_period={report_period} />
-    ) : empid === "RH" ? (
-      <AumRegionReport
-        formatNumberToIndianFormat={formatNumberToIndianFormat}
-        aum_period={aum_period}
-        report_period={report_period}
-      />
-    ) : empid === "CM" ? (
-      <AumUfcReport
-        aum_period={aum_period}
-        
-        report_period={report_period}
-        formatNumberToIndianFormat={formatNumberToIndianFormat}
-      />
-    ) : empid === "RM" ? (
-      <AumRmReport
-      aum_period={aum_period}
-        report_period={report_period}
-        formatNumberToIndianFormat={formatNumberToIndianFormat}
-      />
-    ) : null}
-  </>
-)}
+                <>
+                  {empid === "ZH" || empid === "ADMIN" ? (
+                    <Aum report_period={report_period} />
+                  ) : empid === "RH" ? (
+                    <AumRegionReport
+                      formatNumberToIndianFormat={formatNumberToIndianFormat}
+                      aum_period={aum_period}
+                      report_period={report_period}
+                    />
+                  ) : empid === "CM" ? (
+                    <AumUfcReport
+                      aum_period={aum_period}
+
+                      report_period={report_period}
+                      formatNumberToIndianFormat={formatNumberToIndianFormat}
+                    />
+                  ) : empid === "RM" ? (
+                    <AumRmReport
+                      aum_period={aum_period}
+                      report_period={report_period}
+                      formatNumberToIndianFormat={formatNumberToIndianFormat}
+                    />
+                  ) : null}
+                </>
+              )}
 
             </div>
           </div>

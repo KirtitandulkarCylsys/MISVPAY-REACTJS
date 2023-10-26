@@ -1,7 +1,17 @@
-.arnexport{
+.arnexport {
     border-radius: 8px;
     border: 2px solid rgba(53, 45, 148, 0.3);
     padding: 7px;
     width: 160px;
     height: 41px;
+}
+
+.ArnTable {
+    background-color: #352D94;
+    color: white;
+}
+
+.schrollbarArn{
+    overflow-y: scroll;
+    height: 450px;
 }

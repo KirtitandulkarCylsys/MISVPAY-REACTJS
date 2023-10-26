@@ -1,24 +1,29 @@
 import { useState } from "react";
-import { API_SUMMARY_TRANSACTION } from "../../../Constant/apiConstant";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import axiosInstance from "../../../Constant/apiConstant";
+import { API_ACCOUNT_SUMMARY } from "../../../Constant/apiConstant";
+import { ToastContainer, toast } from "react-toastify";
 import { useDataContext } from "../../../Context/DataContext";
-const Api = () => {
+
+export const Account_Api = ({ headers }) => {
   const [hide, setHide] = useState(false);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
-  const [select_type, setSelectType] = useState("");
-  const [transaction_summary_report, setTransactionSummaryReport] = useState(
-    []
-  );
+  const [amount, setAmount] = useState();
+  const [transaction_type, setTransactionType] = useState();
+  const [transaction_account_report, setTransactionAccountReport] = useState([]);
+  const [condition, setCondition] = useState();
+  const [ufc, setUfc] = useState();
+  const [no_mapping, setNoMapping] = useState();
   const [loading, setLoading] = useState(false);
-  const { roleWiseData } = useDataContext(); 
+  const [selectUfc, setSelectUfc]= useState('');
+  const [schemeType,setSchemeType]=useState('');
+
+  const { roleWiseData } = useDataContext();
+  const emp_id = roleWiseData ? roleWiseData[0].EMP_ID : null; 
   const emproles = roleWiseData ? roleWiseData[0].EMP_ROLE : null; 
-  const channel = roleWiseData ? roleWiseData[0].CHANNEL_CODE : null; 
-  const zoneData = roleWiseData ? roleWiseData[0].ZONE : null;
-  const REGIONData = roleWiseData ? roleWiseData[0].REGIONCODE : null;
-  const UFCData = roleWiseData ? roleWiseData[0].UFC_CODE : null;
+  const channel_code = roleWiseData ? roleWiseData[0].CHANNEL_CODE : null; 
+  const zone = roleWiseData ? roleWiseData[0].ZONE : null;
+  const region_code = roleWiseData ? roleWiseData[0].REGIONCODE : null;
+  const ufc_code = roleWiseData ? roleWiseData[0].UFC_CODE : null;
   const QUARTERData = roleWiseData ? roleWiseData[0].YEAR : null;
   let commonReportValue = "";
   switch (emproles) {
@@ -37,24 +42,27 @@ const Api = () => {
     default:
       commonReportValue = ""; 
   }
-  const fetchTransactionSummary = async () => {
+  const fetchTransactionAccount = async () => {
     try {
       const formattedStartDate = startDate.split("-").reverse().join("/");
       const formattedEndDate = endDate.split("-").reverse().join("/");
       const queryParams = new URLSearchParams({
-        employee_id: "1234",
-        emprole: emproles,
+        employee_id: emp_id,
+        employee_role: emproles,
         quarter: '202324Q2',
         start_date: formattedStartDate,
         end_date: formattedEndDate,
-        select_type: select_type,
-        scheme_code: "nill",
-        channel: channel,
-        zone: zoneData,
-        region: REGIONData,
-        ufc: UFCData,
-        rm: "",
-        common_report: commonReportValue,
+        amount: amount,
+        transaction_type: transaction_type,
+        condition: condition,
+        ufc: selectUfc,
+        zone: zone,
+        region_code: region_code,
+        ufc_code: ufc_code,
+        no_mapping:no_mapping,
+        scheme_type:schemeType,
+        channel_code: "RTL",
+        common_report: " "
       });
 
       if (startDate > endDate) {
@@ -62,15 +70,16 @@ const Api = () => {
         setLoading(false);
       } else {
         setLoading(true);
+        const response = await fetch(API_ACCOUNT_SUMMARY.DATA(queryParams), {
+          method: "GET",
+          headers: headers,
+        });
 
-        const response = await axiosInstance.get(
-          API_SUMMARY_TRANSACTION.DATA(queryParams)
-        );
-        const data = response.data;
-        setTransactionSummaryReport(data);
+        const data = await response.json();
+  
+        setTransactionAccountReport(data);
         setLoading(false);
         setHide(true);
-        console.log(transaction_summary_report);
       }
     } catch (error) {
       console.error("error fetching transaction summary data", error);
@@ -80,7 +89,7 @@ const Api = () => {
 
   const togglehide = async () => {
     try {
-      await fetchTransactionSummary();
+      await fetchTransactionAccount();
       setHide(true);
     } catch (error) {
       setHide(false);
@@ -92,6 +101,7 @@ const Api = () => {
     if (typeof number !== "number") {
       return number;
     }
+
     const parts = number.toString().split(".");
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return parts.join(".");
@@ -101,18 +111,25 @@ const Api = () => {
     hide,
     startDate,
     endDate,
-    setStartDate,
-    setEndDate,
-    select_type,
-    setSelectType,
-    transaction_summary_report,
+    transaction_account_report,
     loading,
-    togglehide,
+    transaction_type,
+    amount,
+    condition,
+    ufc,
+    no_mapping,
+    schemeType,
+    setTransactionType,
+    setEndDate,
     setHide,
+    setStartDate,
     setLoading,
     formatNumberToIndianFormat,
-    emproles
+    togglehide,
+    setAmount,
+    setCondition,
+    setUfc,
+    setNoMapping,
+    emproles,setSelectUfc,setSchemeType
   };
 };
-
-export default Api;

@@ -41,7 +41,7 @@ export const API_SUMMARY_TRANSACTION = {
 };
 
 export const API_SCHEME_DETAILS = {
-    DATA: `${API}/scheme_details`,
+    DATA: (queryParams) => `${API}/scheme_details?${queryParams}`,
 };
 
 export const API_REGION = {
@@ -101,18 +101,30 @@ export const API_ROLEWISE = {
   DATA: `${API}/rolewiselogin`,
 }
 
+export const API_Asset_Class = {
+  DATA: `${API}/asset_class`,
+};
+
+export const API_ACCOUNT_DROPDOWN = {
+  DATA: `${API}/account_dropdown`,
+};
+
+export const API_ACCOUNT_SUMMARY = {
+  DATA: (queryParams) => `${API}/account_summary?${queryParams}`,
+};
+
+
 export const API_NFO = {
   DATA: (queryParams) => `${API}/nfo?${queryParams}`,
 }
 
 export const API_NFO_UPLOAD = {
-  DATA: (queryParams) => `${API}/nfo_upload?${queryParams}`,
+  DATA:  `${API}/nfo_upload`,
 }
 
 export const API_NFO_DELETE = {
   DATA: (queryParams) => `${API}/nfo_delete?${queryParams}`,
 }
-
 
 export const API_ALL_ETF_SALE = {
   DATA: (queryParams) => `${API}/etf_sale?${queryParams}`,
@@ -120,6 +132,13 @@ export const API_ALL_ETF_SALE = {
 
 export const API_MANAGE_USER_CHANNEL_CODE_DROPDOWN = {
   DATA: `${API}/manage_user_channel_code_dropdown`,
+};
+export const API_MANDATE_REPORT = {
+  DATA: (queryParams) => `${API}/mandate_report?${queryParams}`
+}
+
+export const API_ARN = {
+  DATA: (queryParams) => `${API}/arn?${queryParams}`,
 };
 
 export const API_MANAGE_USER_REPORTING_ROLE_DROPDOWN= {
