@@ -143,6 +143,19 @@ const SideBar = ({ isOpen }) => {
                               </span>
                             </Link>
                           </button>
+                          <button className=" p-0 pb-2 pt-2 mb-1" id="sub-accor-active" >
+                            <Link to="/region_ufc_scheme" style={{ textDecoration: "none",color:"white" }} >
+                              <span
+                                className={`sidebar ${isOpen ? "" : "closed"}`}
+                                style={{
+                                  marginLeft: "21px",
+                                  marginRight: "11px",
+                                }}
+                              >
+                                Region/UFC/Scheme Report
+                              </span>
+                            </Link>
+                          </button>
                         </div>
                       </div>
                     </div>
