@@ -126,11 +126,13 @@ export const API_NFO_DELETE = {
   DATA: (queryParams) => `${API}/nfo_delete?${queryParams}`,
 }
 
-
 export const API_ALL_ETF_SALE = {
   DATA: (queryParams) => `${API}/etf_sale?${queryParams}`,
 };
 
+export const API_MANAGE_USER_CHANNEL_CODE_DROPDOWN = {
+  DATA: `${API}/manage_user_channel_code_dropdown`,
+};
 export const API_MANDATE_REPORT = {
   DATA: (queryParams) => `${API}/mandate_report?${queryParams}`
 }
@@ -139,5 +141,60 @@ export const API_ARN = {
   DATA: (queryParams) => `${API}/arn?${queryParams}`,
 };
 
-export default axiosInstance;
+export const API_MANAGE_USER_REPORTING_ROLE_DROPDOWN= {
+    DATA: `${API}/manage_user_reporting_role_dropdown`,
+};
 
+export const API_MANAGE_USER_POWER_USER_DROPDOWN= {
+    DATA: `${API}/manage_user_power_user_dropdown`,
+};
+
+export const API_MANAGE_USER_FUNCTIONAL_ROLE_DROPDOWN= {
+    DATA: `${API}/manage_user_functional_role_dropdown`,
+};
+
+export const API_MANAGE_USER_CITY_DROPDOWN= {
+    DATA: (queryParams) => `${API}/manage_user_city_dropdown?${queryParams}`
+};
+
+  export const API_MANAGE_USER_QUARTER_DROPDOWN= {
+    DATA: `${API}/manage_user_quarter_dropdown`,
+  };
+
+  export const API_MANAGE_EMPLOYEE_ROLE_DROPDOWN= {
+    DATA: (queryParams) => `${API}/manage_user_employee_role_dropdown?${queryParams}`
+};
+
+export const API_MANAGE_LOCATION_DROPDOWN= {
+  DATA: (queryParams) => `${API}/manage_user_location_dropdown?${queryParams}`
+};
+
+export const API_MANAGE_REGION_DROPDOWN= {
+    DATA: (queryParams) => `${API}/manage_user_region_dropdown?${queryParams}`
+  };
+
+  export const API_MANAGE_UFC_LOCATION_DROPDOWN= {
+    DATA: (queryParams) => `${API}/manage_user_ufc_location_dropdown?${queryParams}`
+  };
+  
+  export const API_MANAGE_USER_ZONE_DROPDOWN= {
+    DATA: (queryParams) => `${API}/manage_user_zone_dropdown?${queryParams}`
+  };
+
+  export const API_SEARCH_MANAGE_USER_TABLE= {
+      DATA: (queryParams) => `${API}/search_manage_user_table?${queryParams}`
+    };
+
+export const API_MANAGE_USER_GET_EDIT_DATA= {
+DATA: (queryParams) => `${API}/manage_user_get_edit_data?${queryParams}`
+};
+
+  export const API_MANAGE_USER_SAVE_DATA = {
+    DATA:  `${API}/employees`,
+  }
+
+  export const API_MANAGE_USER_UPDATE_DATA = {
+    DATA:  `${API}/employees_update`,
+  }
+
+export default axiosInstance;
