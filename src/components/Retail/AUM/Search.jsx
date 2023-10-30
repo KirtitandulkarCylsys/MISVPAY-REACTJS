@@ -18,6 +18,7 @@ import ExportToPdf from "../ExportToPdf";
 import AumRegionReport from "./AumRegionReport";
 import AumUfcReport from "./AumUfcReport";
 import AumRmReport from "./AumRmReport";
+import { useDataContext } from "../../../Context/DataContext";
 
 const Search = () => {
   
@@ -27,7 +28,8 @@ const Search = () => {
   const [hide, setHide] = useState(false);
   const { aum_dropdown } = AumDropdownApi();
  
-  const { aum_period, report_period, setReportPeriod,loading,emproles } = usePeriodApi();
+  const { aum_period, loading,emproles } = usePeriodApi();
+  const {report_period, setReportPeriod} = useDataContext();
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
@@ -104,7 +106,6 @@ const Search = () => {
                       </label>
                       <select
                         className="form-select m-2"
-                        value={report_period}
                         onChange={(e) => {
                           setReportPeriod(e.target.value);
                         }}

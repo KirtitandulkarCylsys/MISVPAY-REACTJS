@@ -4,159 +4,25 @@ import ReactPaginate from "react-paginate";
 import FolioSecondTable from "./FolioSecondTable";
 import Loader from "../../Table/Loader";
 
-const FolioFirstTable = ({folio_Report,loading}) => {
-
-  const [clickedIndex, setClickedIndex] = useState(-1);
-  const [isLoading, setIsLoading] = useState(false);
-  const sapmledata1 = [
-    {
-      SrNo: 1,
-      FolioNo: "cm",
-      PinCode: "5222",
-      PanNo: "fsd55",
-      ARNCode: "454454",
-      SubBroker: "",
-      DirectRMCode: "RTL5",
-      Channel: "RTL",
-      Scheme: "rgffgttg",
-      RMCode: 4556,
-      EmployeeName: "dfdfsfs",
-      Ufc: "203",
-      UfcName: "Rachi",
-      Region: "sdfgsdfg",
-      Zone: "East",
-      AAUM: "8546554615",
-      PanType: "dfsd555",
-      PinCategory: "ppppp",
-    },
-    {
-      SrNo: 1,
-      FolioNo: "cm",
-      PinCode: "5222",
-      PanNo: "fsd55",
-      ARNCode: "454454",
-      SubBroker: "",
-      DirectRMCode: "RTL5",
-      Channel: "RTL",
-      Scheme: "rgffgttg",
-      RMCode: 4556,
-      EmployeeName: "dfdfsfs",
-      Ufc: "203",
-      UfcName: "Rachi",
-      Region: "sdfgsdfg",
-      Zone: "East",
-      AAUM: "8546554615",
-      PanType: "dfsd555",
-      PinCategory: "ppppp",
-    },
-    {
-      SrNo: 1,
-      FolioNo: "cm",
-      PinCode: "5222",
-      PanNo: "fsd55",
-      ARNCode: "454454",
-      SubBroker: "",
-      DirectRMCode: "RTL5",
-      Channel: "RTL",
-      Scheme: "rgffgttg",
-      RMCode: 4556,
-      EmployeeName: "dfdfsfs",
-      Ufc: "203",
-      UfcName: "Rachi",
-      Region: "sdfgsdfg",
-      Zone: "East",
-      AAUM: "8546554615",
-      PanType: "dfsd555",
-      PinCategory: "ppppp",
-    },
-  ];
-  const sapmledata = [
-    {
-      Rank: 1,
-      Role: "cm",
-      RMCode: 4556,
-      EmployeeName: "dfdfsfs",
-      Channel: "RTL",
-      Ufc: "203",
-      UfcName: "Rachi",
-      Region: "sdfgsdfg",
-      RegionName: "ppppp",
-      Zone: "East",
-      AccountNo: "555555",
-      FolioName: "fiuhysdiuhf",
-      Pan: "dfsd555",
-      Equity: "21221",
-      Hybrid: "0",
-      Solutions: "0",
-      ETFS: "0",
-      DebtOE: "0",
-      DebtCE: "0",
-      Liquid: "0",
-      Total: "55.808",
-      TotalFolio: "57325",
-      TotalPAN: "110",
-    },
-    {
-      Rank: 2,
-      Role: "cm",
-      RMCode: 4556,
-      EmployeeName: "dfdfsfs",
-      Channel: "RTL",
-      Ufc: "203",
-      UfcName: "Rachi",
-      Region: "gsdfg",
-      RegionName: "ppppp",
-      Zone: "East",
-      AccountNo: "555555",
-      FolioName: "fiuhysdiuhf",
-      Pan: "dfsd555",
-      Equity: "21221",
-      Hybrid: "0",
-      Solutions: "0",
-      ETFS: "0",
-      DebtOE: "0",
-      DebtCE: "0",
-      Liquid: "0",
-      Total: "55.808",
-      TotalFolio: "57325",
-      TotalPAN: "110",
-    },
-    {
-      Rank: 3,
-      Role: "cm",
-      RMCode: 4556,
-      EmployeeName: "dfdfsfs",
-      Channel: "RTL",
-      Ufc: "203",
-      UfcName: "Rachi",
-      Region: "ZxZxa",
-      RegionName: "ppppp",
-      Zone: "East",
-      AccountNo: "555555",
-      FolioName: "fiuhysdiuhf",
-      Pan: "dfsd555",
-      Equity: "21221",
-      Hybrid: "0",
-      Solutions: "0",
-      ETFS: "0",
-      DebtOE: "0",
-      DebtCE: "0",
-      Liquid: "0",
-      Total: "55.808",
-      TotalFolio: "57325",
-      TotalPAN: "110",
-    },
-  ];
-
-  const itemsPerPage = 2;
+const FolioFirstTable = ({ folio_Report, loading }) => {
+  const itemsPerPage = 10;
 
   const [currentPage, setCurrentPage] = useState(0);
 
+  const pageCount = Math.ceil(folio_Report.length / itemsPerPage);
+
   const startIndex = currentPage * itemsPerPage;
+
+  const endIndex = Math.min(startIndex + itemsPerPage, folio_Report.length);
+
+  const displayedItems = folio_Report.slice(startIndex, endIndex);
 
   const handlePageClick = (selected) => {
     setCurrentPage(selected.selected);
   };
+
+  const [clickedIndex, setClickedIndex] = useState(-1);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleButtonClick = (index) => {
     setIsLoading(true);
@@ -269,7 +135,7 @@ const FolioFirstTable = ({folio_Report,loading}) => {
                     </tr>
                   </thead>
                   <tbody style={{ backgroundColor: "#DADADA" }}>
-                    {sapmledata.map((item, index) => (
+                    {displayedItems.map((item, index) => (
                       <React.Fragment key={index}>
                         <tr>
                           <td className="">{item.RANK}</td>
@@ -304,22 +170,22 @@ const FolioFirstTable = ({folio_Report,loading}) => {
                             </td>
                           </td>
                           <td className="">{item.NAME}</td>
-                          <td className="">{item.PANNO}</td>
-                          {/* <td className="">{item.Equity}</td>
-                          <td className="">{item.Hybrid}</td>
-                          <td className="">{item.Solutions}</td>
-                          <td className="">{item.ETFS}</td>
-                          <td className="">{item.DebtOE}</td>
-                          <td className="">{item.DebtCE}</td>
-                          <td className="">{item.Liquid}</td>
-                          <td className="">{item.Total}</td>
-                          <td className="">{item.TotalFolio}</td>
-                          <td className="">{item.TotalPAN}</td> */}
+                          <td className="">{item.PAN_NO}</td>
+                          <td className="">{item.EQ_AUM}</td>
+                          <td className="">{item.HYB_AUM}</td>
+                          <td className="">{item.SOL_AUM}</td>
+                          <td className="">{item.IND_ETF_AUM}</td>
+                          <td className="">{item.DEBT_OE_AUM}</td>
+                          <td className="">{item.DEBT_CE_AUM}</td>
+                          <td className="">{item.LQ_AUM}</td>
+                          <td className="">{item.AUM}</td>
+                          <td className="">{item.TOTAL_FOLIO_AUM}</td>
+                          <td className="">{item.TOTAL_PAN_AUM}</td>
                         </tr>
                         {clickedIndex === index && (
                           <tr key={`-${index}`}>
                             <td colSpan="23" className="p-0">
-                              <FolioSecondTable sapmledata1={sapmledata1} />
+                              <FolioSecondTable />
                             </td>
                           </tr>
                         )}
@@ -333,6 +199,7 @@ const FolioFirstTable = ({folio_Report,loading}) => {
                   nextLabel={"Next"}
                   breakLabel={"..."}
                   breakClassName={"break-me"}
+                  pageCount={pageCount}
                   marginPagesDisplayed={2}
                   pageRangeDisplayed={5}
                   onPageChange={handlePageClick}

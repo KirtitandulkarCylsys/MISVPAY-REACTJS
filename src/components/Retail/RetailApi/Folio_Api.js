@@ -1,13 +1,16 @@
+import { toast } from 'react-toastify';
 import axiosInstance, { API_FOLIO_REPORT } from '../../../Constant/apiConstant';
 import { useDataContext } from '../../../Context/DataContext';
 import { useState, useEffect} from 'react'
 
-export const useFolioApi = () => {
+export const Folio_Api = () => {
     const [folio_Report, setFolio_Report] = useState([]);
     const [loading, setLoading] = useState(false);
-   
+    const [isLoading, setIsLoading] = useState(false);
+    const [hide, setHide] = useState(false);
     const [selectType, setSelectType] = useState();
     const {roleWiseData}= useDataContext();
+    
   
     const emproles = roleWiseData ? roleWiseData[0].EMP_ROLE : null; 
     const channel = roleWiseData ? roleWiseData[0].CHANNEL_CODE : null; 
@@ -17,14 +20,14 @@ export const useFolioApi = () => {
     const QUARTERData = roleWiseData ? roleWiseData[0].YEAR : null;
     const emp_id = roleWiseData ? roleWiseData[0].EMP_ID : null;
     
-    useEffect(() => {
+   
      
   
       const fetchData = async () => {
         setLoading(true);
         const queryParams = new URLSearchParams({
-          empid: "3671",
-          emprole: "ADMIN",
+          empid: emp_id,
+          emprole: emproles,
           quarter: "202324Q2",
           
           zone: zoneData ,
@@ -32,7 +35,7 @@ export const useFolioApi = () => {
           ufc_code: UFCData ,
           rm_code: emp_id,
           period_code:  "DA58300923",
-          report_type: "AUM",
+          report_type: selectType,
           channel_code: "RTL",
           
         
@@ -55,8 +58,24 @@ export const useFolioApi = () => {
         }
       };
   
-      fetchData();
-    }, []);
+   
+    const SearchOnClick = async (e) => {
+      try {
+        await fetchData();
+        setIsLoading(true);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 1500);
+        setHide(true);
+      } catch (error) {
+        setHide(false);
+        toast.error("Please fill all the fields");
+      }
+
+
+
+      
+    };
   
-    return { folio_Report,  setFolio_Report, loading, emproles ,selectType,setSelectType };
+    return { folio_Report,  setFolio_Report, loading, emproles ,selectType,setSelectType,SearchOnClick,isLoading,hide };
   };

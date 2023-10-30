@@ -32,8 +32,8 @@ export const AumDropdownApi = () => {
 export const usePeriodApi = () => {
   const [aum_period, setAumperiod] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [report_period, setReportPeriod] = useState('');
   const {currentPage,entriesPerPage,roleWiseData}= useDataContext();
+  const {report_period} = useDataContext();
 
   const emproles = roleWiseData ? roleWiseData[0].EMP_ROLE : null; 
   const channel = roleWiseData ? roleWiseData[0].CHANNEL_CODE : null; 
@@ -69,7 +69,7 @@ export const usePeriodApi = () => {
         empid: emp_id,
         emprole: emproles,
         quarter: "202324Q2",
-        period_code:  "DD58180823",
+        period_code: report_period,
         zone: zoneData ,
         region_code: REGIONData,
         ufc_code: UFCData ,
@@ -100,7 +100,7 @@ export const usePeriodApi = () => {
     fetchData();
   }, []);
 
-  return { aum_period, report_period, setReportPeriod, loading, emproles };
+  return { aum_period, loading, emproles };
 };
 
 export const useAUMApi = (queryParams) => {

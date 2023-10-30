@@ -1,48 +1,39 @@
-import React from 'react';
-import { AumDropdownApi } from '../RetailApi/AUM_Api';
-import { useState } from 'react';
-import Navbar from '../../Shared/Navbar';
-import SideBar from '../../Shared/SideBar/SideBar';
-import { ToastContainer, toast } from 'react-toastify';
-import LoaderSearch from '../../Table/SubTable/LoaderSearch';
-import { ExportToExcel } from '../AUM/ExportToExcel';
-import ExportToPDF from '../AUM/ExportToPDF';
-import FolioFirstTable from './FolioFirstTable';
-import { useDataContext } from '../../../Context/DataContext';
-import { useFolioApi } from '../RetailApi/Folio_Api';
+import React from "react";
+import { AumDropdownApi } from "../RetailApi/AUM_Api";
+import { useState } from "react";
+import Navbar from "../../Shared/Navbar";
+import SideBar from "../../Shared/SideBar/SideBar";
+import { ToastContainer, toast } from "react-toastify";
+import LoaderSearch from "../../Table/SubTable/LoaderSearch";
+import { ExportToExcel } from "../AUM/ExportToExcel";
+import ExportToPDF from "../AUM/ExportToPDF";
+import FolioFirstTable from "./FolioFirstTable";
+import { useDataContext } from "../../../Context/DataContext";
+import { FolioApi, Folio_Api, useFolioApi } from "../RetailApi/Folio_Api";
 
-const Folio_Report = () => {
-
-  const {roleWiseData}= useDataContext();
+const Folio_Report = ({ headers }) => {
+  const { roleWiseData } = useDataContext();
   const emproles = roleWiseData ? roleWiseData[0].EMP_ROLE : null;
-  const emprole =  emproles; // Change this to the actual value of emprole
+  const REGIONData = roleWiseData ? roleWiseData[0].REGIONCODE : null;
+  const zoneData = roleWiseData ? roleWiseData[0].ZONE : null;
+  const UFCData = roleWiseData ? roleWiseData[0].UFC_NAME : null;
+  const emprole = emproles; // Change this to the actual value of emprole
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [hide, setHide] = useState(false);
-  const [selectType, setSelectType] = useState();
   
   const { aum_dropdown } = AumDropdownApi();
-  const { folio_Report, report_period, setReportPeriod,loading, } = useFolioApi();
+console.log(UFCData)
+  const {
+    folio_Report,
+    selectType,
+    setSelectType,
+    loading,
+    SearchOnClick,
+    hide,
+  } = Folio_Api({ headers });
+
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
-  };
-
-  console.log(folio_Report,"")
-  const SearchOnClick = async (e) => {
-    try {
-      if (!report_period) {
-        toast.error("Please select a period before searching.");
-        return;
-      }
-      setIsLoading(true);
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 1500);
-
-      setHide(true);
-    } catch (error) {
-      setHide(false);
-    }
   };
 
   return (
@@ -86,22 +77,21 @@ const Folio_Report = () => {
                         onChange={(e) => {
                           setSelectType(e.target.value);
                         }}
-                        
                       >
                         <option value="">Select an option</option>
                         <option value="AUM">AUM</option>
-                        <option value="GROSSSALE">GROSS SALE</option>
+                        <option value="GROSSSALES">GROSS SALE</option>
                       </select>
                     </div>
                     <div className="col-md-3">
                       <label className="pll">
                         <b>Select Period</b>
                       </label>
-                      {/* <select
+                      <select
                         className="form-select m-2 w-50"
-                        value={report_period}
+                        // value={report_period}
                         onChange={(e) => {
-                          setReportPeriod(e.target.value);
+                          // setReportPeriod(e.target.value);
                         }}
                        
                       >
@@ -111,23 +101,23 @@ const Folio_Report = () => {
                             {aum.PERIOD_DESC}
                           </option>
                         ))}
-                      </select> */}
+                      </select>
                     </div>
                     <div className="col-md-3">
                       <label className="pll">
                         <b>Channel</b>
                       </label>
-                      {/* <select
+                      <select
                         className="form-select m-2 w-50"
-                        value={report_period}
+                        // value={report_period}
                         onChange={(e) => {
-                          setReportPeriod(e.target.value);
+                          // setReportPeriod(e.target.value);
                         }}
                         disabled={emprole === "Admin" || emprole === "ZH" || emprole === "CM" || emprole === "RH" || emprole === "RM"  }
                       >
                         <option value="">RTL</option>
                        
-                      </select> */}
+                      </select>
                     </div>
                   </div>
                 </div>
@@ -136,95 +126,133 @@ const Folio_Report = () => {
                     <label className="pll">
                       <b>Employe Role</b>
                     </label>
-                    {/* <select
+                    <select
                       className="form-select m-2 w-50"
-                      value={report_period}
-                      onChange={(e) => {
-                        setReportPeriod(e.target.value);
-                      }}
-                      disabled={emprole === "ZH" ||emprole === "RH" || emprole === "CM" || emprole === "RM"}
+                      onChange={(e) => {}}
+                      disabled={
+                        emprole === "ZH" ||
+                        emprole === "RH" ||
+                        emprole === "CM" ||
+                        emprole === "RM"
+                      }
                     >
-                      <option value="">Select an option</option>
-                      {aum_dropdown.map((aum) => (
-                        <option value={aum.PERIOD_CODE} key={aum.PERIOD_CODE}>
-                          {aum.PERIOD_DESC}
-                        </option>
-                      ))}
-                    </select> */}
+                      {emprole === "ADMIN" ? (
+                        <>
+                          <option value="">Select an option</option>
+                          <option value="">Channel Head/Country Head</option>
+                          <option value="">Chief Manager</option>
+                          <option value="">Dept of Fund Accounting</option>
+                          <option value="">Head(PRM)</option>
+                          <option value="">Marketing</option>
+                          <option value="">Region Head</option>
+                          <option value="">Relationship Manager/Senior Relationship Manager</option>
+                          <option value="">VRM</option>
+                          <option value="">Zonal Head</option>
+                        </>
+                      ) : (
+                        <option value="">{emprole}</option>
+                      )}
+                    </select>
                   </div>
                   <div className="col-md-3">
                     <label className="pll">
                       <b>Zone</b>
                     </label>
-                    {/* <select
+                    <select
                       className="form-select m-2 w-50"
-                      value={report_period}
                       onChange={(e) => {
                         // setReportPeriod(e.target.value);
                       }}
-                      disabled={  emprole === "CM" || emprole === "RH" || emprole === "RM"}
+                      disabled={
+                        emprole === "CM" || emprole === "RH" || emprole === "RM"
+                      }
                     >
-                      <option value="">Select an option</option>
-                      {aum_dropdown.map((aum) => (
-                        <option value={aum.PERIOD_CODE} key={aum.PERIOD_CODE}>
-                          {aum.PERIOD_DESC}
-                        </option>
-                      ))}
-                    </select> */}
+
+                      {emprole === "ADMIN" ||
+                      emprole === "ZH" ||
+                      emprole === "RH" ? (
+                        <>
+                          <option value="">Select an option</option>
+                          {aum_dropdown.map((aum) => (
+                            <option
+                              value={aum.PERIOD_CODE}
+                              key={aum.PERIOD_CODE}
+                            >
+                              {aum.PERIOD_DESC}
+                            </option>
+                          ))}
+                        </>
+                      ) : (
+                        <option value="">{zoneData}</option>
+                      )}
+                    </select>
                   </div>
                   <div className="col-md-3">
                     <label className="pll">
                       <b>Region</b>
                     </label>
-                    {/* <select
+                    <select
                       className="form-select m-2 w-50"
-                      value={report_period}
-                      onChange={(e) => {
-                        setReportPeriod(e.target.value);
-                      }}
-                      disabled={   emprole === "CM" || emprole === "RM"}
+                      onChange={(e) => {}}
+                      disabled={emprole === "CM" || emprole === "RM"}
                     >
-                      <option value="">Select an option</option>
-                      {aum_dropdown.map((aum) => (
-                        <option value={aum.PERIOD_CODE} key={aum.PERIOD_CODE}>
-                          {aum.PERIOD_DESC}
-                        </option>
-                      ))}
-                    </select> */}
+                      {emprole === "ADMIN" ||
+                      emprole === "ZH" ||
+                      emprole === "ZH" ? (
+                        <>
+                          <option value="">Select an option</option>
+                          {aum_dropdown.map((aum) => (
+                            <option
+                              value={aum.PERIOD_CODE}
+                              key={aum.PERIOD_CODE}
+                            >
+                              {aum.PERIOD_DESC}
+                            </option>
+                          ))}
+                        </>
+                      ) : (
+                        <option value="">{REGIONData}</option>
+                      )}
+                    </select>
                   </div>
                 </div>
-                <div className="col-md-12 d-flex mb-5 mt-5" style={{ marginLeft: "68px" }}>
+                <div
+                  className="col-md-12 d-flex mb-5 mt-5"
+                  style={{ marginLeft: "68px" }}
+                >
                   <div className="col-md-3">
                     <label className="pll">
                       <b>Location /UFC</b>
                     </label>
-                    {/* <select
+                    <select
                       className="form-select m-2 w-50"
-                      value={report_period}
-                      onChange={(e) => {
-                        setReportPeriod(e.target.value);
-                      }}
-                      disabled={  emprole === "RM"}
+                      onChange={(e) => {}}
+                      disabled={emprole === "RM"}
                     >
-                      <option value="">Select an option</option>
-                      {aum_dropdown.map((aum) => (
-                        <option value={aum.PERIOD_CODE} key={aum.PERIOD_CODE}>
-                          {aum.PERIOD_DESC}
-                        </option>
-                      ))}
-                    </select> */}
+                      {emprole === "ADMIN" ||emprole === "ZH" ||emprole === "CM" ||emprole === "RH"? (
+                        <>
+                          <option value="">Select an option</option>
+                          {aum_dropdown.map((aum) => (
+                            <option
+                              value={aum.PERIOD_CODE}
+                              key={aum.PERIOD_CODE}
+                            >
+                              {aum.PERIOD_DESC}
+                            </option>
+                          ))}
+                        </>
+                      ) : (
+                        <option value="">{UFCData}</option>
+                      )}
+                    </select>
                   </div>
                   <div className="col-md-3" style={{ marginLeft: "70px" }}>
                     <label className="pll">
                       <b> RM Name</b>
                     </label>
-                    {/* <select
+                    <select
                       className="form-select m-2 w-50"
-                      value={report_period}
-                      onChange={(e) => {
-                        setReportPeriod(e.target.value);
-                      }}
-                      
+                      onChange={(e) => {}}
                     >
                       <option value="">Select an option</option>
                       {aum_dropdown.map((aum) => (
@@ -232,14 +260,13 @@ const Folio_Report = () => {
                           {aum.PERIOD_DESC}
                         </option>
                       ))}
-                    </select> */}
+                    </select>
                   </div>
                   <div className="col-md-4 d-flex">
                     <div class="col-md-2  mb-3" style={{ marginLeft: "64px" }}>
                       <button
                         className="BgcolorOrange btn mrp"
                         onClick={SearchOnClick}
-                        // disabled={isLoading}
                       >
                         Search
                       </button>
@@ -265,7 +292,10 @@ const Folio_Report = () => {
               </div>
               {hide && (
                 <>
-                  <FolioFirstTable  folio_Report={ folio_Report} loading={loading} ></FolioFirstTable>
+                  <FolioFirstTable
+                    folio_Report={folio_Report}
+                    loading={loading}
+                  ></FolioFirstTable>
                 </>
               )}
             </div>
