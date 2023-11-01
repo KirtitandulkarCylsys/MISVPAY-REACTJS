@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { toast } from "react-toastify"; // Import toast for showing error messages
+import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 import { NOTIFICATION_MASTER } from "../../../Constant/apiConstant";
 import { useDataContext } from "../../../Context/DataContext";
 
@@ -7,7 +7,7 @@ export const NotificationApi = ({ headers }) => {
   const [loading, setLoading] = useState(false);
   const [hide, setHide] = useState(false);
   const { notification_desc,
-    setNotificationDesc, valid_from, setValidFrom, valid_upto, setValidUpto, last_updated_by, setLastUpdatedBy, status, setStatus } = useDataContext();
+    setNotificationDesc, valid_from, setValidFrom, valid_upto, setValidUpto, last_updated_by, setLastUpdatedBy } = useDataContext();
   const fetchNotificationMaster = async () => {
     try {
       const formattedValidFrom = valid_from.split("-").reverse().join("/");
@@ -17,7 +17,7 @@ export const NotificationApi = ({ headers }) => {
         valid_from: formattedValidFrom,
         valid_upto: formattedValidUpto,
         last_updated_by: last_updated_by,
-        status: status,
+        query_type: "SAVE"
       });
       const postData = async (postDataObject) => {
         try {
@@ -33,7 +33,7 @@ export const NotificationApi = ({ headers }) => {
           } else {
             toast.error("Failed to post data");
           }
-
+           console.log(response ,"resp")
           setLoading(false);
         } catch (error) {
           console.error("Error posting data", error);
@@ -45,8 +45,7 @@ export const NotificationApi = ({ headers }) => {
         notification_desc: notification_desc,
         valid_from: formattedValidFrom,
         valid_upto: formattedValidUpto,
-        last_updated_by: last_updated_by,
-        status: status,
+        last_updated_by: last_updated_by
       };
 
       await postData(dataToPost);
@@ -74,22 +73,20 @@ export const NotificationApi = ({ headers }) => {
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return parts.join(".");
   };
-
   return {
     notification_desc,
     valid_from,
     valid_upto,
     last_updated_by,
-    status,
     loading,
     hide,
     setNotificationDesc,
     setValidFrom,
     setValidUpto,
     setLastUpdatedBy,
-    setStatus,
     fetchNotificationMaster,
     togglehide,
     formatNumberToIndianFormat,
   };
 };
+

@@ -19,6 +19,12 @@ export const DataContextProvider = ({ children }) => {
   const [rolwiseselectype, setRolwiseselectype] = useState("");
   const [loading, setLoading] = useState(false);
   const [hide, setHide] = useState(false);
+  const [notification_desc, setNotificationDesc] = useState("");
+  const [valid_from, setValidFrom] = useState("");
+  const [valid_upto, setValidUpto] = useState("");
+  const [last_updated_by, setLastUpdatedBy] = useState("");
+  const [status, setStatus] = useState("");
+  
   const emproles = roleWiseData ? roleWiseData[0].EMP_ROLE : null;
   const channel = roleWiseData ? roleWiseData[0].CHANNEL_CODE : null;
   const zoneData = roleWiseData ? roleWiseData[0].ZONE : null;
@@ -49,7 +55,7 @@ export const DataContextProvider = ({ children }) => {
     try {
       const formattedStartDate = start_Date?.split("-").reverse().join("/");
       const formattedEndDate = end_Date?.split("-").reverse().join("/");
-      const quarter =  QUARTERData.replace("-","").replace("-", "");;
+      const quarter = QUARTERData.replace("-", "").replace("-", "");;
       const queryParams = new URLSearchParams({
         employee_id: emp_id,
         emprole: emproles,
@@ -64,10 +70,10 @@ export const DataContextProvider = ({ children }) => {
         ufc: UFCData,
         rm: emp_id,
         common_report: commonReportValue,
-        page_number:currentPage ,
+        page_number: currentPage,
         page_size: pagesize,
       });
-      console.log(quarter,"quarter");
+      console.log(quarter, "quarter");
       if (start_Date > end_Date) {
         toast.error("End Date must be Greater Than Start Date");
         setLoading(false);
@@ -102,6 +108,8 @@ export const DataContextProvider = ({ children }) => {
   return (
     <DataContext.Provider
       value={{
+        notification_desc,
+        setNotificationDesc, valid_from, setValidFrom, valid_upto, setValidUpto, last_updated_by, setLastUpdatedBy, status, setStatus,
         roleWiseData,
         setRoleWiseData,
         zontablepageSize,
@@ -109,8 +117,8 @@ export const DataContextProvider = ({ children }) => {
         zonetablecurrentPage,
         setZonetablecurrentPage,
         setStart_Date,
-        setEnd_Date,summary_report, fetchTransactionSummary,setRolwiseselectype, hide, setHide,
-        start_Date,end_Date,emproles,emp_id,rolwiseselectype,channel,zoneData,REGIONData,UFCData,loading,formatNumberToIndianFormat,QUARTERData
+        setEnd_Date, summary_report, fetchTransactionSummary, setRolwiseselectype, hide, setHide,
+        start_Date, end_Date, emproles, emp_id, rolwiseselectype, channel, zoneData, REGIONData, UFCData, loading, formatNumberToIndianFormat, QUARTERData
       }}
     >
       {children}

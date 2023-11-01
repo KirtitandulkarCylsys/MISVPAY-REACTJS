@@ -20,6 +20,7 @@ import EtfSaleTable from './components/Retail/ETF/EtfSaleTable';
 import ArnReport from './components/Retail/ARN_Report/ArnReport';
 import NotificationTable from './components/Notification/NotificationTable';
 import NotificationForm from './components/Notification/NotificationForm';
+import NotificationUpdate from './components/Notification/NotificationUpdate';
 function App() {
   return (
     <div className="App">
@@ -44,6 +45,7 @@ function App() {
         <Route path="/arnreport" element={<ArnReport />} />
         <Route path="/notificationTable" element={<NotificationTable/>} />
         <Route path="/notificationform" element={<NotificationForm/>} />
+        <Route path="/NotificationTable/notificationUpdate/:id" element={<NotificationUpdate/>} />
       </Routes>
     </BrowserRouter>         
     </div>

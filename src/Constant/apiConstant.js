@@ -128,5 +128,18 @@ export const API_ALL_ETF_SALE = {
   DATA: (queryParams) => `${API}/etf_sale?${queryParams}`,
 };
 
+export const NOTIFICATION_MASTER = {
+  DATA: (queryParams) => `${API}/notification_master?${queryParams}`,
+};
 
+export const NOTIFICATION_GET = {
+  DATA: `${API}/notification_master`,
+}
 
+export const NOTIFICATION_UPDATE = {
+  DATA: `${API}/update_notification`,
+};
+
+export const NOTIFICATION_UPDATE_STATUS = {
+  DATA: (queryParams) => `${API}/update_status_notification?${queryParams}`,
+};
